@@ -5,7 +5,12 @@
 local opt = vim.opt
 local g = vim.g
 local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
---
+
+g.amazon = false
+if os.getenv("USER") == "angaidan" then
+  g.amazon = true
+end
+
 -- Neovide Configuration
 if g.neovide then
   g.neovide_transparency = 0.95

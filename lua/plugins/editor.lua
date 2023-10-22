@@ -2,10 +2,6 @@ local Util = require("lazyvim.util")
 
 return {
   {
-    "folke/trouble.nvim",
-    enabled = false,
-  },
-  {
     "nvim-neo-tree/neo-tree.nvim",
     opts = {
       close_if_last_window = true,
@@ -39,24 +35,29 @@ return {
     opts = {
       defaults = {
         ["<leader>fh"] = { name = "+harpoon" },
+        ["<leader>gw"] = { name = "+worktrees" },
       },
-    },
-  },
-  {
-    "folke/todo-comments.nvim",
-    keys = {
-      { "<leader>xt", false },
-      { "<leader>xT", false },
     },
   },
   {
     "nvim-telescope/telescope.nvim",
     dependencies = {
-      "debugloop/telescope-undo.nvim",
-      config = function(_, opts)
-        local telescope = require("telescope")
-        telescope.load_extension("undo")
-      end,
+      {
+        "debugloop/telescope-undo.nvim",
+        config = function(_, opts)
+          local telescope = require("telescope")
+          telescope.load_extension("undo")
+        end,
+      },
+      {
+        "ThePrimeagen/git-worktree.nvim",
+        dependencies = { "nvim-telescope/telescope.nvim" },
+        config = function(_, opts)
+          require("git-worktree").setup(opts)
+          local telescope = require("telescope")
+          telescope.load_extension("git_worktree")
+        end,
+      },
     },
     keys = {
       { "<leader>,", false },
@@ -65,20 +66,34 @@ return {
       { "<leader><space>", false },
       -- find
       { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
-      { "<leader>fc", Util.telescope.config_files(), desc = "Find Config File" },
+      { "<leader>fc", false },
       { "<leader>ff", Util.telescope("files"), desc = "Find Files (root dir)" },
       { "<leader>fF", Util.telescope("files", { cwd = false }), desc = "Find Files (cwd)" },
-      { "<leader>fR", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
-      { "<leader>fr", Util.telescope("oldfiles", { cwd = vim.loop.cwd() }), desc = "Recent (cwd)" },
+      { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
+      { "<leader>fR", Util.telescope("oldfiles", { cwd = vim.loop.cwd() }), desc = "Recent (cwd)" },
       -- git
       { "<leader>gc", "<cmd>Telescope git_commits<CR>", desc = "commits" },
       { "<leader>gs", "<cmd>Telescope git_status<CR>", desc = "status" },
+      {
+        "<leader>gwc",
+        function()
+          require("telescope").extensions.git_worktree.create_git_worktree()
+        end,
+        desc = "Create git worktree",
+      },
+      {
+        "<leader>gws",
+        function()
+          require("telescope").extensions.git_worktree.git_worktrees()
+        end,
+        desc = "Git worktrees",
+      },
       -- search
       { '<leader>s"', false },
       { "<leader>sa", false },
       { "<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer" },
       { "<leader>sc", "<cmd>Telescope command_history<cr>", desc = "Command History" },
-      { "<leader>sC", false },
+      { "<leader>sC", "<cmd>Telescope commands<cr>", desc = "Commands" },
       { "<leader>sd", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Document diagnostics" },
       { "<leader>sD", "<cmd>Telescope diagnostics<cr>", desc = "Workspace diagnostics" },
       { "<leader>sg", Util.telescope("live_grep"), desc = "Grep (root dir)" },
@@ -88,7 +103,7 @@ return {
       { "<leader>sk", "<cmd>Telescope keymaps<cr>", desc = "Key Maps" },
       { "<leader>sM", false },
       { "<leader>sm", false },
-      { "<leader>so", false },
+      { "<leader>so", "<cmd>Telescope vim_options<cr>", desc = "Options" },
       { "<leader>sR", false },
       { "<leader>s<CR>", "<cmd>Telescope resume<cr>", desc = "Resume" },
       { "<leader>sw", Util.telescope("grep_string", { word_match = "-w" }), desc = "Word (root dir)" },
@@ -126,8 +141,6 @@ return {
           "node_modules/.*",
           "dist/.*",
         },
-        git_worktrees = vim.g.git_worktrees,
-        path_display = { "truncate" },
         sorting_strategy = "ascending",
         layout_config = {
           horizontal = { prompt_position = "top", preview_width = 0.55 },
@@ -176,6 +189,23 @@ return {
         end,
         desc = "Goto next mark",
       },
+    },
+  },
+  {
+    "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewToggleFiles" },
+  },
+  {
+    "f-person/git-blame.nvim",
+    keys = {
+      {
+        "<leader>ug",
+        "<CMD>GitBlameToggle<CR>",
+        desc = "Toggle git blame",
+      },
+    },
+    opts = {
+      enabled = false,
     },
   },
 }

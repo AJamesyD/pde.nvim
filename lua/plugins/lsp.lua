@@ -7,14 +7,16 @@ return {
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      "smjonas/inc-rename.nvim",
-      init = function()
-        require("lazyvim.util").lsp.on_attach(function(_, buffer)
+      {
+        "smjonas/inc-rename.nvim",
+        init = function()
+          require("lazyvim.util").lsp.on_attach(function(_, buffer)
           -- stylua: ignore
           vim.keymap.set("n", "<leader>cr", "<CMD>IncRename ", { desc = "Rename", buffer = buffer })
-        end)
-      end,
-      config = true,
+          end)
+        end,
+        config = true,
+      },
     },
     ---@class PluginLspOpts
     opts = {
@@ -50,6 +52,9 @@ return {
   -- add any tools you want to have installed below
   {
     "williamboman/mason.nvim",
+    keys = {
+      { "<leader>cm", false },
+    },
     opts = {
       ensure_installed = {
         -- Lua
@@ -68,5 +73,18 @@ return {
         "marksman",
       },
     },
+  },
+  { import = "lazyvim.plugins.extras.lsp.none-ls" },
+  {
+    "nvimtools/none-ls.nvim",
+    dependencies = {
+      "ThePrimeagen/refactoring.nvim",
+    },
+    opts = function(_, opts)
+      local nls = require("null-ls")
+      opts.sources = {
+        nls.builtins.code_actions.refactoring,
+      }
+    end,
   },
 }

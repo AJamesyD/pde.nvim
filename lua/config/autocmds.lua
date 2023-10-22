@@ -23,6 +23,7 @@ autocmd("FileType", {
   end,
 })
 
+-- Show absolute line numbers in cmd mode only
 autocmd("CmdlineEnter", {
   desc = "Absolute numbers in cmd mode",
   group = augroup("cmdline_enter", { clear = true }),

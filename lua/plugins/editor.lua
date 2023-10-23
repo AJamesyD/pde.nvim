@@ -152,7 +152,6 @@ return {
       },
     },
   },
-  { import = "lazyvim.plugins.extras.editor.aerial" },
   {
     "ThePrimeagen/harpoon",
     dependencies = {

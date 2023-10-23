@@ -56,16 +56,6 @@ return {
                 style = require("bufferline.groups").separator.pill,
               },
             }),
-            -- {
-            --   name = "Tests",
-            --   icon = "",
-            --   auto_close = true,
-            --   ---@param buf bufferline.Buffer
-            --   matcher = function(buf)
-            --     local filename = vim.api.nvim_buf_get_name(buf.id)
-            --     return filename:match("_test") or filename:match("test_")
-            --   end,
-            -- },
           },
         },
       },
@@ -83,5 +73,32 @@ return {
     "iamcco/markdown-preview.nvim", -- TODO: Does this belong in ui?
     build = "cd app && npm install",
     ft = "markdown",
+  },
+  {
+    "m4xshen/smartcolumn.nvim",
+    event = "LazyFile",
+    opts = {
+      colorcolumn = "100",
+      disabled_filetypes = {
+        "help",
+        "text",
+        "markdown",
+        "TelescopePrompt",
+        "TelescopeResults",
+        "alpha",
+        "dashboard",
+        "neo-tree",
+        "Trouble",
+        "lazy",
+        "mason",
+        "notify",
+        "toggleterm",
+        "lazyterm",
+      },
+      custom_colorcolumn = {
+        lua = "120",
+        python = "120",
+      },
+    },
   },
 }

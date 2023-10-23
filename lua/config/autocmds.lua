@@ -5,24 +5,6 @@ local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 local opt_local = vim.opt_local
 
-autocmd("FileType", {
-  desc = "Python opts",
-  pattern = "python",
-  group = augroup("python_opts", { clear = true }),
-  callback = function()
-    opt_local.colorcolumn = { 100, 120 }
-  end,
-})
-
-autocmd("FileType", {
-  desc = "Lua opts",
-  pattern = "lua",
-  group = augroup("lua_opts", { clear = true }),
-  callback = function()
-    opt_local.colorcolumn = { 120 }
-  end,
-})
-
 -- Show absolute line numbers in cmd mode only
 autocmd("CmdlineEnter", {
   desc = "Absolute numbers in cmd mode",

@@ -16,8 +16,8 @@ return {
     keys = {
       { "<leader>br", false },
       { "<leader>bl", false },
-      { "<leader>bb", "<CMD>BufferLinePick<CR>", desc = "Pick buffer" },
-      { "<leader>be", "<CMD>Telescope buffer<CR>", desc = "Buffers (Telescope)" },
+      { "<leader>bb", "<CMD>BufferLinePick<CR>", desc = "Pick buffer open" },
+      { "<leader>bc", "<CMD>BufferLinePickClose<CR>", desc = "Pick buffer close" },
     },
     opts = {
       options = {

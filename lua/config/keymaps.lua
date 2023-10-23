@@ -15,7 +15,6 @@ end
 local del = vim.keymap.del
 
 --
-del("n", "<leader>bb")
 del("n", "<leader>`")
 del("n", "<leader>ur")
 del("n", "<leader>K")

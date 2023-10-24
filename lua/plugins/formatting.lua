@@ -3,6 +3,9 @@ return {
     "stevearc/conform.nvim",
     ---@type ConformOpts
     opts = {
+      format = {
+        lsp_fallback = "always",
+      },
       formatters_by_ft = {
         python = { "black" },
       },

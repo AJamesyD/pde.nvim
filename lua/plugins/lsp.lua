@@ -11,8 +11,8 @@ return {
         "smjonas/inc-rename.nvim",
         init = function()
           require("lazyvim.util").lsp.on_attach(function(_, buffer)
-          -- stylua: ignore
-          vim.keymap.set("n", "<leader>cr", "<CMD>IncRename ", { desc = "Rename", buffer = buffer })
+            -- stylua: ignore
+            vim.keymap.set("n", "<leader>cr", "<CMD>IncRename ", { desc = "Rename", buffer = buffer })
           end)
         end,
         config = true,
@@ -45,6 +45,78 @@ return {
             },
           },
         },
+        pylsp = {
+          settings = {
+            pylsp = {
+              configurationSources = { "flake8" },
+              plugins = {
+                autopep8 = {
+                  enabled = false,
+                },
+                flake8 = {
+                  enabled = false,
+                },
+                jedi_completion = {
+                  enabled = false,
+                },
+                jedi_definition = {
+                  enabled = false,
+                },
+                jedi_hover = {
+                  enabled = false,
+                },
+                jedi_references = {
+                  enabled = false,
+                },
+                jedi_signature_help = {
+                  enabled = false,
+                },
+                jedi_symbols = {
+                  enabled = false,
+                },
+                mccabe = {
+                  enabled = false,
+                },
+                pycodestyle = {
+                  enabled = false,
+                },
+                pyflakes = {
+                  enabled = false,
+                },
+                rope_completion = {
+                  enabled = true,
+                },
+                rope_autoimport = {
+                  enabled = true,
+                },
+                yapf = {
+                  enabled = false,
+                },
+              },
+            },
+          },
+        },
+      },
+      setup = {
+        pylsp = function()
+          ---@param client lsp.Client
+          require("lazyvim.util").lsp.on_attach(function(client, _)
+            if client.name == "pylsp" then
+              -- only enable code actions
+              client.server_capabilities.codeActionProvider = true
+              client.server_capabilities.definitionProvider = false
+              client.server_capabilities.documentFormattingProvider = false
+              client.server_capabilities.documentHighlightProvider = false
+              client.server_capabilities.documentRangeFormattingProvider = false
+              client.server_capabilities.documentSymbolProvider = false
+              client.server_capabilities.foldingRangeProvider = false
+              client.server_capabilities.hoverProvider = false
+              client.server_capabilities.referencesProvider = false
+              client.server_capabilities.renameProvider = false
+              client.server_capabilities.renameProvider = false
+            end
+          end)
+        end,
       },
     },
   },
@@ -65,6 +137,7 @@ return {
         "shfmt",
         -- Python
         "ruff-lsp",
+        "python-lsp-server",
         "pyright",
         "black",
         -- Text
@@ -73,18 +146,5 @@ return {
         "marksman",
       },
     },
-  },
-  { import = "lazyvim.plugins.extras.lsp.none-ls" },
-  {
-    "nvimtools/none-ls.nvim",
-    dependencies = {
-      "ThePrimeagen/refactoring.nvim",
-    },
-    opts = function(_, opts)
-      local nls = require("null-ls")
-      opts.sources = {
-        nls.builtins.code_actions.refactoring,
-      }
-    end,
   },
 }

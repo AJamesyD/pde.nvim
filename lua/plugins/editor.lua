@@ -5,6 +5,8 @@ return {
     "nvim-neo-tree/neo-tree.nvim",
     opts = {
       close_if_last_window = true,
+      enable_git_status = false,
+      enable_diagnostics = false,
       window = {
         width = 30,
       },
@@ -94,8 +96,16 @@ return {
       { "<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer" },
       { "<leader>sc", "<cmd>Telescope command_history<cr>", desc = "Command History" },
       { "<leader>sC", "<cmd>Telescope commands<cr>", desc = "Commands" },
-      { "<leader>sd", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Document diagnostics" },
-      { "<leader>sD", "<cmd>Telescope diagnostics<cr>", desc = "Workspace diagnostics" },
+      {
+        "<leader>sd",
+        "<cmd>Telescope diagnostics bufnr=0<cr>",
+        desc = "Document diagnostics",
+      },
+      {
+        "<leader>sD",
+        "<cmd>Telescope diagnostics<cr>",
+        desc = "Workspace diagnostics",
+      },
       { "<leader>sg", Util.telescope("live_grep"), desc = "Grep (root dir)" },
       { "<leader>sG", Util.telescope("live_grep", { cwd = false }), desc = "Grep (cwd)" },
       { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "Help Pages" },
@@ -108,9 +118,23 @@ return {
       { "<leader>s<CR>", "<cmd>Telescope resume<cr>", desc = "Resume" },
       { "<leader>sw", Util.telescope("grep_string", { word_match = "-w" }), desc = "Word (root dir)" },
       { "<leader>sW", Util.telescope("grep_string", { cwd = false, word_match = "-w" }), desc = "Word (cwd)" },
-      { "<leader>sw", Util.telescope("grep_string"), mode = "v", desc = "Selection (root dir)" },
-      { "<leader>sW", Util.telescope("grep_string", { cwd = false }), mode = "v", desc = "Selection (cwd)" },
-      { "<leader>uC", Util.telescope("colorscheme", { enable_preview = true }), desc = "Colorscheme with preview" },
+      {
+        "<leader>sw",
+        Util.telescope("grep_string"),
+        mode = "v",
+        desc = "Selection (root dir)",
+      },
+      {
+        "<leader>sW",
+        Util.telescope("grep_string", { cwd = false }),
+        mode = "v",
+        desc = "Selection (cwd)",
+      },
+      {
+        "<leader>uC",
+        Util.telescope("colorscheme", { enable_preview = true }),
+        desc = "Colorscheme with preview",
+      },
       {
         "<leader>ss",
         function()
@@ -205,6 +229,13 @@ return {
     },
     opts = {
       enabled = false,
+    },
+  },
+  {
+    "max397574/better-escape.nvim",
+    event = "InsertEnter",
+    opts = {
+      timeout = 500,
     },
   },
 }

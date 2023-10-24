@@ -16,7 +16,7 @@ return {
     keys = {
       { "<leader>br", false },
       { "<leader>bl", false },
-      { "<leader>bb", "<CMD>BufferLinePick<CR>", desc = "Pick buffer open" },
+      { "<leader>bb", "<CMD>BufferLinePick<CR>",      desc = "Pick buffer open" },
       { "<leader>bc", "<CMD>BufferLinePickClose<CR>", desc = "Pick buffer close" },
     },
     opts = {
@@ -195,6 +195,17 @@ return {
     },
     opts = {
       default_amount = 5,
+    },
+  },
+  {
+    "folke/edgy.nvim",
+    optional = true,
+    opts = {
+      animate = {
+        enabled = false,
+      },
+      exit_when_last = true,
+      close_when_all_hidden = true,
     },
   },
 }

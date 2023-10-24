@@ -4,7 +4,6 @@ return {
     main = "catppuccin",
     lazy = false,
     priority = 1000,
-    enabled = false,
   },
   {
     "folke/tokyonight.nvim",
@@ -23,6 +22,15 @@ return {
     "Shatur/neovim-ayu",
     lazy = false,
     priority = 1000,
+    opts = {
+      overrides = {
+        WinSeparator = { fg = "#808080" },
+        LineNr = { fg = "#808080" },
+      },
+    },
+    config = function(_, opts)
+      require("ayu").setup(opts)
+    end,
   },
   {
     "EdenEast/nightfox.nvim",

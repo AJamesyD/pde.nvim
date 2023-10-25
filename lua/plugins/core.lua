@@ -7,6 +7,12 @@ return {
       news = {
         neovim = true,
       },
+      icons = {
+        kinds = {
+          Snippet = " ",
+          Variable = "󰫧 ",
+        },
+      },
     },
   },
 }

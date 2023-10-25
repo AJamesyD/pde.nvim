@@ -63,9 +63,15 @@ return {
   },
   {
     "folke/noice.nvim",
+    keys = {
+      { "<leader>snl", false },
+      { "<leader>snh", "<CMD>Telescope noice<CR>", desc = "Noice History" },
+      { "<leader>sna", false },
+    },
     opts = {
       presets = {
         bottom_search = false,
+        lsp_doc_border = true,
       },
     },
   },

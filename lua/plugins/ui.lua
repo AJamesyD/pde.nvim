@@ -214,4 +214,9 @@ return {
       close_when_all_hidden = true,
     },
   },
+  {
+    "eandrju/cellular-automaton.nvim",
+    lazy = true,
+    cmd = "CellularAutomaton",
+  },
 }

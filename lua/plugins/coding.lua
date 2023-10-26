@@ -20,7 +20,8 @@ return {
 
       local luasnip = require("luasnip")
       local cmp = require("cmp")
-      opts.sources = cmp.config.sources(vim.list_extend(opts.sources, { { name = "nvim_lsp_signature_help" } }))
+      opts.sources =
+        cmp.config.sources(vim.list_extend(opts.sources, { { name = "nvim_lsp_signature_help", keyword_length = 0 } }))
 
       opts.window = {
         completion = cmp.config.window.bordered(),

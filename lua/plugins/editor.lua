@@ -3,6 +3,12 @@ local Util = require("lazyvim.util")
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
+    dependencies = {
+      {
+        "antosha417/nvim-lsp-file-operations",
+        priority = 1000,
+      },
+    },
     opts = {
       close_if_last_window = true,
       enable_git_status = false,
@@ -227,6 +233,11 @@ return {
         desc = "Goto next mark",
       },
     },
+  },
+  {
+    "stevearc/oil.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    cmd = "Oil",
   },
   {
     "sindrets/diffview.nvim",

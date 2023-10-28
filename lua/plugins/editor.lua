@@ -43,7 +43,9 @@ return {
     opts = {
       defaults = {
         ["<leader>fh"] = { name = "+harpoon" },
+        ["<leader>gh"] = { name = "+hunks" },
         ["<leader>gw"] = { name = "+worktrees" },
+        ["<leader>fm"] = { "which_key_ignore" },
       },
     },
   },
@@ -237,7 +239,7 @@ return {
   {
     "stevearc/oil.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    cmd = "Oil",
+    opts = {},
   },
   {
     "sindrets/diffview.nvim",

@@ -215,8 +215,15 @@ return {
     },
   },
   {
+    "stevearc/stickybuf.nvim",
+    event = "LazyFile",
+    cmd = { "PinBuffer", "PinBuftype", "PinFiletype" },
+    opts = {},
+  },
+  {
     "eandrju/cellular-automaton.nvim",
-    lazy = true,
-    cmd = "CellularAutomaton",
+    keys = {
+      { "<leader>fml", "<CMD>CellularAutomaton make_it_rain<CR>", desc = "FML" },
+    },
   },
 }

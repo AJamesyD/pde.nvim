@@ -4,6 +4,40 @@ return {
     main = "catppuccin",
     lazy = false,
     priority = 1000,
+    opts = {
+      integrations = {
+        aerial = true,
+        bufferline = true,
+        dashboard = true,
+        fidget = true,
+        flash = true,
+        gitsigns = true,
+        harpoon = true,
+        headlines = true,
+        indent_blankline = { enabled = true },
+        mason = true,
+        mini = { enabled = true },
+        neotree = true,
+        neogit = true,
+        noice = true,
+        cmp = true,
+        native_lsp = {
+          enabled = true,
+          inlay_hints = { background = "true" },
+        },
+        notify = true,
+        semantic_tokens = true,
+        treesitter_context = true,
+        treesitter = true,
+        telescope = { enabled = true },
+        lsp_trouble = true,
+        illuminate = {
+          enabled = true,
+          lsp = true,
+        },
+        which_key = true,
+      },
+    },
   },
   {
     "folke/tokyonight.nvim",
@@ -12,6 +46,17 @@ return {
     opts = {
       style = "night",
     },
+  },
+  {
+    "nyoom-engineering/oxocarbon.nvim",
+    lazy = false,
+    priority = 1000,
+  },
+  {
+    "rose-pine/neovim",
+    name = "rose-pine",
+    lazy = false,
+    priority = 1000,
   },
   {
     "maxmx03/fluoromachine.nvim",

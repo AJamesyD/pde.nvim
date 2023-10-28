@@ -3,7 +3,6 @@
 -- Add any additional autocmds here
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
-local opt_local = vim.opt_local
 
 -- Show absolute line numbers in cmd mode only
 autocmd("CmdlineEnter", {

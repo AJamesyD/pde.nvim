@@ -17,6 +17,7 @@ return {
         end,
         config = true,
       },
+      { "justinsgithub/wezterm-types" },
     },
     ---@class PluginLspOpts
     opts = {
@@ -132,8 +133,10 @@ return {
         -- Lua
         "lua-language-server",
         "stylua",
+        "selene",
+        "luacheck",
         -- Shell
-        "shellcheck",
+        "bash-language-server",
         "shfmt",
         -- Python
         "ruff-lsp",
@@ -144,6 +147,7 @@ return {
         "yaml-language-server",
         "json-lsp",
         "marksman",
+        "markdownlint",
       },
     },
   },

@@ -8,6 +8,8 @@ return {
       },
       formatters_by_ft = {
         python = { "black" },
+        ["markdown"] = { { "prettierd", "prettier" } },
+        ["markdown.mdx"] = { { "prettierd", "prettier" } },
       },
     },
   },

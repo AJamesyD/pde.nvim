@@ -29,8 +29,8 @@ del("n", "[w")
 del("n", "<leader>uL")
 del("n", "<leader>ul")
 
-del("n", "<leader>gg")
-del("n", "<leader>gG")
+-- del("n", "<leader>gg")
+-- del("n", "<leader>gG")
 
 del("n", "<leader>ui")
 
@@ -73,3 +73,6 @@ map({ "n" }, "<leader>Y", '"+y$', { desc = "Yank to clip (EOL)" })
 map({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from clip" })
 map({ "n", "v" }, "<leader>P", '"+P', { desc = "Paste from clip" })
 map({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete to void" })
+
+-- folds
+map({ "n", "v" }, "<C-.>", "za", { desc = "Toggle fold" })

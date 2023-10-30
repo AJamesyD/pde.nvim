@@ -29,9 +29,6 @@ del("n", "[w")
 del("n", "<leader>uL")
 del("n", "<leader>ul")
 
--- del("n", "<leader>gg")
--- del("n", "<leader>gG")
-
 del("n", "<leader>ui")
 
 del("n", "<leader>L")
@@ -76,3 +73,8 @@ map({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete to void" })
 
 -- folds
 map({ "n", "v" }, "<C-.>", "za", { desc = "Toggle fold" })
+
+-- code
+map({ "n", "v" }, "<leader>cc", function()
+  vim.g.codeium_enabled = not vim.g.codeium_enabled
+end, { desc = "Toggle Codeium" })

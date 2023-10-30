@@ -55,5 +55,26 @@ return {
       return opts
     end,
   },
-  { import = "lazyvim.plugins.extras.coding.codeium" },
+  {
+    "nvim-cmp",
+    dependencies = {
+      {
+        "Exafunction/codeium.nvim",
+        cmd = "Codeium",
+        build = ":Codeium Auth",
+        opts = {},
+      },
+    },
+    ---@param opts cmp.ConfigSchema
+    opts = function(_, opts)
+      table.insert(opts.sources, 1, {
+        name = "codeium",
+        group_index = 1,
+        priority = 100,
+        entry_filter = function(_, _)
+          return vim.g.codeium_enabled
+        end,
+      })
+    end,
+  },
 }

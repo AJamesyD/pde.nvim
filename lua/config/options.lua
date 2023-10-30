@@ -6,7 +6,8 @@ local opt = vim.opt
 local g = vim.g
 local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 
-g.amazon = false
+g.codeium_enabled = true
+
 if os.getenv("USER") == "angaidan" then
   g.amazon = true
 end

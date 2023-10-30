@@ -22,3 +22,13 @@ autocmd("CmdlineLeave", {
     end
   end,
 })
+
+--- Filetype specific options
+-- autocmd("FileType", {
+--   desc = "Python opts",
+--   pattern = "python",
+--   group = augroup("python_opts", { clear = true }),
+--   callback = function()
+--     vim.opt_local...
+--   end,
+-- })

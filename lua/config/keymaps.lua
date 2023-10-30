@@ -69,7 +69,7 @@ map({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clip" })
 map({ "n" }, "<leader>Y", '"+y$', { desc = "Yank to clip (EOL)" })
 map({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from clip" })
 map({ "n", "v" }, "<leader>P", '"+P', { desc = "Paste from clip" })
-map({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete to void" })
+map({ "n", "v" }, "<leader>D", '"_d', { desc = "Delete to void" })
 
 -- folds
 map({ "n", "v" }, "<C-.>", "za", { desc = "Toggle fold" })

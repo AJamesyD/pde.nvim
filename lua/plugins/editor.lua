@@ -69,7 +69,7 @@ return {
         dependencies = { "nvim-telescope/telescope.nvim" },
         opts = function(_, opts)
           require("telescope").load_extension("git_worktree")
-          return opts
+          opts.update_on_change_command = "Telescope builtin include_extensions=true"
         end,
       },
       {

@@ -66,10 +66,25 @@ return {
       },
       {
         "ThePrimeagen/git-worktree.nvim",
-        dependencies = { "nvim-telescope/telescope.nvim" },
+        dependencies = {
+          "nvim-telescope/telescope.nvim",
+          "linux-cultist/venv-selector.nvim",
+        },
         opts = function(_, opts)
+          opts.update_on_change_command = "Telescope find_files"
+
           require("telescope").load_extension("git_worktree")
-          opts.update_on_change_command = "Telescope builtin include_extensions=true"
+
+          local worktree = require("git-worktree")
+
+          worktree.on_tree_change(function(op, metadata)
+            if op == worktree.Operations.Switch then
+              local venv = vim.fn.findfile("pyproject.toml", vim.fn.getcwd() .. ";")
+              if venv ~= "" then
+                require("venv-selector").retrieve_from_cache()
+              end
+            end
+          end)
         end,
       },
       {

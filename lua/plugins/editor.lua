@@ -203,4 +203,10 @@ return {
       timeout = 500,
     },
   },
+  {
+    "willothy/flatten.nvim",
+    lazy = false,
+    priority = 1000,
+    config = true,
+  },
 }

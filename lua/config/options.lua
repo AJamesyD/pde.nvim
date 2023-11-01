@@ -30,6 +30,9 @@ end
 opt.autowrite = false
 opt.clipboard = ""
 
+opt.incsearch = true
+opt.hlsearch = false
+
 opt.swapfile = false
 opt.backup = false
 opt.undodir = os.getenv("HOME") .. "/.cache/" .. app_name .. "/undo//"

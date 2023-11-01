@@ -30,9 +30,19 @@ return {
         lua_ls = {
           settings = {
             Lua = {
+              doc = {
+                privateName = { "^_" },
+              },
               hint = {
                 enable = true,
                 arrayIndex = "Disable",
+                semicolon = "Disable",
+              },
+              workspace = {
+                checkThirdParty = false,
+              },
+              diagnostics = {
+                disable = { "incomplete-signature-doc", "trailing-space" },
               },
             },
           },
@@ -85,10 +95,10 @@ return {
                   enabled = false,
                 },
                 rope_completion = {
-                  enabled = true,
+                  enabled = false,
                 },
                 rope_autoimport = {
-                  enabled = true,
+                  enabled = false,
                 },
                 yapf = {
                   enabled = false,

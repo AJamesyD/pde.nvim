@@ -1,8 +1,18 @@
+local function is_dependency_file(buf_number)
+  local file_name = vim.api.nvim_buf_get_name(buf_number)
+  local dependency_locations = {
+    "site-packages", -- python
+    "node_modules",  -- JS/TS
+  }
+  for location in pairs(dependency_locations) do
+    if file_name:match(location) then
+      return true
+    end
+  end
+  return false
+end
+
 return {
-  -- {
-  --   "nvimdev/dashboard-nvim",
-  --   enabled = false,
-  -- },
   {
     "rcarriga/nvim-notify",
     opts = {
@@ -26,8 +36,9 @@ return {
         separator_style = "slant",
         show_buffer_close_icons = false,
         custom_filter = function(buf_number)
+          local is_dependency_file = is_dependency_file(buf_number)
           local buf_in_cwd = vim.api.nvim_buf_get_name(buf_number):find(vim.fn.getcwd(), 0, true)
-          return buf_in_cwd
+          return buf_in_cwd and not is_dependency_file
         end,
         groups = {
           options = {
@@ -56,6 +67,14 @@ return {
                 style = require("bufferline.groups").separator.pill,
               },
             }),
+            {
+              name = "Deps",
+              auto_close = true, -- whether or not close this group if it doesn't contain the current buffer
+              ---@param buf bufferline.Buffer
+              matcher = function(buf)
+                return is_dependency_file(buf.id)
+              end,
+            },
           },
         },
       },

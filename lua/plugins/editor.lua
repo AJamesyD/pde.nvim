@@ -1,5 +1,3 @@
-local Util = require("lazyvim.util")
-
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -15,6 +13,9 @@ return {
       enable_diagnostics = false,
       window = {
         width = 30,
+      },
+      buffers = {
+        show_unloaded = false,
       },
     },
     keys = {

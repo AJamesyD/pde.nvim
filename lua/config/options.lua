@@ -18,12 +18,11 @@ if g.neovide then
   g.neovide_padding_bottom = 0
   g.neovide_padding_right = 0
   g.neovide_padding_left = 0
-  g.neovide_transparency = 0.95
-  g.transparency = 0.95
-  g.neovide_floating_blur_amount_x = 5
-  g.neovide_floating_blur_amount_y = 5
+  g.neovide_cursor_animation_length = 0.13
   g.neovide_remember_window_size = true
   g.neovide_cursor_vfx_mode = "railgun"
+  g.neovide_refresh_rate = 30
+  g.neovide_no_idle = true
   opt.guifont = "UbuntuMono Nerd Font:h20:e-subpixelantialiasing"
 end
 

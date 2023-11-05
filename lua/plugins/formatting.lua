@@ -7,9 +7,16 @@ return {
         lsp_fallback = "always",
       },
       formatters_by_ft = {
-        python = { "black" },
+        python = function(bufnr)
+          if require("conform").get_formatter_info("ruff_format", bufnr).available then
+            return { "ruff_fix", "ruff_format" }
+          else
+            return { "black" }
+          end
+        end,
         ["markdown"] = { { "prettierd", "prettier" } },
         ["markdown.mdx"] = { { "prettierd", "prettier" } },
+        ["_"] = { "trim_whitespace" },
       },
     },
   },

@@ -38,6 +38,13 @@ return {
     keys = {
       { "<c-s>", mode = { "c" }, false },
     },
+    opts = {
+      modes = {
+        search = {
+          enable = false,
+        },
+      },
+    },
   },
   {
     "folke/which-key.nvim",
@@ -191,11 +198,6 @@ return {
     },
   },
   {
-    "stevearc/oil.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    opts = {},
-  },
-  {
     "sindrets/diffview.nvim",
     cmd = { "DiffviewOpen", "DiffviewToggleFiles" },
   },
@@ -218,12 +220,6 @@ return {
     opts = {
       timeout = 500,
     },
-  },
-  {
-    "willothy/flatten.nvim",
-    lazy = false,
-    priority = 1000,
-    config = true,
   },
   {
     "chrisgrieser/nvim-various-textobjs",
@@ -311,5 +307,12 @@ return {
       },
     },
     opts = {},
+  },
+  {
+    "stevearc/aerial.nvim",
+    optional = true,
+    opts = {
+      backends = { "treesitter", "lsp", "markdown", "man" },
+    },
   },
 }

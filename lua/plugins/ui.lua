@@ -252,4 +252,50 @@ return {
       { "<leader>fml", "<CMD>CellularAutomaton make_it_rain<CR>", desc = "FML" },
     },
   },
+  {
+    "folke/twilight.nvim",
+    cmd = {
+      "Twilight",
+      "TwilightEnable",
+      "TwilightDisable",
+    },
+    keys = {
+      {
+        "<leader>uT",
+        "<cmd>Twilight<cr>",
+        desc = "Toggle Twilight",
+      },
+    },
+    opts = {
+      dimming = {
+        alpha = 0.5,
+      },
+      expand = {
+        -- Python
+        "function_definition",
+        "class_definition",
+        "while_statement",
+        "for_statement",
+        "if_statement",
+        "with_statement",
+        "try_statement",
+        "match_statement",
+
+        -- Lua
+        "do_statement",
+        "while_statement",
+        "repeat_statement",
+        "if_statement",
+        "for_statement",
+        "function_declaration",
+        "function_definition",
+        "table_constructor",
+
+        -- Common
+        "function",
+        "method",
+        "table",
+      },
+    },
+  },
 }

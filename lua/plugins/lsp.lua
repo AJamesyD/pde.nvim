@@ -165,7 +165,6 @@ return {
         "yaml-language-server",
         "json-lsp",
         "marksman",
-        "markdownlint",
       },
     },
   },

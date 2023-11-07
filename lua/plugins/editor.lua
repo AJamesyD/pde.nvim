@@ -76,7 +76,10 @@ return {
         "ThePrimeagen/git-worktree.nvim",
         dependencies = {
           "nvim-telescope/telescope.nvim",
-          "linux-cultist/venv-selector.nvim",
+          {
+            "linux-cultist/venv-selector.nvim",
+            optional = true,
+          },
         },
         opts = function(_, opts)
           opts.update_on_change_command = "Telescope find_files"

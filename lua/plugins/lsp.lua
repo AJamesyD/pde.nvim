@@ -2,6 +2,12 @@ return {
   { import = "lazyvim.plugins.extras.lang.json" },
   { import = "lazyvim.plugins.extras.lang.yaml" },
   { import = "lazyvim.plugins.extras.lang.python" },
+  {
+    "linux-cultist/venv-selector.nvim",
+    optional = true,
+    dependencies = { "neovim/nvim-lspconfig", "nvim-telescope/telescope.nvim" },
+    cmd = { "VenvSelect", "VenvSelectCached", "VenvSelectCurrent" },
+  },
   { import = "lazyvim.plugins.extras.lang.typescript" },
   -- add pyright to lspconfig
   {
@@ -15,7 +21,9 @@ return {
             vim.keymap.set("n", "<leader>cr", "<CMD>IncRename ", { desc = "Rename", buffer = buffer })
           end)
         end,
-        config = true,
+        opts = {
+          preview_empty_name = true,
+        },
       },
       { "justinsgithub/wezterm-types" },
     },

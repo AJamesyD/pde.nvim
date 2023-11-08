@@ -16,8 +16,15 @@ return {
   {
     "rcarriga/nvim-notify",
     opts = {
-      timeout = 2000,
-      stages = "fade_in_slide_out",
+      stages = "static",
+    },
+  },
+  {
+    "echasnovski/mini.indentscope",
+    opts = {
+      draw = {
+        animation = require("mini.indentscope").gen_animation.none(),
+      },
     },
   },
   {

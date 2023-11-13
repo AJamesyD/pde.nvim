@@ -305,4 +305,16 @@ return {
       },
     },
   },
+  {
+    "carbon-steel/detour.nvim",
+    event = "VeryLazy",
+    cmd = "Detour",
+    keys = {
+      {
+        "<C-w><CR>",
+        "<CMD>Detour<CR>",
+        desc = "Detour popup",
+      },
+    },
+  },
 }

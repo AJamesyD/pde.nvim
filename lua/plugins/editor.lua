@@ -39,9 +39,13 @@ return {
       { "<c-s>", mode = { "c" }, false },
     },
     opts = {
+      search = {
+        multi_window = false,
+        incremental = true,
+      },
       modes = {
         search = {
-          enable = false,
+          enabled = false,
         },
       },
     },

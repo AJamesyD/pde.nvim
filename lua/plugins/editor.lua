@@ -69,13 +69,7 @@ return {
     keys = {
       { "<leader>fe", false },
       { "<leader>fE", false },
-      {
-        "<leader>e",
-        function()
-          require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
-        end,
-        desc = "Explorer NeoTree",
-      },
+      { "<leader>e",  false },
       { "<leader>E",  false },
       { "<leader>ge", false },
       { "<leader>be", false },

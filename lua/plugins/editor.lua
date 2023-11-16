@@ -1,5 +1,53 @@
 return {
   {
+    "stevearc/oil.nvim",
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    cmd = "Oil",
+    keys = {
+      {
+        "<leader>o",
+        function()
+          require("oil").toggle_float()
+        end,
+        desc = "Open oil",
+      },
+    },
+    opts = {
+      keymaps = {
+        ["g?"] = "actions.show_help",
+        ["?"] = "actions.show_help",
+        ["<CR>"] = "actions.select",
+        ["<Right>"] = "actions.select",
+        -- ["<C-s>"] = "actions.select_vsplit",
+        -- ["<C-h>"] = "actions.select_split",
+        -- ["<C-t>"] = "actions.select_tab",
+        -- ["<C-p>"] = "actions.preview",
+        ["<leader>op"] = "actions.preview",
+        -- ["<C-c>"] = "actions.close",
+        ["q"] = "actions.close",
+        -- ["<C-l>"] = "actions.refresh",
+        ["<leader>or"] = "actions.refresh",
+        -- ["-"] = "actions.parent",
+        ["<Left>"] = "actions.parent",
+        -- ["_"] = "actions.open_cwd",
+        ["g_"] = "actions.open_cwd",
+        ["<leader>oc"] = "actions.open_cwd",
+        -- ["`"] = "actions.cd",
+        -- ["~"] = "actions.tcd",
+        ["gs"] = "actions.change_sort",
+        ["<leader>os"] = "actions.change_sort",
+        -- ["gx"] = "actions.open_external",
+        ["g."] = "actions.toggle_hidden",
+        ["<leader>oh"] = "actions.toggle_hidden",
+        ["g\\"] = "actions.toggle_trash",
+        ["<leader>ot"] = "actions.toggle_trash",
+      },
+      use_default_keymaps = false,
+    },
+  },
+  {
     "nvim-neo-tree/neo-tree.nvim",
     dependencies = {
       {

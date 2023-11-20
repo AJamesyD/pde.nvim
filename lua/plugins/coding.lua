@@ -66,6 +66,7 @@ return {
         name = "codeium",
         group_index = 1,
         priority = 100,
+        max_item_count = 3,
         entry_filter = function(_, _)
           return vim.g.codeium_enabled
         end,

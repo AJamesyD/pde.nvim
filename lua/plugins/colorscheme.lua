@@ -44,4 +44,10 @@ return {
     lazy = false,
     priority = 1000,
   },
+  {
+    "marko-cerovac/material.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
 }

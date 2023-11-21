@@ -1,15 +1,10 @@
 return {
-  { import = "lazyvim.plugins.extras.lang.json" },
-  { import = "lazyvim.plugins.extras.lang.yaml" },
-  { import = "lazyvim.plugins.extras.lang.python" },
   {
     "linux-cultist/venv-selector.nvim",
     optional = true,
     dependencies = { "neovim/nvim-lspconfig", "nvim-telescope/telescope.nvim" },
     cmd = { "VenvSelect", "VenvSelectCached", "VenvSelectCurrent" },
   },
-  { import = "lazyvim.plugins.extras.lang.typescript" },
-  -- add pyright to lspconfig
   {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -156,6 +151,7 @@ return {
         -- Shell
         "bash-language-server",
         "shfmt",
+        "shellcheck",
         -- Python
         "ruff-lsp",
         "python-lsp-server",

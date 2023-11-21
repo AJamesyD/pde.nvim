@@ -361,7 +361,7 @@ return {
     "stevearc/aerial.nvim",
     optional = true,
     opts = {
-      backends = { "treesitter", "lsp", "markdown", "man" },
+      filter_kind = false,
     },
   },
 }

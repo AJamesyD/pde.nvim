@@ -24,6 +24,17 @@ autocmd("CmdlineLeave", {
 })
 
 --- Filetype specific options
+autocmd("FileType", {
+  desc = "KDL opts",
+  pattern = "kdl",
+  group = augroup("kdl_opts", { clear = true }),
+  callback = function()
+    vim.opt_local.commentstring = "// %s"
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.tabstop = 4
+  end,
+})
+
 -- autocmd("FileType", {
 --   desc = "Python opts",
 --   pattern = "python",

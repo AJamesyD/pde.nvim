@@ -69,7 +69,7 @@ return {
               end,
             },
             require("bufferline.groups").builtin.ungrouped:with({
-              name = " ",
+              name = " ",
               separator = {
                 style = require("bufferline.groups").separator.pill,
               },

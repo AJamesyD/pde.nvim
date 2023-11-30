@@ -1,6 +1,7 @@
 {
   "extras": [
     "lazyvim.plugins.extras.editor.aerial",
+    "lazyvim.plugins.extras.editor.mini-files",
     "lazyvim.plugins.extras.formatting.black",
     "lazyvim.plugins.extras.lang.json",
     "lazyvim.plugins.extras.lang.markdown",
@@ -10,7 +11,7 @@
   ],
   "news": {
     "NEWS.md": "2123",
-    "doc/news.txt": "15337"
+    "doc/news.txt": "13995"
   },
   "version": 2
 }

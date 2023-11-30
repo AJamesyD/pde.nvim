@@ -28,6 +28,32 @@ return {
     },
   },
   {
+    "nvim-pack/nvim-spectre",
+    opts = {
+      find_engine = {
+        ["rg"] = {
+          options = {
+            ["ignore-case"] = {
+              value = "--ignore-case",
+              icon = "[I]",
+              desc = "ignore case",
+            },
+            ["hidden"] = {
+              value = "--hidden",
+              desc = "hidden file",
+              icon = "[H]",
+            },
+            ["backreferences"] = {
+              value = "--pcre2",
+              desc = "backreferences",
+              icon = "[B]",
+            },
+          },
+        },
+      },
+    },
+  },
+  {
     "folke/flash.nvim",
     keys = {
       { "<c-s>", mode = { "c" }, false },

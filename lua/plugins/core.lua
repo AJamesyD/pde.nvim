@@ -4,9 +4,6 @@ return {
     "LazyVim/LazyVim",
     opts = {
       colorscheme = "ayu",
-      news = {
-        neovim = true,
-      },
       icons = {
         kinds = {
           Snippet = " ",

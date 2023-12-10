@@ -190,41 +190,46 @@ return {
   },
   {
     "ThePrimeagen/harpoon",
+    branch = "harpoon2",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",
     },
-    cmd = { "Harpoon" },
     keys = {
       {
         "<leader>fha",
         function()
-          require("harpoon.mark").add_file()
+          local harpoon = require("harpoon")
+          harpoon:list():append()
         end,
         desc = "Add file",
       },
       {
         "<leader>fhe",
         function()
-          require("harpoon.ui").toggle_quick_menu()
+          local harpoon = require("harpoon")
+          harpoon.ui:toggle_quick_menu(harpoon:list())
         end,
         desc = "Toggle quick menu",
       },
       {
         "<C-p>",
         function()
-          require("harpoon.ui").nav_prev()
+          local harpoon = require("harpoon")
+          harpoon:list():prev()
         end,
         desc = "Goto previous mark",
       },
       {
         "<C-n>",
         function()
-          require("harpoon.ui").nav_next()
+          local harpoon = require("harpoon")
+          harpoon:list():next()
         end,
         desc = "Goto next mark",
       },
     },
+    opts = {},
   },
   {
     "sindrets/diffview.nvim",

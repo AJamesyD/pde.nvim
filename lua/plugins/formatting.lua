@@ -8,10 +8,10 @@ return {
       },
       formatters_by_ft = {
         python = function(bufnr)
-          if require("conform").get_formatter_info("ruff_format", bufnr).available then
-            return { "ruff_fix", "ruff_format" }
-          else
+          if require("conform").get_formatter_info("black", bufnr).available then
             return { "black" }
+          else
+            return { "ruff_fix", "ruff_format" }
           end
         end,
         ["markdown"] = { { "prettierd", "prettier" } },

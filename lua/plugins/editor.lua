@@ -19,10 +19,6 @@ return {
       },
     },
     keys = {
-      { "<leader>fe", false },
-      { "<leader>fE", false },
-      { "<leader>e",  false },
-      { "<leader>E",  false },
       { "<leader>ge", false },
       { "<leader>be", false },
     },
@@ -77,7 +73,7 @@ return {
         ["<leader>fh"] = { name = "+harpoon" },
         ["<leader>gh"] = { name = "+hunks" },
         ["<leader>gw"] = { name = "+worktrees" },
-        ["<leader>fm"] = { "which_key_ignore" },
+        ["<leader>F"] = { "which_key_ignore" },
       },
     },
   },
@@ -347,26 +343,6 @@ return {
     optional = true,
     opts = {
       filter_kind = false,
-    },
-  },
-  {
-    "echasnovski/mini.files",
-    optional = true,
-    keys = {
-      {
-        "<leader>e",
-        function()
-          require("mini.files").open(require("lazyvim.util").root(), true)
-        end,
-        desc = "Open mini.files (root dir)",
-      },
-      {
-        "<leader>E",
-        function()
-          require("mini.files").open(vim.loop.cwd(), true)
-        end,
-        desc = "Open mini.files (cwd)",
-      },
     },
   },
 }

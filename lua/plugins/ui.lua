@@ -256,7 +256,7 @@ return {
   {
     "eandrju/cellular-automaton.nvim",
     keys = {
-      { "<leader>fml", "<CMD>CellularAutomaton make_it_rain<CR>", desc = "FML" },
+      { "<leader>FML", "<CMD>CellularAutomaton make_it_rain<CR>", desc = "FML" },
     },
   },
   {

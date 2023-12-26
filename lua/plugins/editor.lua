@@ -51,18 +51,11 @@ return {
   },
   {
     "folke/flash.nvim",
-    keys = {
-      { "<c-s>", mode = { "c" }, false },
-    },
+    lazy = false,
     opts = {
       search = {
         multi_window = false,
         incremental = true,
-      },
-      modes = {
-        search = {
-          enabled = false,
-        },
       },
     },
   },

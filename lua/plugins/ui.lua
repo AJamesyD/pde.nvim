@@ -277,6 +277,7 @@ return {
       dimming = {
         alpha = 0.5,
       },
+      context = 15,
       expand = {
         -- Python
         "function_definition",
@@ -301,20 +302,16 @@ return {
         -- Common
         "function",
         "method",
-        "table",
+        -- "table",
       },
     },
   },
   {
-    "carbon-steel/detour.nvim",
-    event = "VeryLazy",
-    cmd = "Detour",
+    "folke/zen-mode.nvim",
+    cmd = { "ZenMode" },
     keys = {
-      {
-        "<C-w><CR>",
-        "<CMD>Detour<CR>",
-        desc = "Detour popup",
-      },
+      { "<leader>uz", "<cmd>ZenMode<cr>", desc = "Toggle Zen Mode" },
     },
+    opts = {},
   },
 }

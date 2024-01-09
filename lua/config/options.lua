@@ -7,6 +7,7 @@ local g = vim.g
 local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 
 g.codeium_enabled = true
+g.minipairs_disable = true
 
 g.amazon = false
 if os.getenv("USER") == "angaidan" then
@@ -23,7 +24,8 @@ if g.neovide then
   g.neovide_cursor_vfx_mode = "railgun"
   g.neovide_refresh_rate = 30
   g.neovide_no_idle = true
-  opt.guifont = "UbuntuMono Nerd Font:h22:e-subpixelantialiasing"
+  opt.guifont = "BlexMono Nerd Font Mono:h20"
+  -- opt.guifont = "IBM Plex Mono,Symbols Nerd Font,Symbols NFM:h22:e-subpixelantialiasing"
 end
 
 opt.autowrite = false

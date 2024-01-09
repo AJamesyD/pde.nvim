@@ -20,7 +20,6 @@ return {
           preview_empty_name = true,
         },
       },
-      { "justinsgithub/wezterm-types" },
     },
     ---@class PluginLspOpts
     opts = {

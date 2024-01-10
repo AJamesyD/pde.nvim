@@ -222,19 +222,27 @@ return {
   },
   {
     "sindrets/diffview.nvim",
-    cmd = { "DiffviewOpen", "DiffviewToggleFiles" },
+    cmd = {
+      "DiffviewOpen",
+      "DiffviewToggleFiles",
+      "DiffviewFocusFiles",
+      "DiffviewRefresh",
+      "DiffviewFileHistory",
+    },
   },
   {
-    "f-person/git-blame.nvim",
+    "lewis6991/gitsigns.nvim",
     keys = {
       {
         "<leader>ug",
-        "<CMD>GitBlameToggle<CR>",
-        desc = "Toggle git blame",
+        "<CMD>Gitsigns toggle_current_line_blame<CR>",
+        desc = "Toggle git line blame",
       },
     },
     opts = {
-      enabled = false,
+      current_line_blame_opts = {
+        delay = 500,
+      },
     },
   },
   {

@@ -32,6 +32,8 @@ return {
         "sql",
         "ssh_config",
         "sxhkdrc",
+        "ron",
+        "rust",
       },
       autotag = { enable = true },
       context_commentstring = { enable = true, enable_autocmd = false },

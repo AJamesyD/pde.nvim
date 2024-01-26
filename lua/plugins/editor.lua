@@ -55,7 +55,11 @@ return {
     opts = {
       search = {
         multi_window = false,
-        incremental = true,
+      },
+      modes = {
+        char = {
+          jump_labels = true,
+        },
       },
     },
   },

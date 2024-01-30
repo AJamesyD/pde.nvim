@@ -7,6 +7,9 @@ return {
   },
   {
     "hrsh7th/nvim-cmp",
+    dependencies = {
+      "lukas-reineke/cmp-under-comparator",
+    },
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
       local has_words_before = function()
@@ -47,6 +50,9 @@ return {
           end
         end, { "i", "s" }),
       })
+
+      table.insert(opts.sorting.comparators, 4, require("cmp-under-comparator").under)
+
       return opts
     end,
   },

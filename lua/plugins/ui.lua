@@ -239,13 +239,20 @@ return {
   {
     "folke/edgy.nvim",
     optional = true,
-    opts = {
-      animate = {
-        enabled = false,
-      },
-      exit_when_last = true,
-      close_when_all_hidden = true,
-    },
+
+    opts = function(_, opts)
+      opts = vim.tbl_deep_extend("force", opts, {
+        animate = {
+          enabled = false,
+        },
+        exit_when_last = true,
+        close_when_all_hidden = true,
+      })
+      local temp_right = opts.right
+      opts.right = vim.tbl_deep_extend("force", opts.right or {}, opts.left or {})
+      opts.left = temp_right
+      return opts
+    end,
   },
   {
     "stevearc/stickybuf.nvim",

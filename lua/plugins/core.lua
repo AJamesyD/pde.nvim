@@ -3,7 +3,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "ayu",
+      colorscheme = "material-deep-ocean",
       icons = {
         kinds = {
           Snippet = " ",

@@ -50,4 +50,9 @@ return {
     priority = 1000,
     opts = {},
   },
+  {
+    "projekt0n/github-nvim-theme",
+    lazy = false,
+    priority = 1000,
+  },
 }

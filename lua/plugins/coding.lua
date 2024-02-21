@@ -57,7 +57,7 @@ return {
     end,
   },
   {
-    "nvim-cmp",
+    "hrsh7th/nvim-cmp",
     dependencies = {
       {
         "Exafunction/codeium.nvim",
@@ -78,6 +78,25 @@ return {
         end,
       })
     end,
+  },
+  {
+    "jackMort/ChatGPT.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "folke/trouble.nvim",
+      "nvim-telescope/telescope.nvim",
+    },
+    opts = {
+      openai_params = {
+        model = "gpt-4-turbo-preview",
+      },
+      openai_edit_params = {
+        model = "gpt-4-turbo-preview",
+      },
+    },
+    config = true,
   },
   {
     "hrsh7th/nvim-cmp",

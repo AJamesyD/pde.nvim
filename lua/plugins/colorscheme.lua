@@ -11,6 +11,14 @@ return {
     priority = 1000,
     opts = {
       style = "night",
+      ---@param c ColorScheme
+      on_colors = function(c)
+        c.bg = c.bg_dark
+        c.bg_dark = "#000000"
+        c.border = c.comment
+      end,
+      ---@param hl Highlights
+      ---@param c ColorScheme
       on_highlights = function(hl, c)
         hl.CursorLineNr = { fg = c.orange, bold = true }
         hl.LineNr = { fg = c.orange, bold = true }
@@ -18,6 +26,7 @@ return {
         hl.LineNrBelow = { fg = c.fg_gutter }
       end,
     },
+    config = true,
   },
   {
     "rose-pine/neovim",

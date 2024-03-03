@@ -1,3 +1,7 @@
+vim.diagnostic.config({
+  float = { border = "rounded" },
+})
+
 return {
   {
     "linux-cultist/venv-selector.nvim",

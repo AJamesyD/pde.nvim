@@ -53,6 +53,16 @@ return {
 
       table.insert(opts.sorting.comparators, 4, require("cmp-under-comparator").under)
 
+      local prev_format = opts.formatting.format
+      opts.formatting.format = function(entry, vim_item)
+        prev_format(entry, vim_item)
+        if vim_item.abbr:len() >= 60 then
+          vim_item.abbr = vim_item.abbr:sub(1, 57) .. "..."
+        end
+        vim_item.menu = nil
+        return vim_item
+      end
+
       return opts
     end,
   },

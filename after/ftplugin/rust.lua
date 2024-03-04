@@ -3,24 +3,41 @@ vim.keymap.set("n", "<leader>uD", function()
   local client = vim.lsp.get_clients({ name = "rust-analyzer" })[1]
   local settings = client.config.settings or {}
 
-  vim.g.rust_clippy_pedantic = not vim.g.rust_clippy_pedantic
-  if vim.g.rust_clippy_pedantic then
-    settings["rust-analyzer"].check.extraArgs = {
+  vim.g.clippy_level = (vim.g.clippy_level + 1) % 4
+  local extra_args = {}
+  local message = ""
+  if vim.g.clippy_level == 0 then
+    extra_args = {
+      "--no-deps",
+    }
+    message = "clippy lints: default only"
+  elseif vim.g.clippy_level == 1 then
+    extra_args = {
+      "--no-deps",
+      "--",
+      "-Wclippy::cargo",
+    }
+    message = "clippy lints: cargo, default"
+  elseif vim.g.clippy_level == 2 then
+    extra_args = {
+      "--no-deps",
+      "--",
+      "-Wclippy::nursery",
+      "-Wclippy::cargo",
+    }
+    message = "clippy lints: nursery, cargo, default"
+  elseif vim.g.clippy_level == 3 then
+    extra_args = {
       "--no-deps",
       "--",
       "-Wclippy::pedantic",
       "-Wclippy::nursery",
       "-Wclippy::cargo",
     }
-    vim.notify("pedantic and nursery lints enabled")
-  else
-    settings["rust-analyzer"].check.extraArgs = {
-      "--no-deps",
-      "--",
-      "-Wclippy::cargo",
-    }
-    vim.notify("pedantic and nursery lints disabled")
+    message = "clippy lints: pedantic, nursery, cargo, default"
   end
+  settings["rust-analyzer"].check.extraArgs = extra_args
+  vim.notify(message)
 
   client.config.settings = settings
   client.notify("workspace/didChangeConfiguration", {

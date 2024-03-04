@@ -6,6 +6,7 @@ local opt = vim.opt
 local g = vim.g
 local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 
+g.rust_clippy_pendantic = false
 g.codeium_enabled = true
 g.minipairs_disable = true
 

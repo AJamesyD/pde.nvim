@@ -14,23 +14,25 @@ return {
     version = "^3", -- Recommended
     ft = { "rust" },
     opts = {
+      on_attach = require("lazyvim.util").lsp.on_attach(function(client, buffer) end),
       server = {
         settings = {
           -- rust-analyzer language server configuration
           ["rust-analyzer"] = {
             cargo = {
-              allFeatures = true,
-              loadOutDirsFromCheck = true,
-              runBuildScripts = true,
+              features = "all",
             },
-            -- Add clippy lints for Rust.
-            checkOnSave = {
-              allFeatures = true,
+            check = {
               command = "clippy",
-              extraArgs = { "--no-deps" },
+              extraArgs = {
+                "--no-deps",
+              },
+              features = "all",
+            },
+            inlayHints = {
+              chainingHints = { enable = true },
             },
             procMacro = {
-              enable = true,
               ignored = {
                 ["async-trait"] = { "async_trait" },
                 ["napi-derive"] = { "napi" },
@@ -63,9 +65,6 @@ return {
     },
     ---@class PluginLspOpts
     opts = {
-      inlay_hints = {
-        enabled = true,
-      },
       ---@type lspconfig.options
       servers = {
         -- Lua
@@ -196,8 +195,6 @@ return {
         "python-lsp-server",
         "pyright",
         "black",
-        -- Rust
-        "rust-analyzer",
         -- Text
         "yaml-language-server",
         "json-lsp",

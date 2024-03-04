@@ -95,6 +95,11 @@ return {
               disableLanguageServices = false,
               disableOrganizeImports = true,
             },
+            python = {
+              analysis = {
+                typeCheckingMode = "standard",
+              },
+            },
           },
         },
         pylsp = {

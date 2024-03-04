@@ -6,7 +6,11 @@ local opt = vim.opt
 local g = vim.g
 local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 
+-- Language lint levels
 g.rust_clippy_pendantic = false
+g.pyright_level = 2
+
+-- Other globals
 g.codeium_enabled = true
 g.minipairs_disable = true
 

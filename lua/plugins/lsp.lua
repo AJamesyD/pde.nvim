@@ -11,8 +11,7 @@ return {
   },
   {
     "mrcjkb/rustaceanvim",
-    version = "^3", -- Recommended
-    ft = { "rust" },
+    optional = true,
     opts = {
       on_attach = require("lazyvim.util").lsp.on_attach(function(client, buffer) end),
       server = {
@@ -32,20 +31,10 @@ return {
             inlayHints = {
               chainingHints = { enable = true },
             },
-            procMacro = {
-              ignored = {
-                ["async-trait"] = { "async_trait" },
-                ["napi-derive"] = { "napi" },
-                ["async-recursion"] = { "async_recursion" },
-              },
-            },
           },
         },
       },
     },
-    config = function(_, opts)
-      vim.g.rustaceanvim = vim.tbl_deep_extend("force", {}, opts or {})
-    end,
   },
   {
     "neovim/nvim-lspconfig",
@@ -181,9 +170,6 @@ return {
   -- add any tools you want to have installed below
   {
     "williamboman/mason.nvim",
-    keys = {
-      { "<leader>cm", false },
-    },
     opts = {
       ensure_installed = {
         -- Lua

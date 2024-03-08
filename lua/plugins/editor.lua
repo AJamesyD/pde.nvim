@@ -24,6 +24,29 @@ return {
     },
   },
   {
+    "stevearc/oil.nvim",
+    event = "VeryLazy",
+    keys = {
+      {
+        "-",
+        "<cmd>Oil<cr>",
+        desc = "Open Oil",
+      },
+      {
+        "<leader>o",
+        "<cmd>Oil<cr>",
+        desc = "Open Oil",
+      },
+    },
+    opts = {
+      columns = {
+        "icon",
+        "size",
+        "mtime",
+      },
+    },
+  },
+  {
     "nvim-pack/nvim-spectre",
     opts = {
       find_engine = {

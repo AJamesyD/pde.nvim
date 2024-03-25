@@ -184,7 +184,6 @@ return {
         -- Python
         "ruff-lsp",
         "python-lsp-server",
-        "pyright",
         "black",
         -- Text
         "yaml-language-server",

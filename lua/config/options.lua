@@ -13,6 +13,7 @@ g.pyright_level = 2
 -- Other globals
 g.codeium_enabled = true
 g.minipairs_disable = true
+g.lazyvim_python_lsp = "basedpyright"
 
 g.amazon = false
 if os.getenv("USER") == "angaidan" then

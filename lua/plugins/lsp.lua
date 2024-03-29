@@ -78,14 +78,15 @@ return {
           },
         },
         -- Python
-        pyright = {
+        basedpyright = {
           settings = {
-            pyright = {
+            basedpyright = {
               disableLanguageServices = false,
               disableOrganizeImports = true,
-            },
-            python = {
+              disableTaggedHints = false,
               analysis = {
+                autoImportCompletions = true,
+                exclude = { "cdk.out" },
                 typeCheckingMode = "standard",
               },
             },

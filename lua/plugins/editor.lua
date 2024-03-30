@@ -119,6 +119,7 @@ return {
           {
             "linux-cultist/venv-selector.nvim",
             optional = true,
+            event = "VeryLazy",
           },
         },
         opts = function(_, opts)

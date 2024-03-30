@@ -98,6 +98,7 @@ return {
   },
   {
     "folke/noice.nvim",
+    optional = true,
     keys = {
       { "<leader>snh", "<CMD>Telescope noice<CR>", desc = "Noice History" },
     },
@@ -107,11 +108,6 @@ return {
         lsp_doc_border = true,
       },
     },
-  },
-  {
-    "iamcco/markdown-preview.nvim", -- TODO: Does this belong in ui?
-    build = "cd app && npm install",
-    ft = "markdown",
   },
   {
     "m4xshen/smartcolumn.nvim",
@@ -239,7 +235,6 @@ return {
   {
     "folke/edgy.nvim",
     optional = true,
-
     opts = function(_, opts)
       opts = vim.tbl_deep_extend("force", opts, {
         animate = {

@@ -4,12 +4,6 @@ vim.diagnostic.config({
 
 return {
   {
-    "linux-cultist/venv-selector.nvim",
-    optional = true,
-    dependencies = { "neovim/nvim-lspconfig", "nvim-telescope/telescope.nvim" },
-    cmd = { "VenvSelect", "VenvSelectCached", "VenvSelectCurrent" },
-  },
-  {
     "mrcjkb/rustaceanvim",
     optional = true,
     opts = {

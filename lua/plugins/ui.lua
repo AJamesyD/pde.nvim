@@ -278,8 +278,12 @@ return {
     opts = {
       dimming = {
         alpha = 0.5,
+        inactive = true,
       },
       context = 15,
+      exclude = {
+        "markdown",
+      },
       expand = {
         -- Python
         "function_definition",
@@ -290,6 +294,17 @@ return {
         "with_statement",
         "try_statement",
         "match_statement",
+        "import_from_statement",
+        "parenthesized_expression",
+        "generator_expression",
+        "list_comprehension",
+        "set_comprehension",
+        "dictionary_comprehension",
+        "tuple",
+        "list",
+        "set",
+        "dictionary",
+        "string",
 
         -- Lua
         "do_statement",
@@ -301,10 +316,35 @@ return {
         "function_definition",
         "table_constructor",
 
+        -- Rust
+        "mod_item",
+        "foreign_mod_item",
+        "function_item",
+        "struct_item",
+        "trait_item",
+        "enum_item",
+        "impl_item",
+        "type_item",
+        "union_item",
+        "const_item",
+        "use_declaration",
+        "let_declaration",
+        "loop_expression",
+        "for_expression",
+        "while_expression",
+        "if_expression",
+        "match_expression",
+        "call_expression",
+        "array_expression",
+        "macro_definition",
+        "macro_invocation",
+        "attribute_item",
+
         -- Common
         "function",
         "method",
-        -- "table",
+        "table",
+        "if_statement",
       },
     },
   },

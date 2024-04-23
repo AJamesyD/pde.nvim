@@ -50,6 +50,10 @@ return {
     opts = {
       ---@type lspconfig.options
       servers = {
+        -- Rust
+        rust_analyzer = {
+          mason = false,
+        },
         -- Lua
         lua_ls = {
           settings = {

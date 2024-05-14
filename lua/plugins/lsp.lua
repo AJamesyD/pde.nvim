@@ -6,8 +6,17 @@ return {
   {
     "mrcjkb/rustaceanvim",
     optional = true,
+    ---@class RustaceanOpts
     opts = {
       on_attach = require("lazyvim.util").lsp.on_attach(function(client, buffer) end),
+      tools = {
+        hover_actions = {
+          replace_builtin_hover = false,
+        },
+        code_actions = {
+          ui_select_fallback = true,
+        },
+      },
       server = {
         settings = {
           -- rust-analyzer language server configuration
@@ -21,6 +30,14 @@ return {
                 "--no-deps",
               },
               features = "all",
+            },
+            diagnostics = {
+              disabled = {
+                "unresolved-proc-macro",
+              },
+              styleLints = {
+                enable = true,
+              },
             },
             inlayHints = {
               chainingHints = { enable = true },

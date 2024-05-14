@@ -325,10 +325,26 @@ return {
     opts = {},
   },
   {
-    "stevearc/aerial.nvim",
-    optional = true,
+    "cbochs/grapple.nvim",
     opts = {
-      filter_kind = false,
+      scope = "git_branch", -- also try out "git_branch"
     },
+    event = { "BufReadPost", "BufNewFile" },
+    cmd = "Grapple",
+    keys = function()
+      local keys = {
+        { "<leader>H", "<cmd>Grapple toggle<cr>",      desc = "Grapple toggle tag" },
+        { "<leader>h", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple open tags window" },
+      }
+
+      for i = 1, 5 do
+        table.insert(keys, {
+          "<leader>" .. i,
+          "<cmd>Grapple select index=" .. i .. "<cr>",
+          desc = "Grapple to File " .. i,
+        })
+      end
+      return keys
+    end,
   },
 }

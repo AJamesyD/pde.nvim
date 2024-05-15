@@ -26,9 +26,6 @@ del("n", "[e")
 del("n", "]w")
 del("n", "[w")
 
-del("n", "<leader>uL")
-del("n", "<leader>ul")
-
 del("n", "<leader>ui")
 
 del("n", "<leader>L")

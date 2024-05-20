@@ -19,14 +19,15 @@ return {
       stages = "static",
     },
   },
-  {
-    "echasnovski/mini.indentscope",
-    opts = {
-      draw = {
-        animation = require("mini.indentscope").gen_animation.none(),
-      },
-    },
-  },
+  -- {
+  --   "echasnovski/mini.indentscope",
+  --   optional = true,
+  --   opts = {
+  --     draw = {
+  --       animation = require("mini.indentscope").gen_animation.none(),
+  --     },
+  --   },
+  -- },
   {
     "akinsho/bufferline.nvim",
     dependencies = { "tiagovla/scope.nvim" }, -- TODO: configure scope w/ resession.

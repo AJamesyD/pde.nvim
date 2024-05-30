@@ -160,6 +160,9 @@ return {
         },
       },
       setup = {
+        rust_analyzer = function()
+          return true
+        end,
         pylsp = function()
           ---@param client lsp.Client
           require("lazyvim.util").lsp.on_attach(function(client, _)

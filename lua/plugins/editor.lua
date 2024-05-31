@@ -118,6 +118,7 @@ return {
           {
             "linux-cultist/venv-selector.nvim",
             optional = true,
+            branch = "regexp",
             event = "VeryLazy",
           },
         },

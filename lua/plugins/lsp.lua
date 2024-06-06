@@ -49,20 +49,6 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
-    dependencies = {
-      {
-        "smjonas/inc-rename.nvim",
-        init = function()
-          require("lazyvim.util").lsp.on_attach(function(_, buffer)
-            -- stylua: ignore
-            vim.keymap.set("n", "<leader>cr", "<CMD>IncRename ", { desc = "Rename", buffer = buffer })
-          end)
-        end,
-        opts = {
-          preview_empty_name = true,
-        },
-      },
-    },
     ---@class PluginLspOpts
     opts = {
       ---@type lspconfig.options

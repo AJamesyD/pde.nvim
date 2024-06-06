@@ -356,4 +356,8 @@ return {
     },
     opts = {},
   },
+  {
+    "tzachar/highlight-undo.nvim",
+    opts = {},
+  },
 }

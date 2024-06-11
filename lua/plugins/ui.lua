@@ -1,8 +1,10 @@
 local function is_dependency_file(buf_number)
   local file_name = vim.api.nvim_buf_get_name(buf_number)
   local dependency_locations = {
-    "site-packages", -- python
-    "node_modules",  -- JS/TS
+    "site-packages/", -- python
+    "node_modules/",  -- JS/TS
+    "build/",
+    "target/",
   }
   for location in pairs(dependency_locations) do
     if file_name:match(location) then
@@ -35,6 +37,20 @@ return {
       { "<leader>bl", false },
       { "<leader>bb", "<CMD>BufferLinePick<CR>",      desc = "Pick buffer open" },
       { "<leader>bc", "<CMD>BufferLinePickClose<CR>", desc = "Pick buffer close" },
+      {
+        "<leader>bf",
+        function()
+          vim.g.bufferline_filter_enabled = not vim.g.bufferline_filter_enabled
+        end,
+        desc = "Toggle bufferline filter",
+      },
+      {
+        "<leader>uB",
+        function()
+          vim.g.bufferline_filter_enabled = not vim.g.bufferline_filter_enabled
+        end,
+        desc = "Toggle bufferline filter",
+      },
     },
     opts = {
       options = {
@@ -43,9 +59,12 @@ return {
         separator_style = "slant",
         show_buffer_close_icons = false,
         custom_filter = function(buf_number)
-          local is_dependency_file = is_dependency_file(buf_number)
+          if not vim.g.bufferline_filter_enabled then
+            return true
+          end
+          local is_dep_file = is_dependency_file(buf_number)
           local buf_in_cwd = vim.api.nvim_buf_get_name(buf_number):find(vim.fn.getcwd(), 0, true)
-          return buf_in_cwd and not is_dependency_file
+          return buf_in_cwd and not is_dep_file
         end,
         groups = {
           options = {

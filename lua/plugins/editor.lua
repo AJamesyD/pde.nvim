@@ -85,6 +85,55 @@ return {
         },
       },
     },
+    keys = {
+      {
+        "s",
+        mode = { "n", "x", "o" },
+        function()
+          if vim.g.flash_enabled then
+            require("flash").jump()
+          end
+        end,
+        desc = "Flash",
+      },
+      {
+        "S",
+        mode = { "n", "x", "o" },
+        function()
+          if vim.g.flash_enabled then
+            require("flash").treesitter()
+          end
+        end,
+        desc = "Flash Treesitter",
+      },
+      {
+        "r",
+        mode = "o",
+        function()
+          if vim.g.flash_enabled then
+            require("flash").remote()
+          end
+        end,
+        desc = "Remote Flash",
+      },
+      {
+        "R",
+        mode = { "o", "x" },
+        function()
+          if vim.g.flash_enabled then
+            require("flash").treesitter_search()
+          end
+        end,
+        desc = "Treesitter Search",
+      },
+      {
+        "<leader>uS",
+        function()
+          vim.g.flash_enabled = not vim.g.flash_enabled
+        end,
+        desc = "Toggle Flash",
+      },
+    },
   },
   {
     "folke/which-key.nvim",

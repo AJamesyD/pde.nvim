@@ -15,6 +15,7 @@ g.codeium_enabled = true
 g.minipairs_disable = true
 g.lazyvim_python_lsp = "basedpyright"
 g.bufferline_filter_enabled = true
+g.flash_enabled = false
 
 g.amazon = false
 if os.getenv("USER") == "angaidan" then

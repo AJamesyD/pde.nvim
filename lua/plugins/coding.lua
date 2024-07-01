@@ -43,6 +43,17 @@ return {
     end,
   },
   {
+    "supermaven-inc/supermaven-nvim",
+    build = ":SupermavenUseFree",
+    opts = {
+      keymaps = {
+        accept_suggestion = "<C-S-y>",
+        clear_suggestion = "<C-n>",
+        accept_word = "<C-y>",
+      },
+    },
+  },
+  {
     "jackMort/ChatGPT.nvim",
     event = "VeryLazy",
     dependencies = {

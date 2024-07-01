@@ -8,6 +8,7 @@ return {
         kinds = {
           Snippet = " ",
           Variable = "󰫧 ",
+          Supermaven = " ",
         },
       },
     },

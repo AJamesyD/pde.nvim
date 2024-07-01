@@ -11,7 +11,7 @@ g.clippy_level = 0
 g.pyright_level = 2
 
 -- Other globals
-g.codeium_enabled = true
+g.codeium_enabled = false
 g.minipairs_disable = true
 g.lazyvim_python_lsp = "basedpyright"
 g.bufferline_filter_enabled = true

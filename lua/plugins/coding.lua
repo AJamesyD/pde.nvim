@@ -23,10 +23,18 @@ return {
     dependencies = {
       {
         "Exafunction/codeium.nvim",
-        enabled = false,
         cmd = "Codeium",
         build = ":Codeium Auth",
         opts = {},
+        keys = {
+          {
+            "<leader>c<leader>",
+            function()
+              vim.g.codeium_enabled = not vim.g.codeium_enabled
+            end,
+            desc = "Toggle Codeium",
+          },
+        },
       },
     },
     ---@param opts cmp.ConfigSchema
@@ -45,6 +53,13 @@ return {
   {
     "supermaven-inc/supermaven-nvim",
     build = ":SupermavenUseFree",
+    keys = {
+      {
+        "<leader>c<CR>",
+        "<cmd>SupermavenToggle<CR>",
+        desc = "Toggle Supermaven",
+      },
+    },
     opts = {
       keymaps = {
         accept_suggestion = "<C-S-y>",

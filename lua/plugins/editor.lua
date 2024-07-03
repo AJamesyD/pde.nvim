@@ -25,6 +25,7 @@ return {
   },
   {
     "stevearc/oil.nvim",
+    enabled = false,
     event = "VeryLazy",
     keys = {
       {

@@ -60,6 +60,7 @@ map("n", "<C-o>", "<C-o>zz", {})
 map("n", "<C-i>", "<C-i>zz", {})
 
 -- cut/copy/paste
+map({ "n", "v" }, "$", "g_", { noremap = false, desc = "Paste from clip" })
 map({ "n" }, "x", '"_x', {})
 map({ "x" }, "p", '"_dP', {})
 map({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clip" })

@@ -140,10 +140,10 @@ return {
   {
     "folke/which-key.nvim",
     opts = {
-      defaults = {
-        ["<leader>gh"] = { name = "+hunks" },
-        ["<leader>gw"] = { name = "+worktrees" },
-        ["<leader>F"] = { "which_key_ignore" },
+      preset = "modern",
+      spec = {
+        { "<leader>F",  hidden = true },
+        { "<leader>gw", group = "+worktrees" },
       },
     },
   },

@@ -48,32 +48,6 @@ return {
     },
   },
   {
-    "nvim-pack/nvim-spectre",
-    opts = {
-      find_engine = {
-        ["rg"] = {
-          options = {
-            ["ignore-case"] = {
-              value = "--ignore-case",
-              icon = "[I]",
-              desc = "ignore case",
-            },
-            ["hidden"] = {
-              value = "--hidden",
-              desc = "hidden file",
-              icon = "[H]",
-            },
-            ["backreferences"] = {
-              value = "--pcre2",
-              desc = "backreferences",
-              icon = "[B]",
-            },
-          },
-        },
-      },
-    },
-  },
-  {
     "folke/flash.nvim",
     lazy = false,
     opts = {
@@ -142,7 +116,7 @@ return {
     opts = {
       preset = "modern",
       spec = {
-        { "<leader>F",  hidden = true },
+        { "<leader>F", hidden = true },
         { "<leader>gw", group = "+worktrees" },
       },
     },
@@ -210,15 +184,15 @@ return {
       },
     },
     keys = {
-      { "<leader>,",       false },
-      { "<leader>/",       false },
-      { "<leader>:",       false },
+      { "<leader>,", false },
+      { "<leader>/", false },
+      { "<leader>:", false },
       { "<leader><space>", false },
       -- buffer
-      { "<leader>be",      "<cmd>Telescope buffers<cr>", desc = "Expore buffers" },
+      { "<leader>be", "<cmd>Telescope buffers<cr>", desc = "Expore buffers" },
       -- find
-      { "<leader>fc",      false },
-      { "<leader>fp",      "<cmd>Telescope project<cr>", desc = "Projects" },
+      { "<leader>fc", false },
+      { "<leader>fp", "<cmd>Telescope project<cr>", desc = "Projects" },
       -- git
       {
         "<leader>gwc",
@@ -235,16 +209,16 @@ return {
         desc = "Git worktrees",
       },
       -- search
-      { '<leader>s"',    false },
-      { "<leader>sa",    false },
-      { "<leader>sH",    false },
-      { "<leader>sM",    false },
-      { "<leader>sm",    false },
-      { "<leader>sR",    false },
-      { "<leader>sa",    "<cmd>Telescope live_grep_args<cr>", desc = "Grep w/ args" },
-      { "<leader>s<CR>", "<cmd>Telescope resume<cr>",         desc = "Resume" },
+      { '<leader>s"', false },
+      { "<leader>sa", false },
+      { "<leader>sH", false },
+      { "<leader>sM", false },
+      { "<leader>sm", false },
+      { "<leader>sR", false },
+      { "<leader>sa", "<cmd>Telescope live_grep_args<cr>", desc = "Grep w/ args" },
+      { "<leader>s<CR>", "<cmd>Telescope resume<cr>", desc = "Resume" },
       -- undo
-      { "<leader>su",    "<CMD>Telescope undo<CR>",           desc = "Undo history" },
+      { "<leader>su", "<CMD>Telescope undo<CR>", desc = "Undo history" },
     },
     opts = {
       defaults = {
@@ -395,7 +369,7 @@ return {
     cmd = "Grapple",
     keys = function()
       local keys = {
-        { "<leader>H", "<cmd>Grapple toggle<cr>",      desc = "Grapple toggle tag" },
+        { "<leader>H", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle tag" },
         { "<leader>h", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple open tags window" },
       }
 

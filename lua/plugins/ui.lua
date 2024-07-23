@@ -2,7 +2,7 @@ local function is_dependency_file(buf_number)
   local file_name = vim.api.nvim_buf_get_name(buf_number)
   local dependency_locations = {
     "site-packages/", -- python
-    "node_modules/",  -- JS/TS
+    "node_modules/", -- JS/TS
     "build/",
     "target/",
   }
@@ -35,7 +35,7 @@ return {
     keys = {
       { "<leader>br", false },
       { "<leader>bl", false },
-      { "<leader>bb", "<CMD>BufferLinePick<CR>",      desc = "Pick buffer open" },
+      { "<leader>bb", "<CMD>BufferLinePick<CR>", desc = "Pick buffer open" },
       { "<leader>bc", "<CMD>BufferLinePickClose<CR>", desc = "Pick buffer close" },
       {
         "<leader>bf",

@@ -24,30 +24,6 @@ return {
     },
   },
   {
-    "stevearc/oil.nvim",
-    enabled = false,
-    event = "VeryLazy",
-    keys = {
-      {
-        "-",
-        "<cmd>Oil<cr>",
-        desc = "Open Oil",
-      },
-      {
-        "<leader>o",
-        "<cmd>Oil<cr>",
-        desc = "Open Oil",
-      },
-    },
-    opts = {
-      columns = {
-        "icon",
-        "size",
-        "mtime",
-      },
-    },
-  },
-  {
     "folke/flash.nvim",
     lazy = false,
     opts = {

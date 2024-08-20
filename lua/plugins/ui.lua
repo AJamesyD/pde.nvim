@@ -23,11 +23,15 @@ return {
   },
   {
     "echasnovski/mini.indentscope",
-    opts = {
-      draw = {
-        animation = require("mini.indentscope").gen_animation.none(),
-      },
-    },
+    optional = true,
+    opts = function(_, opts)
+      opts.draw = opts.draw or {}
+      local ok, indentscope = pcall(require, "mini.indentscope")
+      if ok and indentscope then
+        opts.draw.animation = indentscope.gen_animation.none()
+      end
+      return opts
+    end,
   },
   {
     "akinsho/bufferline.nvim",

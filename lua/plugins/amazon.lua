@@ -26,6 +26,7 @@ return {
         url = "angaidan@git.amazon.com:pkg/NinjaHooks",
         cond = vim.g.amazon,
         branch = "mainline",
+        lazy = false,
         init = function()
           require("lazyvim.util").lsp.on_attach(function()
             bemol()
@@ -46,23 +47,21 @@ return {
         end,
       },
     },
-    ---@param opts PluginLspOpts
     opts = function(_, opts)
       if vim.g.amazon then
-        opts.setup.barium = function()
-          local lspconfig = require("lspconfig")
-          local configs = require("lspconfig.configs")
-          configs.barium = {
-            default_config = {
-              cmd = { "barium" },
-              filetypes = { "brazilconfig" },
-              root_dir = function(fname)
-                return lspconfig.util.find_git_ancestor(fname)
-              end,
-              settings = {},
-            },
-          }
-        end
+        local lspconfig = require("lspconfig")
+        local configs = require("lspconfig.configs")
+        configs.barium = {
+          default_config = {
+            cmd = { "barium" },
+            filetypes = { "brazil-config" },
+            root_dir = function(fname)
+              return lspconfig.util.find_git_ancestor(fname)
+            end,
+            settings = {},
+          },
+        }
+        lspconfig.barium.setup({})
       end
       return opts
     end,

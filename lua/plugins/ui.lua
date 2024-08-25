@@ -267,7 +267,7 @@ return {
         close_when_all_hidden = true,
       })
       local temp_right = opts.right
-      opts.right = vim.tbl_deep_extend("force", opts.right or {}, opts.left or {})
+      opts.right = opts.left
       opts.left = temp_right
       return opts
     end,

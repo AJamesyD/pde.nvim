@@ -19,7 +19,7 @@ return {
     optional = true,
     opts = {
       formatters_by_ft = {
-        nix = { { "nixfmt", "nixpkgs-fmt" } },
+        nix = { "nixfmt", "nixpkgs-fmt", stop_after_first = true },
       },
     },
   },

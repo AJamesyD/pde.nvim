@@ -4,6 +4,11 @@ return {
     ---@type TSConfig
     ---@diagnostic disable-next-line: missing-fields
     opts = {
+      ensure_installed = {
+        "ini",
+        "kdl",
+      },
+      auto_install = true,
       highlight = {
         enable = true,
         disable = function(_, bufnr)
@@ -38,12 +43,12 @@ return {
         swap = {
           enable = true,
           swap_next = {
-            [">F"] = { query = "@function.outer", desc = "Swap next function" },
-            [">A"] = { query = "@parameter.inner", desc = "Swap next argument" },
+            [">f"] = { query = "@function.outer", desc = "Swap next function" },
+            [">a"] = { query = "@parameter.inner", desc = "Swap next argument" },
           },
           swap_previous = {
-            ["<F"] = { query = "@function.outer", desc = "Swap previous function" },
-            ["<A"] = { query = "@parameter.inner", desc = "Swap previous argument" },
+            ["<f"] = { query = "@function.outer", desc = "Swap previous function" },
+            ["<a"] = { query = "@parameter.inner", desc = "Swap previous argument" },
           },
         },
       },

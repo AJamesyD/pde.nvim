@@ -18,6 +18,12 @@ local function bemol()
   end
 end
 
+vim.filetype.add({
+  extension = {
+    ion = "ion",
+  },
+})
+
 return {
   {
     "neovim/nvim-lspconfig",
@@ -65,5 +71,20 @@ return {
       end
       return opts
     end,
+  },
+  {
+    "stevearc/conform.nvim",
+    optional = true,
+    opts = {
+      formatters = {
+        ion = {
+          command = "ion",
+          args = { "cat", "--format", "pretty" },
+        },
+      },
+      formatters_by_ft = {
+        ion = { "ion", "trim_newlines" },
+      },
+    },
   },
 }

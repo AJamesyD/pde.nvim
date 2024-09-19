@@ -39,6 +39,8 @@ end
 opt.autowrite = false
 opt.clipboard = ""
 
+opt.mouse = ""
+
 opt.incsearch = true
 opt.hlsearch = false
 

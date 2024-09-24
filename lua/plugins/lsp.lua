@@ -4,11 +4,30 @@ vim.diagnostic.config({
 
 return {
   {
+    "Saecki/crates.nvim",
+    opts = {
+      thousands_separator = ",",
+      popup = {
+        border = "rounded",
+        show_version_date = true,
+      },
+      completion = {
+        cmp = { enabled = true },
+        crates = { enabled = true },
+      },
+      lsp = {
+        enabled = true,
+        actions = true,
+        completion = true,
+        hover = true,
+      },
+    },
+  },
+  {
     "mrcjkb/rustaceanvim",
-    optional = true,
+    version = "^5", -- Recommended
     ---@class RustaceanOpts
     opts = {
-      on_attach = require("lazyvim.util").lsp.on_attach(function(client, buffer) end),
       tools = {
         hover_actions = {
           replace_builtin_hover = false,
@@ -26,21 +45,26 @@ return {
             },
             check = {
               command = "clippy",
-              extraArgs = {
-                "--no-deps",
-              },
               features = "all",
             },
+            completion = {
+              fullFunctionSignatures = { enable = true },
+            },
             diagnostics = {
+              experimental = true,
               disabled = {
                 "unresolved-proc-macro",
               },
-              styleLints = {
-                enable = true,
-              },
+              styleLints = { enable = true },
+            },
+            imports = {
+              granularity = { enforce = true },
             },
             inlayHints = {
               chainingHints = { enable = true },
+            },
+            rustfmt = {
+              extraArgs = "+nightly",
             },
           },
         },

@@ -6,6 +6,11 @@ local opt = vim.opt
 local g = vim.g
 local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 
+-- markdown-preview.nvim
+-- requires following. in ssh config
+-- LocalForward 8999 [127.0.0.1]:8999
+g.mkdp_port = 8999
+
 -- Language lint levels
 g.clippy_level = 0
 g.pyright_level = 2

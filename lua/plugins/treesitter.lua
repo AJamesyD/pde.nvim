@@ -20,25 +20,15 @@ return {
           enable = true,
           lookahead = true,
           keymaps = {
-            ["aa"] = { query = "@parameter.outer", desc = "around argument" },
-            ["ia"] = { query = "@parameter.inner", desc = "inside argument" },
+            ["aa"] = { query = "@parameter.outer", desc = "argument" },
+            ["ia"] = { query = "@parameter.inner", desc = "argument" },
+            ["a="] = { query = "@assignment.outer", desc = "assignment" },
+            ["i="] = { query = "@assignment.inner", desc = "assignment" },
           },
         },
         move = {
           enable = true,
           set_jumps = true,
-          goto_next_start = {
-            ["]a"] = { query = "@parameter.inner", desc = "Next argument start" },
-          },
-          goto_next_end = {
-            ["]A"] = { query = "@parameter.inner", desc = "Next argument end" },
-          },
-          goto_previous_start = {
-            ["[a"] = { query = "@parameter.inner", desc = "Previous argument start" },
-          },
-          goto_previous_end = {
-            ["[A"] = { query = "@parameter.inner", desc = "Previous argument end" },
-          },
         },
         swap = {
           enable = true,

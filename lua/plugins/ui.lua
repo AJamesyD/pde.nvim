@@ -1,19 +1,3 @@
-local function is_dependency_file(buf_number)
-  local file_name = vim.api.nvim_buf_get_name(buf_number)
-  local dependency_locations = {
-    "site-packages/", -- python
-    "node_modules/", -- JS/TS
-    "build/",
-    "target/",
-  }
-  for location in pairs(dependency_locations) do
-    if file_name:match(location) then
-      return true
-    end
-  end
-  return false
-end
-
 return {
   {
     "rcarriga/nvim-notify",
@@ -62,14 +46,6 @@ return {
         themable = true,
         separator_style = "slant",
         show_buffer_close_icons = false,
-        custom_filter = function(buf_number)
-          if not vim.g.bufferline_filter_enabled then
-            return true
-          end
-          local is_dep_file = is_dependency_file(buf_number)
-          local buf_in_cwd = vim.api.nvim_buf_get_name(buf_number):find(vim.fn.getcwd(), 0, true)
-          return buf_in_cwd and not is_dep_file
-        end,
         groups = {
           options = {
             toggle_hidden_on_enter = true,
@@ -87,8 +63,8 @@ return {
               auto_close = false, -- whether or not close this group if it doesn't contain the current buffer
               ---@param buf bufferline.Buffer
               matcher = function(buf)
-                local filename = vim.api.nvim_buf_get_name(buf.id)
-                return filename:lower():match("%.md") or filename:lower():match("%.txt")
+                local extension = vim.fn.fnamemodify(buf.path, ":e")
+                return extension:match("md") or extension:match("txt")
               end,
             },
             require("bufferline.groups").builtin.ungrouped:with({
@@ -98,11 +74,23 @@ return {
               },
             }),
             {
-              name = "Deps",
+              name = "Deps/Output",
               auto_close = true, -- whether or not close this group if it doesn't contain the current buffer
               ---@param buf bufferline.Buffer
               matcher = function(buf)
-                return is_dependency_file(buf.id)
+                local path = buf.path
+                local dependency_locations = {
+                  "site-packages/", -- python
+                  "node_modules/", -- JS/TS
+                  "build/",
+                  "target/",
+                }
+                for _, location in ipairs(dependency_locations) do
+                  if path:match(location) then
+                    return true
+                  end
+                end
+                return false
               end,
             },
           },
@@ -382,7 +370,6 @@ return {
   },
   {
     "tzachar/highlight-undo.nvim",
-    enabled = false, -- TODO: re-enable when termcodes fixed
     opts = {},
   },
 }

@@ -76,7 +76,7 @@ end
 vim.opt.foldtext = "v:lua.foldtext()"
 
 vim.opt.listchars = {
-  eol = "󰌑",
+  -- eol = "󰌑",
   nbsp = "␣",
   trail = "·",
   precedes = "←",

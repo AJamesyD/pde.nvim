@@ -1,5 +1,13 @@
 return {
   {
+    "folke/lazydev.nvim",
+    opts = {
+      library = {
+        { path = "tokyonight.nvim" },
+      },
+    },
+  },
+  {
     "hrsh7th/nvim-cmp",
     dependencies = {
       "lukas-reineke/cmp-under-comparator",

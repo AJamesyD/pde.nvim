@@ -382,6 +382,7 @@ return {
   },
   {
     "tzachar/highlight-undo.nvim",
+    enabled = false, -- TODO: re-enable when termcodes fixed
     opts = {},
   },
 }

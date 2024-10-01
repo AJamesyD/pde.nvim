@@ -8,14 +8,34 @@ return {
       },
     },
     opts = {
+      auto_clean_after_session_restore = true,
       close_if_last_window = true,
       enable_git_status = false,
-      enable_diagnostics = false,
-      window = {
-        width = 30,
+      enable_cursor_hijack = true,
+      sources = {
+        "filesystem",
+        "buffers",
       },
       buffers = {
+        group_empty_dirs = true,
         show_unloaded = false,
+      },
+      filesystem = {
+        scan_mode = "deep",
+        filtered_items = {
+          force_visible_in_empty_folder = true,
+        },
+      },
+      default_component_configs = {
+        name = {
+          highlight_opened_files = true,
+        },
+        symlink_targets = {
+          enabled = true,
+        },
+      },
+      window = {
+        width = 40,
       },
     },
     keys = {
@@ -163,7 +183,6 @@ return {
       { "<leader>,", false },
       { "<leader>/", false },
       { "<leader>:", false },
-      { "<leader><space>", false },
       -- buffer
       { "<leader>be", "<cmd>Telescope buffers<cr>", desc = "Expore buffers" },
       -- find

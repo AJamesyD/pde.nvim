@@ -247,14 +247,65 @@ return {
     "folke/edgy.nvim",
     optional = true,
     opts = function(_, opts)
-      opts = vim.tbl_deep_extend("force", opts, {
+      ---@param min_size integer
+      ---@param max_size integer
+      ---@param fraction_of_max number
+      local function min_sidebar_size(min_size, max_size, fraction_of_max)
+        return math.max(math.floor(max_size * fraction_of_max), min_size)
+      end
+      ---@type Edgy.Config
+      local overrides = {
+        keys = {
+          ["<c-Right>"] = false,
+          ["<c-Left>"] = false,
+          ["<c-Up>"] = false,
+          ["<c-Down>"] = false,
+          -- increase width
+          ["<A-l>"] = function(win)
+            win:resize("width", 2)
+          end,
+          -- decrease width
+          ["<A-h>"] = function(win)
+            win:resize("width", -2)
+          end,
+          -- increase height
+          ["<A-k>"] = function(win)
+            win:resize("height", 2)
+          end,
+          -- decrease height
+          ["<A-j>"] = function(win)
+            win:resize("height", -2)
+          end,
+        },
+        options = {
+          left = {
+            size = function()
+              return min_sidebar_size(30, vim.o.columns, 0.1)
+            end,
+          },
+          right = {
+            size = function()
+              return min_sidebar_size(30, vim.o.columns, 0.1)
+            end,
+          },
+        },
         animate = {
           enabled = false,
         },
         exit_when_last = true,
         close_when_all_hidden = true,
-      })
+      }
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+
       local temp_right = opts.right
+      for _, config in ipairs(temp_right) do
+        if type(config) == "table" and config.ft == "grug-far" then
+          config.size.width = function()
+            return min_sidebar_size(10, vim.o.columns, 0.25)
+          end
+        end
+      end
+
       opts.right = opts.left
       opts.left = temp_right
       return opts

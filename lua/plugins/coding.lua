@@ -4,6 +4,7 @@ return {
     opts = {
       library = {
         { path = "tokyonight.nvim" },
+        { path = "edgy.nvim" },
       },
     },
   },

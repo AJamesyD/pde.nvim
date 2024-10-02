@@ -12,7 +12,9 @@ return {
       opts.draw = opts.draw or {}
       local ok, indentscope = pcall(require, "mini.indentscope")
       if ok and indentscope then
-        opts.draw.animation = indentscope.gen_animation.none()
+        if not vim.g.neovide then
+          opts.draw.animation = indentscope.gen_animation.none()
+        end
       end
       return opts
     end,
@@ -290,7 +292,7 @@ return {
           },
         },
         animate = {
-          enabled = false,
+          enabled = vim.g.neovide or false,
         },
         exit_when_last = true,
         close_when_all_hidden = true,

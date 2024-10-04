@@ -21,7 +21,10 @@ return {
   },
   {
     "akinsho/bufferline.nvim",
-    dependencies = { "tiagovla/scope.nvim" }, -- TODO: configure scope w/ resession.
+    dependencies = {
+      "tiagovla/scope.nvim",
+      config = true,
+    }, -- TODO: configure scope w/ resession.
     keys = {
       { "<leader>br", false },
       { "<leader>bl", false },

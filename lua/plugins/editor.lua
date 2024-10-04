@@ -425,12 +425,6 @@ return {
       },
       highlight_mode = "last",
       highlight_on_hover = true,
-      manage_folds = {
-        ["_"] = true,
-        lua = false,
-      },
-      link_folds_to_tree = true,
-      link_tree_to_folds = true,
     },
   },
 }

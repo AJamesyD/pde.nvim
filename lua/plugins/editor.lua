@@ -17,14 +17,29 @@ return {
         "buffers",
       },
       buffers = {
+        bind_to_cwd = false, -- Keep same as filesystem.bind_to_cwd
         group_empty_dirs = true,
         show_unloaded = false,
+        terminals_first = true,
       },
       filesystem = {
         scan_mode = "deep",
         filtered_items = {
           force_visible_in_empty_folder = true,
+          always_show = {
+            ".cargo",
+            ".config",
+            ".gitignore",
+            ".rustfmt.toml",
+          },
+          always_show_by_pattern = {
+            ".*rc",
+            ".bash*",
+            ".env*",
+            ".zsh*",
+          },
         },
+        hijack_netrw_behavior = "open_current",
       },
       default_component_configs = {
         name = {
@@ -36,6 +51,15 @@ return {
       },
       window = {
         width = 40,
+      },
+      event_handlers = {
+        {
+          event = "neo_tree_buffer_enter",
+          handler = function()
+            vim.opt.relativenumber = true
+            vim.opt.number = true
+          end,
+        },
       },
     },
     keys = {
@@ -358,7 +382,7 @@ return {
   {
     "cbochs/grapple.nvim",
     opts = {
-      scope = "git_branch", -- also try out "git_branch"
+      scope = "git_branch",
     },
     event = { "BufReadPost", "BufNewFile" },
     cmd = "Grapple",
@@ -377,5 +401,36 @@ return {
       end
       return keys
     end,
+  },
+  {
+    "hedyhli/outline.nvim",
+    optional = true,
+    opts = {
+      outline_window = {
+        show_numbers = true,
+        show_relative_numbers = true,
+      },
+    },
+  },
+  {
+    "stevearc/aerial.nvim",
+    optional = true,
+    opts = {
+      layout = {
+        win_opts = {
+          number = true,
+          relativenumber = true,
+          statuscolumn = vim.opt.statuscolumn["_value"],
+        },
+      },
+      highlight_mode = "last",
+      highlight_on_hover = true,
+      manage_folds = {
+        ["_"] = true,
+        lua = false,
+      },
+      link_folds_to_tree = true,
+      link_tree_to_folds = true,
+    },
   },
 }

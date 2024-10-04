@@ -3,8 +3,8 @@ return {
     "folke/lazydev.nvim",
     opts = {
       library = {
-        { path = "tokyonight.nvim" },
         { path = "edgy.nvim" },
+        { path = "tokyonight.nvim" },
       },
     },
   },

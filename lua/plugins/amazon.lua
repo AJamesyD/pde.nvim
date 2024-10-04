@@ -34,7 +34,7 @@ return {
         branch = "mainline",
         lazy = false,
         init = function()
-          require("lazyvim.util").lsp.on_attach(function()
+          LazyVim.lsp.on_attach(function()
             bemol()
           end)
         end,

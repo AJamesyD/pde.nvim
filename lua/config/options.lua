@@ -6,21 +6,23 @@ local opt = vim.opt
 local g = vim.g
 local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 
--- markdown-preview.nvim
--- requires following. in ssh config
--- LocalForward 8999 [127.0.0.1]:8999
-g.mkdp_port = 8999
+-- LazyVim globals
+g.lazyvim_statuscolumn = {
+  -- folds_open = true, -- A little too busy
+  -- folds_githl = true, -- Only catches if first line of fold is diff
+}
+g.lazyvim_python_lsp = "basedpyright"
 
--- Language lint levels
-g.clippy_level = 0
-g.pyright_level = 2
+-- Plugin globals
+g.mkdp_port = 8999 -- markdown-preview.nvim requires "LocalForward 8999 [127.0.0.1]:8999"
 
--- Other globals
+-- Custom globals
 g.codeium_enabled = false
 g.minipairs_disable = true
-g.lazyvim_python_lsp = "basedpyright"
 g.bufferline_filter_enabled = true
 g.flash_enabled = false
+g.clippy_level = 0
+g.pyright_level = 2
 
 g.amazon = false
 if os.getenv("USER") == "angaidan" then
@@ -51,45 +53,34 @@ if g.neovide then
   opt.linespace = -3
 end
 
-opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,"
-  .. "a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,"
-  .. "sm:block-blinkwait175-blinkoff150-blinkon175"
-
+-- Override default LazyVim options
 opt.autowrite = false
 opt.clipboard = ""
-
 opt.mouse = ""
 
-opt.incsearch = true
-opt.hlsearch = false
+-- TODO: Experiment with nvim-ufo
+-- function _G.foldtext()
+--   local ok = pcall(vim.treesitter.get_parser, vim.api.nvim_get_current_buf())
+--   local ret = ok and vim.treesitter.foldtext and vim.treesitter.foldtext()
+--   if not ret or type(ret) == "string" then
+--     ret = { { vim.api.nvim_buf_get_lines(0, vim.v.lnum - 1, vim.v.lnum, false)[1], {} } }
+--   end
+--   local num_lines = vim.v.foldend - vim.v.foldstart + 1
+--   table.insert(ret, { "  " .. num_lines })
+--
+--   if not vim.treesitter.foldtext then
+--     return table.concat(
+--       vim.tbl_map(function(line)
+--         return line[1]
+--       end, ret),
+--       " "
+--     )
+--   end
+--   return ret
+-- end
+-- vim.opt.foldtext = "v:lua.foldtext()"
 
-opt.swapfile = false
-opt.backup = false
-opt.undodir = os.getenv("HOME") .. "/.cache/" .. app_name .. "/undo//"
-
-function _G.foldtext()
-  local ok = pcall(vim.treesitter.get_parser, vim.api.nvim_get_current_buf())
-  local ret = ok and vim.treesitter.foldtext and vim.treesitter.foldtext()
-  if not ret or type(ret) == "string" then
-    ret = { { vim.api.nvim_buf_get_lines(0, vim.v.lnum - 1, vim.v.lnum, false)[1], {} } }
-  end
-  local num_lines = vim.v.foldend - vim.v.foldstart + 1
-  table.insert(ret, { "  " .. num_lines })
-
-  if not vim.treesitter.foldtext then
-    return table.concat(
-      vim.tbl_map(function(line)
-        return line[1]
-      end, ret),
-      " "
-    )
-  end
-  return ret
-end
-
-vim.opt.foldtext = "v:lua.foldtext()"
-
-vim.opt.listchars = {
+opt.listchars = {
   -- eol = "󰌑",
   nbsp = "␣",
   trail = "·",
@@ -98,3 +89,15 @@ vim.opt.listchars = {
   tab = "¬ ",
   conceal = "※",
 }
+
+-- Custom options
+opt.incsearch = true
+opt.hlsearch = false
+
+opt.swapfile = false
+opt.backup = false
+opt.undodir = os.getenv("HOME") .. "/.cache/" .. app_name .. "/undo//"
+
+opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,"
+  .. "a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,"
+  .. "sm:block-blinkwait175-blinkoff150-blinkon175"

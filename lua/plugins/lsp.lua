@@ -25,7 +25,6 @@ return {
   },
   {
     "mrcjkb/rustaceanvim",
-    version = "^5", -- Recommended
     ---@class RustaceanOpts
     opts = {
       tools = {
@@ -75,7 +74,6 @@ return {
     "neovim/nvim-lspconfig",
     ---@class PluginLspOpts
     opts = {
-      ---@type lspconfig.options
       servers = {
         -- Rust
         rust_analyzer = {
@@ -174,8 +172,8 @@ return {
           return true
         end,
         pylsp = function()
-          ---@param client lsp.Client
-          require("lazyvim.util").lsp.on_attach(function(client, _)
+          ---@param client vim.lsp.Client
+          LazyVim.lsp.on_attach(function(client, _)
             if client.name == "pylsp" then
               -- only enable code actions
               client.server_capabilities.codeActionProvider = true
@@ -192,32 +190,6 @@ return {
             end
           end)
         end,
-      },
-    },
-  },
-
-  -- add any tools you want to have installed below
-  {
-    "williamboman/mason.nvim",
-    opts = {
-      ensure_installed = {
-        -- Lua
-        "lua-language-server",
-        "stylua",
-        "selene",
-        "luacheck",
-        -- Shell
-        "bash-language-server",
-        "shfmt",
-        "shellcheck",
-        -- Python
-        "ruff-lsp",
-        "python-lsp-server",
-        "black",
-        -- Text
-        "yaml-language-server",
-        "json-lsp",
-        "marksman",
       },
     },
   },

@@ -197,31 +197,19 @@ return {
     "williamboman/mason.nvim",
     dependencies = {
       "Zeioth/mason-extra-cmds",
+      cmd = "MasonUpdateAll",
+      build = ":MasonUpdateAll",
       config = true,
     },
     cmd = {
       "MasonUpdateAll", -- this cmd is provided by mason-extra-cmds
     },
-    -- opts_extend = { "ensure_installed" },
-    opts = function(_, opts)
-      local overrides = {
-        PATH = "append",
-        max_concurrent_installers = 10,
-        ui = {
-          border = "rounded",
-        },
-      }
-
-      -- Update mason packages after lazy finishes updating
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "LazyUpdate",
-        callback = function()
-          vim.cmd(":MasonUpdateAll")
-        end,
-      })
-
-      opts = vim.tbl_deep_extend("force", opts, overrides)
-      return opts
-    end,
+    opts = {
+      PATH = "append",
+      max_concurrent_installers = 10,
+      ui = {
+        border = "rounded",
+      },
+    },
   },
 }

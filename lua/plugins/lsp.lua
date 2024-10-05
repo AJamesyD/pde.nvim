@@ -193,4 +193,14 @@ return {
       },
     },
   },
+  {
+    "williamboman/mason.nvim",
+    opts = {
+      PATH = "append",
+      max_concurrent_installers = 10,
+      ui = {
+        border = "rounded",
+      },
+    },
+  },
 }

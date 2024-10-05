@@ -434,7 +434,7 @@ return {
       "kevinhwang91/promise-async",
       {
         "neovim/nvim-lspconfig",
-        opts = function()
+        opts = function(_, opts)
           local keys = require("lazyvim.plugins.lsp.keymaps").get()
           keys[#keys + 1] = {
             "K",
@@ -447,6 +447,7 @@ return {
             end,
             desc = "Hover",
           }
+          return opts
         end,
       },
     },
@@ -471,7 +472,7 @@ return {
         end,
       },
     },
-    opts = function(_)
+    opts = function(_, opts)
       local handler = function(virtText, lnum, endLnum, width, truncate)
         local newVirtText = {}
         local foldedLines = endLnum - lnum
@@ -520,7 +521,9 @@ return {
           },
         },
       }
-      return overrides
+
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+      return opts
     end,
     init = function()
       -- vim.opt.foldcolumn = "0" -- '0' is not bad

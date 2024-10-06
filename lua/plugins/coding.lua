@@ -3,8 +3,9 @@ return {
     "folke/lazydev.nvim",
     opts = {
       library = {
-        { path = "edgy.nvim" },
-        { path = "tokyonight.nvim" },
+        { path = "edgy.nvim", words = { "edgy" } },
+        { path = "mason.nvim", words = { "mason" } },
+        { path = "tokyonight.nvim", words = { "tokyonight" } },
       },
     },
   },

@@ -1,6 +1,9 @@
 local bufnr = vim.api.nvim_get_current_buf()
 vim.keymap.set("n", "<leader>uD", function()
-  local client = vim.lsp.get_active_clients({ name = "basedpyright" })[1]
+  local client = vim.lsp.get_clients({
+    bufnr = vim.api.nvim_get_current_buf(),
+    name = "basedpyright",
+  })[1]
   local settings = client.config.settings or {}
 
   vim.g.pyright_level = (vim.g.pyright_level + 1) % 5

@@ -1,6 +1,9 @@
 local bufnr = vim.api.nvim_get_current_buf()
 vim.keymap.set("n", "<leader>uD", function()
-  local client = vim.lsp.get_active_clients({ name = "rust-analyzer" })[1]
+  local client = vim.lsp.get_clients({
+    bufnr = vim.api.nvim_get_current_buf(),
+    name = "rust-analyzer",
+  })[1]
   local settings = client.config.settings or {}
 
   vim.g.clippy_level = (vim.g.clippy_level + 1) % 4

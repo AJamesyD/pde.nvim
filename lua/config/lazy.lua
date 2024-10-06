@@ -60,3 +60,4 @@ require("lazy").setup({
 })
 
 _G.LazyVim = require("lazyvim.util")
+_G.MyUtils = require("util")

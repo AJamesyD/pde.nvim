@@ -1,11 +1,5 @@
 local bufnr = vim.api.nvim_get_current_buf()
-vim.keymap.set("n", "<leader>uD", function()
-  local client = vim.lsp.get_clients({
-    bufnr = vim.api.nvim_get_current_buf(),
-    name = "rust-analyzer",
-  })[1]
-  local settings = client.config.settings or {}
-
+local function settings_updater(settings)
   vim.g.clippy_level = (vim.g.clippy_level + 1) % 4
   local extra_args = {}
   local message = ""
@@ -39,12 +33,21 @@ vim.keymap.set("n", "<leader>uD", function()
     }
     message = "clippy lints: pedantic, nursery, cargo, default"
   end
-  settings["rust-analyzer"].check.extraArgs = extra_args
+
   vim.notify(message)
 
-  client.config.settings = settings
-  client.notify("workspace/didChangeConfiguration", {
-    settings = settings,
+  settings["rust-analyzer"].check.extraArgs = extra_args
+  return settings
+end
+
+vim.keymap.set("n", "<leader>uD", function()
+  local client_filter = {
+    bufnr = bufnr,
+    name = "rust-analyzer",
+  }
+  MyUtils.reload_lsp_setting({
+    client_filter = client_filter,
+    settings_updater = settings_updater,
+    restart_cmd = "RustAnalyzer restart",
   })
-  vim.cmd("RustAnalyzer restart")
 end, { desc = "Toggle diagnostic level", buffer = bufnr })

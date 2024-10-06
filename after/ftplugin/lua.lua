@@ -2,7 +2,7 @@ local bufnr = vim.api.nvim_get_current_buf()
 vim.keymap.set("n", "<leader>uD", function()
   local client = vim.lsp.get_clients({
     bufnr = bufnr,
-    name = "basedpyright",
+    name = "lua_ls",
   })[1]
   local settings = client.config.settings or {}
 

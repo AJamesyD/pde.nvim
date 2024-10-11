@@ -4,6 +4,7 @@ return {
     opts = {
       library = {
         { path = "edgy.nvim", words = { "edgy" } },
+        { path = "nvim-cmp-lsp-rs", words = { "rust" } },
         { path = "mason.nvim", words = { "mason" } },
         { path = "rustaceanvim", words = { "rust" } },
         { path = "tokyonight.nvim", words = { "tokyonight" } },
@@ -16,8 +17,44 @@ return {
     opts = function(_, opts)
       local cmp = require("cmp")
 
+      ---@type cmp.SourceConfig[]
+      local sources = cmp.config.sources({
+        -- group_index = 1
+        { name = "snippets" }, -- Source first for dedup
+        { name = "nvim_lsp", keyword_length = 1 },
+        { name = "path" },
+      }, {
+        -- group_index = 2
+        { name = "buffer", keyword_length = 5 },
+        { name = "path" },
+      })
+      ---@param source cmp.SourceConfig
+      for _, source in ipairs(opts.sources or {}) do
+        if not vim.tbl_contains({ "snippets", "nvim_lsp", "buffer", "path" }, source.name) then
+          table.insert(sources, source)
+        end
+      end
+
+      ---@type table<integer, integer>
+      local modified_offset_priority = {
+        snippets = 1,
+        nvim_lsp = 1,
+      }
+      ---@param offset integer: kind of completion entry
+      local function modified_offset(offset)
+        return modified_offset_priority[offset] or offset
+      end
+      ---@type cmp.ComparatorFunction
+      local compare_offset = function(entry1, entry2)
+        local offset1 = modified_offset(entry1:get_offset())
+        local offset2 = modified_offset(entry2:get_offset())
+        if offset1 ~= offset2 then
+          return offset1 - offset2 < 0
+        end
+      end
+
       ---@param kind integer: kind of completion entry
-      local function deprio(kind)
+      local deprio = function(kind)
         ---@type cmp.ComparatorFunction
         return function(entry1, entry2)
           if entry1:get_kind() == kind then
@@ -43,15 +80,14 @@ return {
 
       local types = require("cmp.types")
       ---@type table<integer, integer>
-      local modified_priority = {
-        [types.lsp.CompletionItemKind.Variable] = 1, -- high
+      local modified_kind_priority = {
+        [types.lsp.CompletionItemKind.Variable] = types.lsp.CompletionItemKind.Method, -- Method=2
         [types.lsp.CompletionItemKind.Keyword] = 0, -- top
         [types.lsp.CompletionItemKind.Snippet] = 0, -- top
-        [types.lsp.CompletionItemKind.Text] = 100, -- bottom
       }
       ---@param kind integer: kind of completion entry
       local function modified_kind(kind)
-        return modified_priority[kind] or kind
+        return modified_kind_priority[kind] or kind
       end
       ---kind: Entires with smaller ordinal value of 'kind' will be ranked higher.
       ---(see lsp.CompletionItemKind enum).
@@ -100,11 +136,12 @@ return {
         -- compare.order,
 
         --- My Overrides ---
-        compare.offset,
         compare.exact,
-        deprio(types.lsp.CompletionItemKind.Text),
         compare.score,
+        compare_offset,
         compare_under,
+        -- Magic number line for plugins/lang/rust.lua
+        deprio(types.lsp.CompletionItemKind.Text),
         recently_used,
         compare.locality,
         compare_kind,
@@ -114,23 +151,33 @@ return {
         compare.order,
       }
 
+      local prev_format = opts.formatting.format
+
       local overrides = {
         completion = {
           keyword_length = 2, -- default: 1
         },
+        formatting = {
+          ---@param entry cmp.Entry
+          ---@param vim_item vim.CompletedItem
+          format = function(entry, vim_item)
+            local item = prev_format(entry, vim_item)
+            -- Allow a few sources to create entries no matter what
+            -- NOTE: Expecting preference for snippets over lsp provided snippets
+            item.dup = ({
+              crates = 1,
+              snippets = 1,
+            })[entry.source.name] or nil
+            return item
+          end,
+        },
         performance = {
           debounce = 40, -- default: 60
           trottle = 30, -- default: 30
-          fetching_timeout = 250, -- default: 500
+          fetching_timeout = 300, -- default: 500
           max_view_entries = 50, -- default: 200
         },
-        sources = cmp.config.sources({
-          { name = "nvim_lsp", keyword_length = 1 },
-          { name = "path" },
-        }, {
-          { name = "buffer", keyword_length = 5 },
-          { name = "path" },
-        }),
+        sources = sources,
         sorting = {
           comparators = comparators,
         },

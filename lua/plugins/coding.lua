@@ -5,6 +5,7 @@ return {
       library = {
         { path = "edgy.nvim", words = { "edgy" } },
         { path = "mason.nvim", words = { "mason" } },
+        { path = "rustaceanvim", words = { "rust" } },
         { path = "tokyonight.nvim", words = { "tokyonight" } },
       },
     },
@@ -99,9 +100,9 @@ return {
         -- compare.order,
 
         --- My Overrides ---
-        deprio(types.lsp.CompletionItemKind.Text),
         compare.offset,
         compare.exact,
+        deprio(types.lsp.CompletionItemKind.Text),
         compare.score,
         compare_under,
         recently_used,

@@ -38,7 +38,8 @@ return {
   },
   {
     "mrcjkb/rustaceanvim",
-    ---@class RustaceanOpts
+    version = "^5",
+    ---@type rustaceanvim.Opts
     opts = {
       tools = {
         hover_actions = {
@@ -49,7 +50,7 @@ return {
         },
       },
       server = {
-        settings = {
+        default_settings = {
           -- rust-analyzer language server configuration
           ["rust-analyzer"] = {
             cargo = {
@@ -68,6 +69,12 @@ return {
                 "unresolved-proc-macro",
               },
               styleLints = { enable = true },
+            },
+            hover = {
+              show = {
+                enumVariants = 10,
+                fields = 10,
+              },
             },
             imports = {
               granularity = { enforce = true },

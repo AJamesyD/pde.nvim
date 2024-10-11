@@ -428,7 +428,7 @@ return {
               local ok, ufo = pcall(require, "ufo")
               local winid = ok and ufo.peekFoldedLinesUnderCursor()
               if not winid then
-                vim.lsp.buf.hover()
+                require("noice.lsp").hover()
               end
             end,
             desc = "Hover",

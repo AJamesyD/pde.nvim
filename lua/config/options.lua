@@ -6,7 +6,8 @@ local opt = vim.opt
 local g = vim.g
 local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 
--- LazyVim globals
+-- Override default LazyVim globals
+g.bigfile_size = 512 * 1024 -- 0.5MB. Default is 1.5MB
 g.lazyvim_statuscolumn = {
   -- folds_open = true, -- A little too busy
   -- folds_githl = true, -- Only catches if first line of fold is diff
@@ -17,11 +18,11 @@ g.lazyvim_python_lsp = "basedpyright"
 g.mkdp_port = 8999 -- markdown-preview.nvim requires "LocalForward 8999 [127.0.0.1]:8999"
 
 -- Custom globals
-g.codeium_enabled = false
-g.minipairs_disable = true
-g.bufferline_filter_enabled = true
-g.flash_enabled = false
 g.clippy_level = 0
+g.codeium_enabled = false
+g.concerning_file_size = 100 * 1024 -- 100 KB
+g.flash_enabled = false
+g.minipairs_disable = true
 g.pyright_level = 2
 
 g.amazon = false

@@ -30,20 +30,6 @@ return {
       { "<leader>bl", false },
       { "<leader>bb", "<CMD>BufferLinePick<CR>", desc = "Pick buffer open" },
       { "<leader>bc", "<CMD>BufferLinePickClose<CR>", desc = "Pick buffer close" },
-      {
-        "<leader>bf",
-        function()
-          vim.g.bufferline_filter_enabled = not vim.g.bufferline_filter_enabled
-        end,
-        desc = "Toggle bufferline filter",
-      },
-      {
-        "<leader>uB",
-        function()
-          vim.g.bufferline_filter_enabled = not vim.g.bufferline_filter_enabled
-        end,
-        desc = "Toggle bufferline filter",
-      },
     },
     opts = {
       options = {

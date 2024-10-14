@@ -8,6 +8,7 @@ return {
         { path = "mason.nvim", words = { "mason" } },
         { path = "rustaceanvim", words = { "rust" } },
         { path = "tokyonight.nvim", words = { "tokyonight" } },
+        { path = "nvim-treesitter" },
       },
     },
   },

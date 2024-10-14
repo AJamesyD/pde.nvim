@@ -1,49 +1,61 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    ---@type TSConfig
+    ---@param opts TSConfig
     ---@diagnostic disable-next-line: missing-fields
-    opts = {
-      ensure_installed = {
+    opts = function(_, opts)
+      vim.filetype.add({
+        extension = { rasi = "rasi", rofi = "rasi", wofi = "rasi" },
+        filename = {
+          [".envrc"] = "sh",
+        },
+      })
+
+      ---@type TSConfig
+      ---@diagnostic disable-next-line: missing-fields
+      local overrides = {
+        auto_install = true,
+        highlight = {
+          enable = true,
+        },
+        textobjects = {
+          select = {
+            enable = true,
+            lookahead = true,
+            keymaps = {
+              ["aa"] = { query = "@parameter.outer", desc = "argument" },
+              ["ia"] = { query = "@parameter.inner", desc = "argument" },
+              ["a="] = { query = "@assignment.outer", desc = "assignment" },
+              ["i="] = { query = "@assignment.inner", desc = "assignment" },
+            },
+          },
+          move = {
+            enable = true,
+            set_jumps = true,
+          },
+          swap = {
+            enable = true,
+            swap_next = {
+              [">f"] = { query = "@function.outer", desc = "Swap next function" },
+              [">a"] = { query = "@parameter.inner", desc = "Swap next argument" },
+            },
+            swap_previous = {
+              ["<f"] = { query = "@function.outer", desc = "Swap previous function" },
+              ["<a"] = { query = "@parameter.inner", desc = "Swap previous argument" },
+            },
+          },
+        },
+      }
+
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+      local ensure_installed = {
         "ini",
         "kdl",
         "tmux",
-      },
-      auto_install = true,
-      highlight = {
-        enable = true,
-        disable = function(_, bufnr)
-          return vim.api.nvim_buf_line_count(bufnr) > 10000
-        end,
-      },
-      textobjects = {
-        select = {
-          enable = true,
-          lookahead = true,
-          keymaps = {
-            ["aa"] = { query = "@parameter.outer", desc = "argument" },
-            ["ia"] = { query = "@parameter.inner", desc = "argument" },
-            ["a="] = { query = "@assignment.outer", desc = "assignment" },
-            ["i="] = { query = "@assignment.inner", desc = "assignment" },
-          },
-        },
-        move = {
-          enable = true,
-          set_jumps = true,
-        },
-        swap = {
-          enable = true,
-          swap_next = {
-            [">f"] = { query = "@function.outer", desc = "Swap next function" },
-            [">a"] = { query = "@parameter.inner", desc = "Swap next argument" },
-          },
-          swap_previous = {
-            ["<f"] = { query = "@function.outer", desc = "Swap previous function" },
-            ["<a"] = { query = "@parameter.inner", desc = "Swap previous argument" },
-          },
-        },
-      },
-    },
+      }
+      opts.ensure_installed = vim.list_extend(opts.ensure_installed or {}, ensure_installed)
+      return opts
+    end,
   },
   {
     "m-demare/hlargs.nvim",

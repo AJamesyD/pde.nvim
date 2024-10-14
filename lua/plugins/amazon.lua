@@ -2,8 +2,8 @@ local function bemol()
   local bemol_dir = vim.fs.find({ ".bemol" }, { upward = true, type = "directory" })[1]
   local ws_folders_lsp = {}
   if bemol_dir then
-    -- Disable autoformatting in Brazil projects
-    vim.g.autoformat = false
+    -- Often want to disable autoformatting in Brazil projects
+    -- vim.g.autoformat = false
     local file = io.open(bemol_dir .. "/ws_root_folders", "r")
     if file then
       for line in file:lines() do
@@ -83,7 +83,7 @@ return {
         },
       },
       formatters_by_ft = {
-        ion = { "ion", "trim_newlines" },
+        ion = { "ion" },
       },
     },
   },

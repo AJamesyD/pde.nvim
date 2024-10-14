@@ -100,6 +100,7 @@ return {
           kind = function(kind)
             return {
               kind.Variable,
+              kind.EnumMember,
               kind.Method,
               kind.Field,
               kind.Function,

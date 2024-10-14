@@ -11,7 +11,12 @@ autocmd("CmdlineEnter", {
   desc = "Absolute numbers in cmd mode",
   group = augroup("cmdline_enter"),
   callback = function(event)
-    if vim.opt_local.number then
+    local buf = event.buf
+
+    local number = vim.api.nvim_get_option_value("number", { scope = "local" })
+    local relativenumber = vim.api.nvim_get_option_value("relativenumber", { scope = "local" })
+
+    if number and relativenumber then
       vim.opt_local.relativenumber = false
     end
   end,
@@ -21,7 +26,12 @@ autocmd("CmdlineLeave", {
   desc = "Relative numbers outside cmd mode",
   group = augroup("cmdline_leave"),
   callback = function(event)
-    if vim.opt_local.number then
+    local buf = event.buf
+
+    local number = vim.api.nvim_get_option_value("number", { scope = "local" })
+    local relativenumber = vim.api.nvim_get_option_value("relativenumber", { scope = "local" })
+
+    if number and not relativenumber then
       vim.opt_local.relativenumber = true
     end
   end,

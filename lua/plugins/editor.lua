@@ -85,20 +85,13 @@ return {
       {
         "s",
         mode = { "n", "x", "o" },
-        function()
-          if vim.g.flash_enabled then
-            require("flash").jump()
-          end
-        end,
-        desc = "Flash",
+        false,
       },
       {
         "S",
         mode = { "n", "x", "o" },
         function()
-          if vim.g.flash_enabled then
-            require("flash").treesitter()
-          end
+          require("flash").treesitter()
         end,
         desc = "Flash Treesitter",
       },
@@ -106,9 +99,7 @@ return {
         "r",
         mode = "o",
         function()
-          if vim.g.flash_enabled then
-            require("flash").remote()
-          end
+          require("flash").remote()
         end,
         desc = "Remote Flash",
       },
@@ -116,18 +107,9 @@ return {
         "R",
         mode = { "o", "x" },
         function()
-          if vim.g.flash_enabled then
-            require("flash").treesitter_search()
-          end
+          require("flash").treesitter_search()
         end,
         desc = "Treesitter Search",
-      },
-      {
-        "<leader>uS",
-        function()
-          vim.g.flash_enabled = not vim.g.flash_enabled
-        end,
-        desc = "Toggle Flash",
       },
     },
   },
@@ -137,7 +119,12 @@ return {
       preset = "modern",
       spec = {
         { "<leader>F", hidden = true },
-        { "<leader>gw", group = "+worktrees" },
+        { "<leader>gw", group = "worktrees" },
+      },
+      triggers = {
+        { "<auto>", mode = "nixsotc" },
+        -- For mini.surround
+        { "s", mode = { "n", "v" } },
       },
     },
   },

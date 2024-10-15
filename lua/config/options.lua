@@ -21,7 +21,6 @@ g.mkdp_port = 8999 -- markdown-preview.nvim requires "LocalForward 8999 [127.0.0
 g.clippy_level = 0
 g.codeium_enabled = false
 g.concerning_file_size = 100 * 1024 -- 100 KB
-g.flash_enabled = false
 g.minipairs_disable = true
 g.pyright_level = 2
 

@@ -59,6 +59,8 @@ opt.autowrite = false
 opt.clipboard = ""
 opt.mouse = "nv" -- Normal and visual
 
+opt.scrolloff = 15
+
 opt.listchars = {
   -- eol = "󰌑",
   nbsp = "␣",

@@ -49,6 +49,7 @@ return {
 
       opts = vim.tbl_deep_extend("force", opts, overrides)
       local ensure_installed = {
+        "comment",
         "ini",
         "kdl",
         "tmux",

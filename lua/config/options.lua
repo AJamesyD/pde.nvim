@@ -57,6 +57,7 @@ end
 opt.autowrite = false
 opt.clipboard = ""
 opt.mouse = "nv" -- Normal and visual
+opt.mousemoveevent = true
 
 opt.scrolloff = 15
 

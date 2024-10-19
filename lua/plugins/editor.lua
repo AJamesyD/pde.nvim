@@ -1,3 +1,45 @@
+local function sync_grapple_tags_to_bufferline_pinned()
+  local grapple = require("grapple")
+  local bufferline_groups = require("bufferline.groups")
+  local bufferline_ui = require("bufferline.ui")
+
+  local grapple_tagged_paths = {}
+  for _, tag in ipairs(grapple.tags() or {}) do
+    local absolute_path = tag.path
+    local uri = vim.uri_from_fname(absolute_path)
+    local bufnr = vim.uri_to_bufnr(uri)
+
+    table.insert(grapple_tagged_paths, absolute_path)
+
+    ---@type bufferline.Buffer
+    ---@diagnostic disable-next-line: missing-fields
+    local bufferline_buf = {
+      id = bufnr,
+    }
+    if not bufferline_groups._is_pinned(bufferline_buf) then
+      bufferline_groups.add_element("pinned", bufferline_buf)
+      bufferline_ui.refresh()
+    end
+  end
+
+  local pinned_paths = (vim.g["BufferlinePinnedBuffers"] or ""):split(",")
+  for i, path in ipairs(pinned_paths) do
+    if not vim.tbl_contains(grapple_tagged_paths, path) then
+      local uri = vim.uri_from_fname(path)
+      local bufnr = vim.uri_to_bufnr(uri)
+      ---@type bufferline.Buffer
+      ---@diagnostic disable-next-line: missing-fields
+      local bufferline_buf = {
+        id = bufnr,
+      }
+      if bufferline_groups._is_pinned(bufferline_buf) then
+        bufferline_groups.remove_element("pinned", bufferline_buf)
+        bufferline_ui.refresh()
+      end
+    end
+  end
+end
+
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -368,14 +410,19 @@ return {
   },
   {
     "cbochs/grapple.nvim",
-    opts = {
-      scope = "git_branch",
-    },
+    ---@type grapple.settings
     event = { "BufReadPost", "BufNewFile" },
     cmd = "Grapple",
     keys = function()
       local keys = {
-        { "<leader>H", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle tag" },
+        {
+          "<leader>H",
+          function()
+            require("grapple").toggle()
+            sync_grapple_tags_to_bufferline_pinned()
+          end,
+          desc = "Grapple toggle tag",
+        },
         { "<leader>h", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple open tags window" },
       }
 
@@ -387,6 +434,38 @@ return {
         })
       end
       return keys
+    end,
+    opts = {
+      -- Model after vim.g.root_spec, i.e. { "lsp", {".git", "lua"}, "cwd" }
+      scope = "lsp",
+      default_scopes = {
+        lsp = {
+          fallback = "git_branch",
+        },
+        git_branch = {
+          fallback = "git",
+        },
+      },
+    },
+    config = function(_, opts)
+      local grapple = require("grapple")
+      grapple.setup(opts)
+
+      vim.api.nvim_create_autocmd("FileType", {
+        desc = "Schedule sync of grapple/bufferline tags/pins",
+        pattern = "grapple",
+        callback = function(event)
+          local bufnr = event.buf
+
+          vim.api.nvim_create_autocmd({ "BufLeave", "WinLeave" }, {
+            desc = "Sync grapple/bufferline tags/pins",
+            buffer = bufnr,
+            callback = function()
+              vim.schedule(sync_grapple_tags_to_bufferline_pinned)
+            end,
+          })
+        end,
+      })
     end,
   },
   {

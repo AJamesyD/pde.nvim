@@ -4,9 +4,11 @@ return {
     opts = {
       library = {
         { path = "edgy.nvim", words = { "edgy" } },
+        { path = "grapple.nvim", words = { "grapple" } },
         { path = "nvim-cmp-lsp-rs", words = { "rust" } },
         { path = "mason.nvim", words = { "mason" } },
         { path = "rustaceanvim", words = { "rust" } },
+        { path = "telescope.nvim", words = { "telescope" } },
         { path = "tokyonight.nvim", words = { "tokyonight" } },
         { path = "nvim-treesitter" },
       },

@@ -33,31 +33,21 @@ return {
     },
     opts = {
       options = {
-        style_preset = require("bufferline").style_preset.no_italic,
-        themable = true,
         separator_style = "slant",
         show_buffer_close_icons = false,
+        show_close_icon = false,
+        tab_size = 12,
         groups = {
           options = {
             toggle_hidden_on_enter = true,
           },
           items = {
             require("bufferline.groups").builtin.pinned:with({
-              name = "Pinned",
               icon = " ",
               separator = {
                 style = require("bufferline.groups").separator.pill,
               },
             }),
-            {
-              name = "Docs",
-              auto_close = false, -- whether or not close this group if it doesn't contain the current buffer
-              ---@param buf bufferline.Buffer
-              matcher = function(buf)
-                local extension = vim.fn.fnamemodify(buf.path, ":e")
-                return extension:match("md") or extension:match("txt")
-              end,
-            },
             require("bufferline.groups").builtin.ungrouped:with({
               name = " ",
               separator = {
@@ -65,23 +55,34 @@ return {
               },
             }),
             {
-              name = "Deps/Output",
-              auto_close = true, -- whether or not close this group if it doesn't contain the current buffer
+              name = " test",
               ---@param buf bufferline.Buffer
               matcher = function(buf)
-                local path = buf.path
-                local dependency_locations = {
-                  "site-packages/", -- python
-                  "node_modules/", -- JS/TS
-                  "build/",
-                  "target/",
-                }
-                for _, location in ipairs(dependency_locations) do
-                  if path:match(location) then
-                    return true
-                  end
+                local filename = buf.filename or vim.api.nvim_buf_get_name(buf.id)
+                if not filename or filename == "" then
+                  return false
                 end
-                return false
+                return filename:match("tests/") or filename:match("test/") or filename:match("tst/")
+              end,
+            },
+            {
+              name = " docs",
+              auto_close = true,
+              ---@param buf bufferline.Buffer
+              matcher = function(buf)
+                local is_text_file = vim.b[buf.id].is_text_file
+                return is_text_file ~= nil and is_text_file
+              end,
+            },
+            {
+              name = " misc",
+              auto_close = true,
+              ---@type vim.api.keyset.highlight
+              highlight = { underline = true },
+              ---@param buf bufferline.Buffer
+              matcher = function(buf)
+                local is_relevant_file = vim.b[buf.id].is_relevant_file
+                return is_relevant_file ~= nil and not is_relevant_file
               end,
             },
           },

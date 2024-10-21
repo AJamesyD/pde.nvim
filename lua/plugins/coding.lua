@@ -16,6 +16,7 @@ return {
   },
   {
     "hrsh7th/nvim-cmp",
+    dependencies = { "f3fora/cmp-spell" },
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
       local cmp = require("cmp")
@@ -26,6 +27,16 @@ return {
         { name = "snippets" }, -- Source first for dedup
         { name = "nvim_lsp", keyword_length = 1 },
         { name = "path" },
+        {
+          name = "spell",
+          option = {
+            keep_all_entries = false,
+            enable_in_context = function()
+              return require("cmp.config.context").in_treesitter_capture("spell")
+            end,
+            preselect_correct_word = true,
+          },
+        },
       }, {
         -- group_index = 2
         { name = "buffer", keyword_length = 5 },

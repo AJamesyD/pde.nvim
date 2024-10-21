@@ -54,8 +54,6 @@ if g.neovide then
 end
 
 opt.spell = true
-opt.spelllang = { "en_US" }
-
 -- Override default LazyVim options
 opt.autowrite = false
 opt.clipboard = ""

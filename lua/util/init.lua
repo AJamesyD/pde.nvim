@@ -123,4 +123,20 @@ function M.is_relevant_file(full_file_name, root_dir)
   return false
 end
 
+---@param mode string|string[]
+---@param lhs string
+---@param rhs string|function
+---@param opts? vim.keymap.set.Opts
+M.map = function(mode, lhs, rhs, opts)
+  -- set default value if not specify
+  if opts and opts.noremap == nil and opts.remap == nil then
+    opts.noremap = true
+  end
+  if opts and opts.silent == nil then
+    opts.silent = true
+  end
+
+  vim.keymap.set(mode, lhs, rhs, opts)
+end
+
 return M

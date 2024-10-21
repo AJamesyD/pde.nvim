@@ -45,8 +45,8 @@ del("n", "<leader><tab>[")
 
 -- Add any additional keymaps here
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
-map("n", "n", "'Nn'[v:searchforward].'zv'zz", { desc = "Next Search Result", expr = true })
-map("n", "N", "'nN'[v:searchforward].'zv'zz", { desc = "Prev Search Result", expr = true })
+map("n", "n", "'Nn'[v:searchforward].'zzzv'", { desc = "Next Search Result", expr = true })
+map("n", "N", "'nN'[v:searchforward].'zzzv'", { desc = "Prev Search Result", expr = true })
 
 -- better movement
 map("n", "<C-u>", "<C-u>zz")

@@ -81,7 +81,7 @@ autocmd({ "BufWinEnter" }, {
   end,
 })
 
---- Filetype specific options
+-- FileType specific options
 autocmd("FileType", {
   desc = "KDL opts",
   pattern = "kdl",

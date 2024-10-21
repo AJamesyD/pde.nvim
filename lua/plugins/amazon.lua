@@ -18,9 +18,17 @@ local function bemol()
   end
 end
 
+-- Make my own filetype thing to override neovim applying ".conf" file type.
+-- You may or may not need this depending on your setup.
 vim.filetype.add({
   extension = {
     ion = "ion",
+  },
+  filename = {
+    ["Config"] = function()
+      vim.b.brazil_package_Config = 1
+      return "brazil-config"
+    end,
   },
 })
 
@@ -32,24 +40,17 @@ return {
         url = "angaidan@git.amazon.com:pkg/NinjaHooks",
         cond = vim.g.amazon,
         branch = "mainline",
-        lazy = false,
         init = function()
           LazyVim.lsp.on_attach(function()
             bemol()
           end)
         end,
         config = function(plugin)
+          local nvim_conf_dir = "~/.config/nvim"
+          vim.opt.rtp:remove(nvim_conf_dir)
           vim.opt.rtp:prepend(plugin.dir .. "/configuration/vim/amazon/brazil-config")
-          -- Make my own filetype thing to override neovim applying ".conf" file type.
-          -- You may or may not need this depending on your setup.
-          vim.filetype.add({
-            filename = {
-              ["Config"] = function()
-                vim.b.brazil_package_Config = 1
-                return "brazil-config"
-              end,
-            },
-          })
+          -- NOTE: Make sure ~/.config/nvim is always first (for spell, etc)
+          vim.opt.rtp:prepend(nvim_conf_dir)
         end,
       },
     },

@@ -54,6 +54,9 @@ if g.neovide then
 end
 
 opt.spell = true
+opt.spelloptions = "camel,noplainbuffer"
+opt.spelllang = "en_us"
+
 -- Override default LazyVim options
 opt.autowrite = false
 opt.clipboard = ""

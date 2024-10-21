@@ -202,7 +202,6 @@ return {
             "linux-cultist/venv-selector.nvim",
             optional = true,
             branch = "regexp",
-            event = "VeryLazy",
           },
         },
         opts = function(_, opts)
@@ -220,15 +219,6 @@ return {
               end
             end
           end)
-        end,
-      },
-      {
-        "folke/noice.nvim",
-        optional = true,
-        dependencies = { "nvim-telescope/telescope.nvim" },
-        opts = function(_, opts)
-          require("telescope").load_extension("noice")
-          return opts
         end,
       },
     },
@@ -267,6 +257,8 @@ return {
       { "<leader>s<CR>", "<cmd>Telescope resume<cr>", desc = "Resume" },
       -- undo
       { "<leader>su", "<CMD>Telescope undo<CR>", desc = "Undo history" },
+      -- spell
+      { "z=", "<CMD>Telescope spell_suggest<CR>", desc = "Spelling Suggestions" },
     },
     opts = {
       defaults = {
@@ -284,6 +276,11 @@ return {
           width = 0.87,
           height = 0.80,
           preview_cutoff = 120,
+        },
+      },
+      pickers = {
+        spell_suggest = {
+          theme = "cursor",
         },
       },
     },

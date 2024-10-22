@@ -23,7 +23,7 @@ local function sync_grapple_tags_to_bufferline_pinned()
   end
 
   local pinned_paths = (vim.g["BufferlinePinnedBuffers"] or ""):split(",")
-  for i, path in ipairs(pinned_paths) do
+  for _, path in ipairs(pinned_paths) do
     if not vim.tbl_contains(grapple_tagged_paths, path) then
       local uri = vim.uri_from_fname(path)
       local bufnr = vim.uri_to_bufnr(uri)
@@ -420,10 +420,14 @@ return {
           end,
           desc = "Grapple toggle tag",
         },
-        { "<leader>h", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple open tags window" },
+        {
+          "<leader>h",
+          "<cmd>Grapple toggle_tags<cr>",
+          desc = "Grapple open tags window",
+        },
       }
 
-      for i = 1, 5 do
+      for i = 1, 4 do
         table.insert(keys, {
           "<leader>" .. i,
           "<cmd>Grapple select index=" .. i .. "<cr>",

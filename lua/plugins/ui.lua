@@ -26,7 +26,13 @@ return {
       config = true,
     }, -- TODO: configure scope w/ resession.
     keys = {
+      { "<leader>bP", false },
       { "<leader>br", false },
+      { "<leader>bl", false },
+      { "[B", false },
+      { "]B", false },
+      { "<B", "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer prev" },
+      { ">B", "<cmd>BufferLineMoveNext<cr>", desc = "Move buffer next" },
       { "<leader>bl", false },
       { "<leader>bb", "<CMD>BufferLinePick<CR>", desc = "Pick buffer open" },
       { "<leader>bc", "<CMD>BufferLinePickClose<CR>", desc = "Pick buffer close" },
@@ -119,6 +125,7 @@ return {
     "folke/noice.nvim",
     optional = true,
     keys = {
+      { "<leader>snl", false },
       { "<leader>snh", "<CMD>Telescope noice<CR>", desc = "Noice History" },
     },
     opts = {

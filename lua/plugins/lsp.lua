@@ -15,7 +15,6 @@ return {
       codelens = {
         enabled = true,
       },
-      ---@type lspconfig.options
       servers = {
         lua_ls = {
           settings = {

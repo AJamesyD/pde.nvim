@@ -93,6 +93,21 @@ return {
   },
   {
     "nvim-lualine/lualine.nvim",
+    init = function()
+      vim.g.lualine_laststatus = vim.o.laststatus
+      if vim.fn.argc(-1) > 0 then
+        -- set an empty statusline till lualine loads
+        vim.o.statusline = " "
+      else
+        -- hide the statusline on the starter page
+        vim.o.laststatus = 0
+      end
+
+      if vim.fn.exists("$TMUX") then
+        -- Remove statusline when in TMUX to reduce visual noise
+        vim.g.lualine_laststatus = 0
+      end
+    end,
     opts = {
       options = {
         component_separators = { left = "", right = "" },
@@ -514,10 +529,14 @@ return {
       return opts
     end,
     init = function()
-      -- vim.opt.foldcolumn = "0" -- '0' is not bad
+      -- Required
+      vim.opt.foldenable = true
+      vim.opt.foldcolumn = "auto:1" -- '0' is not bad
       vim.opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
       vim.opt.foldlevelstart = 99
-      vim.opt.foldenable = true
+
+      -- Optional
+      vim.opt.foldminlines = 20
     end,
     config = function(_, opts)
       require("ufo").setup(opts)

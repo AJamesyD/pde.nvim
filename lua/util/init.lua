@@ -139,4 +139,8 @@ M.map = function(mode, lhs, rhs, opts)
   vim.keymap.set(mode, lhs, rhs, opts)
 end
 
+M.is_amazon = function()
+  return os.getenv("USER") == "angaidan"
+end
+
 return M

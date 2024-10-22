@@ -9,7 +9,7 @@ local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 -- Override default LazyVim globals
 g.bigfile_size = 512 * 1024 -- 0.5MB. Default is 1.5MB
 g.lazyvim_statuscolumn = {
-  -- folds_open = true, -- A little too busy
+  folds_open = true, -- A little too busy
   -- folds_githl = true, -- Only catches if first line of fold is diff
 }
 g.lazyvim_python_lsp = "basedpyright"
@@ -24,11 +24,6 @@ g.concerning_file_size = 100 * 1024 -- 100 KB
 g.minipairs_disable = true
 g.pyright_level = 2
 
-g.amazon = false
-if os.getenv("USER") == "angaidan" then
-  g.amazon = true
-end
-
 -- Neovide Configuration
 if g.neovide then
   g.neovide_padding_top = 0
@@ -37,9 +32,9 @@ if g.neovide then
   g.neovide_padding_left = 0
 
   -- g.neovide_window_blurred = true;
-  -- g.neovide_floating_blur_amount_x = 2.0
-  -- g.neovide_floating_blur_amount_y = 2.0
   -- g:neovide_transparency = 0.8
+  g.neovide_floating_blur_amount_x = 2.0
+  g.neovide_floating_blur_amount_y = 2.0
 
   g.neovide_cursor_smooth_blink = true
   g.neovide_cursor_vfx_mode = "railgun"
@@ -64,6 +59,9 @@ opt.mouse = "nv" -- Normal and visual
 opt.mousemoveevent = true
 
 opt.scrolloff = 15
+opt.sidescrolloff = 20
+
+opt.softtabstop = -1 -- Will default to shiftwidth
 
 opt.listchars = {
   -- eol = "󰌑",

@@ -9,7 +9,7 @@ local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 -- Override default LazyVim globals
 g.bigfile_size = 512 * 1024 -- 0.5MB. Default is 1.5MB
 g.lazyvim_statuscolumn = {
-  folds_open = true, -- A little too busy
+  -- folds_open = true, -- A little too busy
   -- folds_githl = true, -- Only catches if first line of fold is diff
 }
 g.lazyvim_python_lsp = "basedpyright"

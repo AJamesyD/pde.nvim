@@ -75,6 +75,7 @@
   "scope.nvim": { "branch": "main", "commit": "932102696ead2b7ab9ff65017767b57e2722fdde" },
   "smart-splits.nvim": { "branch": "master", "commit": "32172b6598c1c647b96aeead67896c59ca4b7aa6" },
   "smartcolumn.nvim": { "branch": "main", "commit": "cefb17be095ad5526030a21bb2a80553cae09127" },
+  "statuscol.nvim": { "branch": "main", "commit": "5998d16044159ad3779f62c45e756c555e3051f0" },
   "stickybuf.nvim": { "branch": "master", "commit": "183b9569bef78f44b17c078214f7d731f19cbefe" },
   "supermaven-nvim": { "branch": "main", "commit": "07d20fce48a5629686aefb0a7cd4b25e33947d50" },
   "telescope-fzf-native.nvim": { "branch": "main", "commit": "cf48d4dfce44e0b9a2e19a008d6ec6ea6f01a83b" },

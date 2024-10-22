@@ -436,6 +436,26 @@ return {
     dependencies = {
       "kevinhwang91/promise-async",
       {
+        "luukvbaal/statuscol.nvim",
+        -- TODO: experiment with this
+        enabled = false,
+        opts = function(opts)
+          local builtin = require("statuscol.builtin")
+          local overrides = {
+            relculright = true,
+            segments = {
+              { text = { "%s" }, click = "v:lua.ScSa" },
+              { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" },
+              { text = { builtin.foldfunc }, click = "v:lua.ScFa" },
+            },
+          }
+
+          opts = vim.tbl_deep_extend("force", opts, overrides)
+          return opts
+        end,
+        config = true,
+      },
+      {
         "neovim/nvim-lspconfig",
         opts = function(_, opts)
           local keys = require("lazyvim.plugins.lsp.keymaps").get()

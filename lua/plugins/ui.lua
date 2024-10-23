@@ -78,7 +78,7 @@ return {
               ---@param buf bufferline.Buffer
               matcher = function(buf)
                 local is_text_file = vim.b[buf.id].is_text_file
-                return is_text_file ~= nil and is_text_file
+                return type(is_text_file) ~= "nil" and is_text_file
               end,
             },
             {
@@ -89,7 +89,7 @@ return {
               ---@param buf bufferline.Buffer
               matcher = function(buf)
                 local is_relevant_file = vim.b[buf.id].is_relevant_file
-                return is_relevant_file ~= nil and not is_relevant_file
+                return type(is_relevant_file) ~= "nil" and not is_relevant_file
               end,
             },
           },
@@ -99,23 +99,9 @@ return {
   },
   {
     "nvim-lualine/lualine.nvim",
-    init = function()
-      vim.g.lualine_laststatus = vim.o.laststatus
-      if vim.fn.argc(-1) > 0 then
-        -- set an empty statusline till lualine loads
-        vim.o.statusline = " "
-      else
-        -- hide the statusline on the starter page
-        vim.o.laststatus = 0
-      end
-
-      if vim.fn.exists("$TMUX") then
-        -- Remove statusline when in TMUX to reduce visual noise
-        vim.g.lualine_laststatus = 0
-      end
-    end,
     opts = {
       options = {
+        globalstatus = true,
         component_separators = { left = "", right = "" },
         section_separators = { left = "", right = "" },
       },

@@ -6,27 +6,37 @@ local function augroup(name)
   return vim.api.nvim_create_augroup(name, { clear = true })
 end
 
+-- HACK: Below used to force autocmd types to come into scope.
+-- TODO: Modify lazydev.nvim to do this automatically
+---@module 'lazyvim'
+
 -- Show absolute line numbers in cmd mode only
-autocmd("CmdlineEnter", {
+autocmd({ "CmdlineEnter" }, {
   desc = "Absolute numbers in cmd mode",
   callback = function(event)
+    local bufnr = event.buf
     local number = vim.api.nvim_get_option_value("number", { scope = "local" })
     local relativenumber = vim.api.nvim_get_option_value("relativenumber", { scope = "local" })
 
+    vim.b[bufnr].prev_relativenumber = relativenumber
     if number and relativenumber then
       vim.opt_local.relativenumber = false
     end
   end,
 })
 
-autocmd("CmdlineLeave", {
+autocmd({ "CmdlineLeave" }, {
   desc = "Relative numbers outside cmd mode",
-  callback = function()
+  callback = function(event)
+    local bufnr = event.buf
     local number = vim.api.nvim_get_option_value("number", { scope = "local" })
     local relativenumber = vim.api.nvim_get_option_value("relativenumber", { scope = "local" })
 
+    local prev_relativenumber = vim.b[bufnr].prev_relativenumber
+    -- if prev_relativenumber hasn't been set, default to true
+    prev_relativenumber = prev_relativenumber or (type(prev_relativenumber) == "nil")
     if number and not relativenumber then
-      vim.opt_local.relativenumber = true
+      vim.opt_local.relativenumber = prev_relativenumber
     end
   end,
 })
@@ -82,7 +92,7 @@ autocmd({ "BufWinEnter" }, {
 })
 
 -- FileType specific options
-autocmd("FileType", {
+autocmd({ "FileType" }, {
   desc = "KDL opts",
   pattern = "kdl",
   callback = function()
@@ -92,9 +102,19 @@ autocmd("FileType", {
   end,
 })
 
-autocmd("FileType", {
+autocmd({ "FileType" }, {
   desc = "Mark text files for faster identification in bufferline",
   pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
+  callback = function(event)
+    local bufnr = event.buf
+    local bufglobals = vim.b[bufnr]
+    bufglobals.is_text_file = true
+  end,
+})
+
+autocmd({ "BufAdd" }, {
+  desc = "Mark test files for faster identification in bufferline",
+  pattern = { "/test" },
   callback = function(event)
     local bufnr = event.buf
     local bufglobals = vim.b[bufnr]

@@ -34,20 +34,19 @@ vim.filetype.add({
 
 vim.api.nvim_create_autocmd("LspAttach", {
   desc = "Run bemol when entering compatible Amazon project",
-  ---@param event vim.api.create_autocmd.callback.args
   callback = function(event)
     local bufnr = event.buf
     local filepath = vim.api.nvim_buf_get_name(bufnr)
     local filetype = vim.bo[event.buf].filetype
     local brazil_root = require("lspconfig.util").root_pattern("Config")(filepath)
 
-    if brazil_root ~= nil and filetype == "sh" then
+    if brazil_root and filetype == "sh" then
       vim.b.autoformat = false
       vim.bo[event.buf].expandtab = false
     end
 
     -- TODO: Only run on supported languages https://w.amazon.com/bin/view/Bemol#HPluginFeatures
-    if brazil_root ~= nil then
+    if brazil_root then
       bemol()
     end
   end,

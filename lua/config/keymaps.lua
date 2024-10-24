@@ -18,7 +18,6 @@ del("n", "<leader>l")
 del("n", "<leader>fn")
 
 -- toggle options
-del("n", "<leader>uw")
 del("n", "<leader>ul")
 del("n", "<leader>uT")
 del("n", "<leader>ub")

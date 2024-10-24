@@ -287,6 +287,18 @@ return {
   },
   {
     "sindrets/diffview.nvim",
+    keys = {
+      {
+        "<leader>gd",
+        "<CMD>DiffviewOpen<CR>",
+        desc = "Open Diffview",
+      },
+      {
+        "<leader>gD",
+        "<CMD>DiffviewClose<CR>",
+        desc = "Close Diffview",
+      },
+    },
     cmd = {
       "DiffviewOpen",
       "DiffviewToggleFiles",
@@ -294,6 +306,174 @@ return {
       "DiffviewRefresh",
       "DiffviewFileHistory",
     },
+    opts = function(opts)
+      local actions = require("diffview.config").actions
+      local overrides = {
+        enhanced_diff_hl = true,
+        file_panel = {
+          win_config = {
+            position = "right",
+          },
+        },
+        keymaps = {
+          disable_defaults = true,
+          view = {
+            {
+              "n",
+              "<leader>e",
+              actions.toggle_files,
+              { desc = "Explorer Diffview", silent = true, nowait = true, noremap = true },
+            },
+            {
+              "n",
+              "<leader>ge",
+              actions.toggle_files,
+              { desc = "Explorer Diffview", silent = true, nowait = true, noremap = true },
+            },
+            { "n", "[x", actions.prev_conflict, { desc = "Prev Conflict" } },
+            { "n", "]x", actions.next_conflict, { desc = "Next Conflict" } },
+            { "n", "<leader>go", actions.conflict_choose("ours"), { desc = "Choose OURS" } },
+            { "n", "<leader>gt", actions.conflict_choose("theirs"), { desc = "Choose THEIRS" } },
+            { "n", "<leader>gb", actions.conflict_choose("base"), { desc = "Choose BASE" } },
+            { "n", "<leader>gO", actions.conflict_choose_all("ours"), { desc = "Choose OURS (whole file)" } },
+            { "n", "<leader>gT", actions.conflict_choose_all("theirs"), { desc = "Choose THEIRS (whole file)" } },
+            { "n", "<leader>gB", actions.conflict_choose_all("base"), { desc = "Choose BASE (whole file)" } },
+          },
+          diff1 = {
+            -- Mappings in single window diff layouts
+            { "n", "g?", actions.help({ "view", "diff1" }), { desc = "Open the help panel" } },
+          },
+          diff2 = {
+            -- Mappings in 2-way diff layouts
+            { "n", "g?", actions.help({ "view", "diff2" }), { desc = "Open the help panel" } },
+          },
+          diff3 = {
+            -- Mappings in 3-way diff layouts
+            { "n", "g?", actions.help({ "view", "diff3" }), { desc = "Open the help panel" } },
+          },
+          diff4 = {
+            -- Mappings in 4-way diff layouts
+            { "n", "g?", actions.help({ "view", "diff4" }), { desc = "Open the help panel" } },
+          },
+          file_panel = {
+            { "n", "j", actions.next_entry, { desc = "Down" } },
+            { "n", "<down>", actions.next_entry, { desc = "Down" } },
+            { "n", "k", actions.prev_entry, { desc = "Up" } },
+            { "n", "<up>", actions.prev_entry, { desc = "Up" } },
+            { "n", "<CR>", actions.select_entry, { desc = "Open Diff" } },
+            { "n", "o", actions.select_entry, { desc = "Open Diff" } },
+            { "n", "l", actions.select_entry, { desc = "Open Diff" } },
+            { "n", "<2-LeftMouse>", actions.select_entry, { desc = "Open Diff" } },
+            { "n", "<Tab>", actions.toggle_stage_entry, { desc = "Toggle Staged" } },
+            { "n", "S", actions.stage_all, { desc = "Stage All" } },
+            { "n", "U", actions.unstage_all, { desc = "Unstage All" } },
+            { "n", "X", actions.restore_entry, { desc = "Restore File" } },
+            { "n", "zo", actions.open_fold, { desc = "Open fold" } },
+            { "n", "h", actions.close_fold, { desc = "Close fold" } },
+            { "n", "zc", actions.close_fold, { desc = "Close fold" } },
+            { "n", "za", actions.toggle_fold, { desc = "Toggle fold" } },
+            { "n", "zR", actions.open_all_folds, { desc = "Expand all folds" } },
+            { "n", "zM", actions.close_all_folds, { desc = "Close all folds" } },
+            { "n", "<c-b>", actions.scroll_view(-0.25), { desc = "Scroll the view up" } },
+            { "n", "<c-f>", actions.scroll_view(0.25), { desc = "Scroll the view down" } },
+            -- {
+            --   "n",
+            --   "<tab>",
+            --   actions.select_next_entry,
+            --   { desc = "Open the diff for the next file" },
+            -- },
+            -- {
+            --   "n",
+            --   "<s-tab>",
+            --   actions.select_prev_entry,
+            --   { desc = "Open the diff for the previous file" },
+            -- },
+            -- {
+            --   "n",
+            --   "i",
+            --   actions.listing_style,
+            --   { desc = "Toggle between 'list' and 'tree' views" },
+            -- },
+            -- {
+            --   "n",
+            --   "f",
+            --   actions.toggle_flatten_dirs,
+            --   { desc = "Flatten empty subdirectories in tree listing style" },
+            -- },
+            -- {
+            --   "n",
+            --   "R",
+            --   actions.refresh_files,
+            --   { desc = "Update stats and entries in the file list" },
+            -- },
+            { "n", "<leader>e", actions.toggle_files, { desc = "Explorer Diffview" } },
+            { "n", "<leader>ge", actions.toggle_files, { desc = "Explorer Diffview" } },
+            { "n", "[x", actions.prev_conflict, { desc = "Prev Conflict" } },
+            { "n", "]x", actions.next_conflict, { desc = "Next Conflict" } },
+            { "n", "g?", actions.help("file_panel"), { desc = "Open help panel" } },
+            { "n", "<leader>gO", actions.conflict_choose_all("ours"), { desc = "Choose OURS (whole file)" } },
+            { "n", "<leader>gT", actions.conflict_choose_all("theirs"), { desc = "Choose THEIRS (whole file)" } },
+            { "n", "<leader>gB", actions.conflict_choose_all("base"), { desc = "Choose BASE (whole file)" } },
+          },
+          file_history_panel = {
+            { "n", "g!", actions.options, { desc = "Option panel" } },
+            { "n", "y", actions.copy_hash, { desc = "Copy Commit Hash" } },
+            { "n", "X", actions.restore_entry, { desc = "Restore File" } },
+            { "n", "zo", actions.open_fold, { desc = "Expand fold" } },
+            { "n", "zc", actions.close_fold, { desc = "Close fold" } },
+            { "n", "h", actions.close_fold, { desc = "Close fold" } },
+            { "n", "za", actions.toggle_fold, { desc = "Toggle fold" } },
+            { "n", "zR", actions.open_all_folds, { desc = "Expand all folds" } },
+            { "n", "zM", actions.close_all_folds, { desc = "Close all folds" } },
+            { "n", "j", actions.next_entry, { desc = "Down" } },
+            { "n", "<down>", actions.next_entry, { desc = "Down" } },
+            { "n", "k", actions.prev_entry, { desc = "Up" } },
+            { "n", "<up>", actions.prev_entry, { desc = "Up" } },
+            { "n", "<CR>", actions.select_entry, { desc = "Open File" } },
+            { "n", "<S-CR>", actions.open_in_diffview, { desc = "Open File in Diffview" } },
+            { "n", "o", actions.select_entry, { desc = "Open File" } },
+            { "n", "l", actions.select_entry, { desc = "Open File" } },
+            { "n", "<2-LeftMouse>", actions.select_entry, { desc = "Open File" } },
+            { "n", "<c-b>", actions.scroll_view(-0.25), { desc = "Scroll the view up" } },
+            { "n", "<c-f>", actions.scroll_view(0.25), { desc = "Scroll the view down" } },
+            { "n", "<leader>e", actions.toggle_files, { desc = "Explorer Diffview" } },
+            { "n", "<leader>ge", actions.toggle_files, { desc = "Explorer Diffview" } },
+            { "n", "g?", actions.help("file_history_panel"), { desc = "Open help panel" } },
+          },
+          option_panel = {
+            { "n", "<tab>", actions.select_entry, { desc = "Changeoption" } },
+            { "n", "q", actions.close, { desc = "Close" } },
+            { "n", "g?", actions.help("option_panel"), { desc = "Open help panel" } },
+          },
+          help_panel = {
+            { "n", "q", actions.close, { desc = "Close" } },
+            { "n", "<esc>", actions.close, { desc = "Close" } },
+          },
+        },
+      }
+
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+      return opts
+    end,
+  },
+  {
+    "folke/edgy.nvim",
+    optional = true,
+    opts = function(_, opts)
+      -- Will get swapped to right by other edgy conf
+      opts.left = opts.left or {}
+      table.insert(opts.left, 1, {
+        title = "Diffview Files",
+        ft = "DiffviewFiles",
+      })
+
+      opts.bottom = opts.bottom or {}
+      table.insert(opts.bottom, {
+        title = "Diffview File History",
+        ft = "DiffviewFileHistory",
+        size = { height = 0.4 },
+      })
+    end,
   },
   {
     "lewis6991/gitsigns.nvim",

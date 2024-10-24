@@ -36,3 +36,4 @@ Treesitter
 leader/!
 neovide
 tmux
+open_fold/!

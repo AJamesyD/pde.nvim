@@ -21,6 +21,28 @@ local lazyterm_executor = {
 
 return {
   {
+    "stevearc/conform.nvim",
+    optional = true,
+    opts = {
+      formatters = {
+        rust = {
+          args = function(self, ctx)
+            local util = require("conform.util")
+
+            local args = { "+nightly", "--emit=stdout" }
+            local edition = util.parse_rust_edition(ctx.dirname) or self.options.default_edition
+            table.insert(args, "--edition=" .. edition)
+
+            return args
+          end,
+        },
+      },
+      formatters_by_ft = {
+        rust = { "rustfmt" },
+      },
+    },
+  },
+  {
     "neovim/nvim-lspconfig",
     ---@class PluginLspOpts
     opts = {

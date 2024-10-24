@@ -33,13 +33,13 @@ if g.neovide then
 
   -- g.neovide_window_blurred = true;
   -- g:neovide_transparency = 0.8
-  g.neovide_floating_blur_amount_x = 2.0
-  g.neovide_floating_blur_amount_y = 2.0
+  -- g.neovide_floating_blur_amount_x = 2.0
+  -- g.neovide_floating_blur_amount_y = 2.0
 
   g.neovide_cursor_smooth_blink = true
   g.neovide_cursor_vfx_mode = "railgun"
-  g.neovide_refresh_rate = 60
-  g.neovide_refresh_rate_idle = 30
+  g.neovide_refresh_rate = 120
+  g.neovide_refresh_rate_idle = 60
   g.neovide_no_idle = true
 
   g.neovide_confirm_quit = true

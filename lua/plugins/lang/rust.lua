@@ -88,6 +88,12 @@ return {
         hover_actions = {
           replace_builtin_hover = false,
         },
+        ---@type rustaceanvim.FloatWinConfig|vim.api.keyset.win_config
+        float_win_config = {
+          auto_focus = true,
+          open_split = "vertical",
+          width = 0.8,
+        },
         executor = lazyterm_executor,
         test_executor = "background",
         crate_test_executor = "background",

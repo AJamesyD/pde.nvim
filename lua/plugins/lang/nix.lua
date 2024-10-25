@@ -17,6 +17,20 @@ return {
             },
           },
         },
+        nixd = {
+          settings = {
+            nixd = {
+              opts = {
+                ["flake-parts"] = {
+                  expr = '(builtins.getFlake "~/.config/nix/flake.nix").debug.options',
+                },
+                ["flake-parts=ps"] = {
+                  expr = '(builtins.getFlake "~/.config/nix/flake.nix").currentSystem.options',
+                },
+              },
+            },
+          },
+        },
       },
     },
   },

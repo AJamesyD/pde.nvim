@@ -87,6 +87,33 @@ return {
       return opts
     end,
   },
+  -- TODO: Install and enable ts_query_ls
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   ---@class PluginLspOpts
+  --   opts = {
+  --     servers = {
+  --       ts_query_ls = {
+  --         settings = {
+  --           parser_install_directories = {
+  --             -- If using nvim-treesitter with lazy.nvim
+  --             vim.fs.joinpath(vim.fn.stdpath("data"), "/lazy/nvim-treesitter/parser/"),
+  --           },
+  --           -- This setting is provided by default
+  --           parser_aliases = {
+  --             ecma = "javascript",
+  --             jsx = "javascript",
+  --             php_only = "php",
+  --           },
+  --           -- E.g. zed support
+  --           language_retrieval_patterns = {
+  --             "languages/src/([^/]+)/[^/]+\\.scm$",
+  --           },
+  --         },
+  --       },
+  --     },
+  --   },
+  -- },
   {
     "chrisgrieser/nvim-various-textobjs",
     lazy = false,

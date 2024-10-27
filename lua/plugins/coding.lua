@@ -25,55 +25,35 @@ return {
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
       local cmp = require("cmp")
+      local types = require("cmp.types")
 
-      ---@type cmp.SourceConfig[]
-      local sources = cmp.config.sources({
-        -- group_index = 1
-        { name = "snippets" }, -- Source first for dedup
-        { name = "nvim_lsp", keyword_length = 1 },
-        { name = "async_path" },
-        {
-          name = "spell",
-          option = {
-            keep_all_entries = false,
-            enable_in_context = function()
-              return require("cmp.config.context").in_treesitter_capture("spell")
-            end,
-            preselect_correct_word = true,
-          },
-        },
-      }, {
-        -- group_index = 2
-        { name = "buffer", keyword_length = 5 },
-        { name = "async_path" },
-      })
-      ---@param source cmp.SourceConfig
-      for _, source in ipairs(opts.sources or {}) do
-        if not vim.tbl_contains({ "snippets", "nvim_lsp", "buffer", "path" }, source.name) then
-          table.insert(sources, source)
-        end
-      end
-
-      ---@type table<integer, integer>
-      local modified_offset_priority = {
-        snippets = 1,
-        nvim_lsp = 1,
-      }
-      ---@param offset integer: kind of completion entry
-      local function modified_offset(offset)
-        return modified_offset_priority[offset] or offset
-      end
       ---@type cmp.ComparatorFunction
-      local compare_offset = function(entry1, entry2)
-        local offset1 = modified_offset(entry1:get_offset())
-        local offset2 = modified_offset(entry2:get_offset())
-        if offset1 ~= offset2 then
-          return offset1 - offset2 < 0
+      local function prioritize_non_lsp_snippets(entry1, entry2)
+        local entry1_is_snippet = entry1:get_kind() == types.lsp.CompletionItemKind.Snippet
+        local entry2_is_snippet = entry2:get_kind() == types.lsp.CompletionItemKind.Snippet
+        if not entry1_is_snippet or not entry2_is_snippet then
+          return nil
+        end
+
+        local entry1_source = entry1.source.name
+        local entry2_source = entry2.source.name
+        assert(
+          vim.tbl_contains({ "snippets", "nvim_lsp" }, entry1_source),
+          "only snippets or nvim_lsp should provide snippets. Instead got: " .. entry1_source
+        )
+        assert(
+          vim.tbl_contains({ "snippets", "nvim_lsp" }, entry2_source),
+          "only snippets or nvim_lsp should provide snippets. Instead got: " .. entry2_source
+        )
+        if entry1_source == entry2_source then
+          return nil
+        else
+          return entry1_source == "snippets"
         end
       end
 
-      ---@param kind integer: kind of completion entry
-      local deprio = function(kind)
+      ---@param kind lsp.CompletionItemKind: kind of completion entry
+      local deprioritize = function(kind)
         ---@type cmp.ComparatorFunction
         return function(entry1, entry2)
           if entry1:get_kind() == kind then
@@ -84,6 +64,7 @@ return {
         end
       end
 
+      ---compare_under: deprioritize functions/methods that have leading underscores
       ---@type cmp.ComparatorFunction
       local compare_under = function(entry1, entry2)
         local _, entry1_under = entry1.completion_item.label:find("^_+")
@@ -97,7 +78,6 @@ return {
         end
       end
 
-      local types = require("cmp.types")
       ---@type table<integer, integer>
       local modified_kind_priority = {
         [types.lsp.CompletionItemKind.Variable] = types.lsp.CompletionItemKind.Method, -- Method=2
@@ -140,6 +120,34 @@ return {
         end,
       })
 
+      ---@type cmp.SourceConfig[]
+      local sources = cmp.config.sources({
+        -- group_index = 1
+        { name = "snippets" }, -- Source first for dedup
+        { name = "nvim_lsp", keyword_length = 1 },
+        { name = "async_path" },
+        {
+          name = "spell",
+          option = {
+            keep_all_entries = false,
+            enable_in_context = function()
+              return require("cmp.config.context").in_treesitter_capture("spell")
+            end,
+            preselect_correct_word = true,
+          },
+        },
+      }, {
+        -- group_index = 2
+        { name = "buffer", keyword_length = 5 },
+        { name = "async_path" },
+      })
+      ---@param source cmp.SourceConfig
+      for _, source in ipairs(opts.sources or {}) do
+        if not vim.tbl_contains({ "snippets", "nvim_lsp", "buffer", "path" }, source.name) then
+          table.insert(sources, source)
+        end
+      end
+
       local compare = require("cmp.config.compare")
       local comparators = {
         --- Default ---
@@ -155,12 +163,13 @@ return {
         -- compare.order,
 
         --- My Overrides ---
+        prioritize_non_lsp_snippets,
         compare.exact,
         compare.score,
-        compare_offset,
+        compare.offset,
         compare_under,
         -- Magic number line for plugins/lang/rust.lua
-        deprio(types.lsp.CompletionItemKind.Text),
+        deprioritize(types.lsp.CompletionItemKind.Text),
         recently_used,
         compare.locality,
         compare_kind,

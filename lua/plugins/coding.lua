@@ -10,6 +10,8 @@ return {
         { path = "rustaceanvim", words = { "rust" } },
         { path = "telescope.nvim", words = { "telescope" } },
         { path = "tokyonight.nvim", words = { "tokyonight" } },
+        { path = "LazyVim" },
+        { path = "lazy.nvim" },
         { path = "nvim-treesitter" },
       },
     },

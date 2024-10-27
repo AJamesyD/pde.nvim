@@ -1,6 +1,7 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    cmd = { "TSInstallFromGrammar" },
     ---@param opts TSConfig
     ---@diagnostic disable-next-line: missing-fields
     opts = function(_, opts)

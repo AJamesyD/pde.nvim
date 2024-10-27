@@ -198,11 +198,6 @@ return {
         "ThePrimeagen/git-worktree.nvim",
         dependencies = {
           "nvim-telescope/telescope.nvim",
-          {
-            "linux-cultist/venv-selector.nvim",
-            optional = true,
-            branch = "regexp",
-          },
         },
         opts = function(_, opts)
           opts.update_on_change_command = "Telescope find_files"
@@ -284,6 +279,11 @@ return {
         },
       },
     },
+  },
+  {
+    "linux-cultist/venv-selector.nvim",
+    branch = "regexp",
+    event = "VeryLazy",
   },
   {
     "sindrets/diffview.nvim",

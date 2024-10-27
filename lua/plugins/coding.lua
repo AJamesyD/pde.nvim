@@ -16,7 +16,10 @@ return {
   },
   {
     "hrsh7th/nvim-cmp",
-    dependencies = { "f3fora/cmp-spell" },
+    dependencies = {
+      "https://codeberg.org/FelipeLema/cmp-async-path",
+      "f3fora/cmp-spell",
+    },
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
       local cmp = require("cmp")
@@ -26,7 +29,7 @@ return {
         -- group_index = 1
         { name = "snippets" }, -- Source first for dedup
         { name = "nvim_lsp", keyword_length = 1 },
-        { name = "path" },
+        { name = "async_path" },
         {
           name = "spell",
           option = {
@@ -40,7 +43,7 @@ return {
       }, {
         -- group_index = 2
         { name = "buffer", keyword_length = 5 },
-        { name = "path" },
+        { name = "async_path" },
       })
       ---@param source cmp.SourceConfig
       for _, source in ipairs(opts.sources or {}) do

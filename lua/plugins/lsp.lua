@@ -15,20 +15,6 @@ return {
       codelens = {
         enabled = true,
       },
-      servers = {
-        lua_ls = {
-          settings = {
-            Lua = {
-              codeLens = {
-                enable = false,
-              },
-              diagnostics = {
-                disable = { "incomplete-signature-doc", "trailing-space" },
-              },
-            },
-          },
-        },
-      },
     },
   },
   {

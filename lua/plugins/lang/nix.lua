@@ -16,6 +16,14 @@ return {
               },
             },
           },
+          setup = {
+            ["nil"] = function()
+              LazyVim.lsp.on_attach(function(client, _)
+                -- TODO: Re-enable when semantic highlighting is better
+                client.server_capabilities.semanticTokensProvider = nil
+              end, "nil")
+            end,
+          },
         },
         nixd = {
           settings = {
@@ -29,6 +37,14 @@ return {
                 },
               },
             },
+          },
+          setup = {
+            ["nixd"] = function()
+              LazyVim.lsp.on_attach(function(client, _)
+                -- TODO: Re-enable when semantic highlighting is better
+                client.server_capabilities.semanticTokensProvider = nil
+              end, "nixd")
+            end,
           },
         },
       },

@@ -1,21 +1,34 @@
 return {
   {
     "rcarriga/nvim-notify",
-    opts = {
-      stages = "static",
-    },
+    opts = function(opts)
+      if not vim.g.neovide then
+        opts.stages = "static"
+      end
+      return opts
+    end,
   },
   {
     "echasnovski/mini.indentscope",
     optional = true,
     opts = function(_, opts)
-      opts.draw = opts.draw or {}
-      local ok, indentscope = pcall(require, "mini.indentscope")
-      if ok and indentscope then
-        if not vim.g.neovide then
-          opts.draw.animation = indentscope.gen_animation.none()
-        end
+      local indentscope = require("mini.indentscope")
+      local overrides = {
+        draw = {
+          animation = indentscope.gen_animation.none(),
+        },
+        options = {
+          -- Whether to use cursor column when computing reference indent.
+          -- Useful to see incremental scopes with horizontal cursor movements.
+          indent_at_cursor = false,
+        },
+      }
+
+      if vim.g.neovide then
+        overrides.draw.animation = indentscope.gen_animation.exponential()
       end
+
+      opts = vim.tbl_deep_extend("force", overrides, opts)
       return opts
     end,
   },
@@ -24,7 +37,7 @@ return {
     dependencies = {
       "tiagovla/scope.nvim",
       config = true,
-    }, -- TODO: configure scope w/ resession.
+    },
     keys = {
       { "<leader>bP", false },
       { "<leader>br", false },
@@ -109,7 +122,6 @@ return {
   },
   {
     "folke/noice.nvim",
-    optional = true,
     keys = {
       { "<leader>snl", false },
       { "<leader>snh", "<CMD>Telescope noice<CR>", desc = "Noice History" },
@@ -125,7 +137,7 @@ return {
     "m4xshen/smartcolumn.nvim",
     event = "LazyFile",
     opts = {
-      colorcolumn = "100",
+      colorcolumn = "120",
       disabled_filetypes = {
         "help",
         "text",
@@ -143,14 +155,12 @@ return {
         "lazyterm",
       },
       custom_colorcolumn = {
-        lua = "120",
-        python = "120",
+        -- lua = "120",
       },
     },
   },
   {
     "mrjones2014/smart-splits.nvim",
-    lazy = false,
     keys = {
       -- resizing splits
       {
@@ -468,7 +478,6 @@ return {
         end,
       },
     },
-    event = "VeryLazy",
     keys = {
       {
         "zR",

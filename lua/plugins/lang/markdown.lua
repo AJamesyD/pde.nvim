@@ -32,7 +32,6 @@ return {
     "epwalsh/obsidian.nvim",
     version = "*",
     lazy = true,
-    ft = "markdown",
     event = {
       "BufReadPre " .. personal_vault .. ".*md",
       "BufNewFile " .. personal_vault .. ".*md",

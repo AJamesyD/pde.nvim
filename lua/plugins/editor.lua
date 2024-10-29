@@ -111,7 +111,6 @@ return {
   },
   {
     "folke/flash.nvim",
-    lazy = false,
     opts = {
       search = {
         multi_window = false,
@@ -283,7 +282,6 @@ return {
   {
     "linux-cultist/venv-selector.nvim",
     branch = "regexp",
-    event = "VeryLazy",
   },
   {
     "sindrets/diffview.nvim",

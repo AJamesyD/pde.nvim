@@ -55,21 +55,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 return {
   {
     "neovim/nvim-lspconfig",
-    dependencies = {
-      {
-        url = "angaidan@git.amazon.com:pkg/NinjaHooks",
-        branch = "mainline",
-        cond = require("util").is_amazon(),
-        lazy = false,
-        config = function(plugin)
-          local nvim_conf_dir = "~/.config/nvim"
-          vim.opt.rtp:remove(nvim_conf_dir)
-          vim.opt.rtp:prepend(plugin.dir .. "/configuration/vim/amazon/brazil-config")
-          -- NOTE: Make sure ~/.config/nvim is always first in runtime path (for spell, etc)
-          vim.opt.rtp:prepend(nvim_conf_dir)
-        end,
-      },
-    },
     opts = function(_, opts)
       if MyUtils.is_amazon() then
         local lspconfig = require("lspconfig")
@@ -105,5 +90,18 @@ return {
         ion = { "ion" },
       },
     },
+  },
+  {
+    url = "angaidan@git.amazon.com:pkg/NinjaHooks",
+    branch = "mainline",
+    cond = require("util").is_amazon(),
+    lazy = false,
+    config = function(plugin)
+      local nvim_conf_dir = "~/.config/nvim"
+      vim.opt.rtp:remove(nvim_conf_dir)
+      vim.opt.rtp:prepend(plugin.dir .. "/configuration/vim/amazon/brazil-config")
+      -- NOTE: Make sure ~/.config/nvim is always first in runtime path (for spell, etc)
+      vim.opt.rtp:prepend(nvim_conf_dir)
+    end,
   },
 }

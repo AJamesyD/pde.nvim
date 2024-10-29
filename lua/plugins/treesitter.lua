@@ -116,7 +116,6 @@ return {
   -- },
   {
     "chrisgrieser/nvim-various-textobjs",
-    lazy = false,
     keys = {
       {
         "ig",

@@ -20,6 +20,7 @@ return {
     "hrsh7th/nvim-cmp",
     dependencies = {
       "https://codeberg.org/FelipeLema/cmp-async-path",
+      { "hrsh7th/cmp-path", enabled = false },
       "f3fora/cmp-spell",
     },
     ---@param opts cmp.ConfigSchema
@@ -239,7 +240,7 @@ return {
   {
     "willothy/flatten.nvim",
     config = true,
-    -- Ensure that it runs first to minimize delay when opening file from terminal
+    -- TODO: find a way to load when launching LazyGit
     lazy = false,
     priority = 1001,
   },
@@ -297,7 +298,6 @@ return {
   {
     "jackMort/ChatGPT.nvim",
     enabled = false,
-    event = "VeryLazy",
     dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-lua/plenary.nvim",

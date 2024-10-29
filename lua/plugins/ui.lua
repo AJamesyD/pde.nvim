@@ -296,7 +296,7 @@ return {
         exit_when_last = true,
         close_when_all_hidden = true,
       }
-      opts = vim.tbl_deep_extend("force", opts, overrides)
+      opts = vim.tbl_deep_extend("force", overrides, opts)
 
       local temp_right = opts.right
       for _, config in ipairs(temp_right) do
@@ -444,7 +444,7 @@ return {
             },
           }
 
-          opts = vim.tbl_deep_extend("force", opts, overrides)
+          opts = vim.tbl_deep_extend("force", overrides, opts)
           return opts
         end,
         config = true,
@@ -539,7 +539,7 @@ return {
         },
       }
 
-      opts = vim.tbl_deep_extend("force", opts, overrides)
+      opts = vim.tbl_deep_extend("force", overrides, opts)
       return opts
     end,
     init = function()

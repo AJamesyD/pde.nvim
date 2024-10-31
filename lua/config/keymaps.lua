@@ -19,7 +19,6 @@ del("n", "<leader>fn")
 
 -- toggle options
 del("n", "<leader>ul")
-del("n", "<leader>ub")
 
 -- lazygit
 -- TODO: Better git blame / <leader>gb
@@ -64,3 +63,23 @@ map({ "n" }, "x", '"_x', { desc = "which_key_ignore" })
 map({ "x" }, "p", '"_dP', { desc = "Paste over" })
 map({ "n", "v" }, "<C-y>", '"+y', { desc = "Yank to clip" })
 map({ "n", "v" }, "<C-p>", '"+p', { desc = "Paste from clip" })
+
+-- toggle options
+require("util").map_toggle("<leader>ub", {
+  name = "Bufferline",
+  get = function()
+    return vim.o.showtabline == 2
+  end,
+  set = function(state)
+    if state then
+      require("bufferline.config").options.auto_toggle_bufferline = true
+      require("bufferline.config").options.always_show_bufferline = true
+      vim.o.showtabline = 2
+    else
+      vim.g.bufferline_auto_toggle = require("bufferline.config").options.auto_toggle_bufferline
+      require("bufferline.config").options.auto_toggle_bufferline = false
+      require("bufferline.config").options.always_show_bufferline = false
+      vim.o.showtabline = 0
+    end
+  end,
+})

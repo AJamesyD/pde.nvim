@@ -114,10 +114,12 @@ autocmd({ "FileType" }, {
 
 autocmd({ "BufAdd" }, {
   desc = "Mark test files for faster identification in bufferline",
-  pattern = { "/test" },
   callback = function(event)
     local bufnr = event.buf
     local bufglobals = vim.b[bufnr]
-    bufglobals.is_text_file = true
+    local filename = vim.fn.expand("<afile>")
+    if filename:match("tests/") or filename:match("test/") or filename:match("tst/") then
+      bufglobals.is_test_file = true
+    end
   end,
 })

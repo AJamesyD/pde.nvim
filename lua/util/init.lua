@@ -114,10 +114,7 @@ function M.is_relevant_file(full_file_name, root_dir)
     -- Includes newline
     return true
   elseif #out > 2 then
-    -- TODO: remove once sure this doesn't happen normally
-    for line in ipairs(out) do
-      vim.notify("line: " .. line)
-    end
+    -- This can happen when opening a dir in NetRW
     return true
   end
   return false

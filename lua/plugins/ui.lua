@@ -1,7 +1,7 @@
 require("util").map_toggle("<leader>uz", {
   name = "ZenMode",
   get = function()
-    return require("zen-mode.config").options.plugins.options.enabled
+    return require("zen-mode.view").is_open()
   end,
   set = function(state)
     if state then
@@ -84,6 +84,9 @@ return {
         separator_style = "slant",
         show_buffer_close_icons = false,
         show_close_icon = false,
+        move_wraps_at_ends = true,
+        always_show_bufferline = false,
+        auto_toggle_bufferline = false,
         tab_size = 12,
         groups = {
           options = {
@@ -106,16 +109,12 @@ return {
               name = " test",
               ---@param buf bufferline.Buffer
               matcher = function(buf)
-                local filename = buf.filename or vim.api.nvim_buf_get_name(buf.id)
-                if not filename or filename == "" then
-                  return false
-                end
-                return filename:match("tests/") or filename:match("test/") or filename:match("tst/")
+                local is_test_file = vim.b[buf.id].is_test_file
+                return type(is_test_file) ~= "nil" and is_test_file
               end,
             },
             {
               name = " docs",
-              auto_close = true,
               ---@param buf bufferline.Buffer
               matcher = function(buf)
                 local is_text_file = vim.b[buf.id].is_text_file
@@ -124,7 +123,6 @@ return {
             },
             {
               name = " misc",
-              auto_close = true,
               ---@type vim.api.keyset.highlight
               highlight = { underline = true },
               ---@param buf bufferline.Buffer
@@ -451,7 +449,54 @@ return {
   {
     "folke/zen-mode.nvim",
     cmd = { "ZenMode" },
-    opts = {},
+    opts = {
+      window = {
+        width = 0.85,
+        options = {
+          signcolumn = "no",
+          number = false,
+          relativenumber = false,
+          cursorcolumn = false,
+        },
+      },
+      plugins = {
+        -- disables git signs
+        gitsigns = { enabled = true },
+        -- disables the tmux statusline
+        tmux = { enabled = true },
+        -- this will change the font size on kitty when in zen mode
+        -- to make this work, you need to set the following kitty options:
+        -- - allow_remote_control socket-only
+        -- - listen_on unix:/tmp/kitty
+        kitty = {
+          enabled = true,
+          font = "+4", -- font size increment
+        },
+        -- this will change the font size on alacritty when in zen mode
+        -- requires  Alacritty Version 0.10.0 or higher
+        -- uses `alacritty msg` subcommand to change font size
+        alacritty = {
+          enabled = true,
+          font = "18", -- font size
+        },
+        -- this will change the scale factor in Neovide when in zen mode
+        -- See alse also the Plugins/Wezterm section in this projects README
+        neovide = {
+          enabled = true,
+          -- Will multiply the current scale factor by this number
+          scale = 1.2,
+          -- disable the Neovide animations while in Zen mode
+          disable_animations = {
+            neovide_animation_length = 0,
+            neovide_cursor_animate_command_line = false,
+            neovide_scroll_animation_length = 0,
+            neovide_position_animation_length = 0,
+            neovide_cursor_animation_length = 0,
+            neovide_cursor_vfx_mode = "",
+          },
+        },
+      },
+    },
   },
   {
     "tzachar/highlight-undo.nvim",

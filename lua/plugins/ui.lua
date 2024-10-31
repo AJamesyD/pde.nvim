@@ -138,13 +138,84 @@ return {
   },
   {
     "nvim-lualine/lualine.nvim",
-    opts = {
-      options = {
-        globalstatus = true,
-        component_separators = { left = "", right = "" },
-        section_separators = { left = "", right = "" },
-      },
-    },
+    opts = function(_, opts)
+      local overrides = {
+        options = {
+          globalstatus = true,
+          component_separators = { left = "", right = "" },
+          section_separators = { left = "", right = "" },
+        },
+      }
+
+      -- WARN: Scary magic number usage
+      local diagnostics_element = table.remove(opts.sections.lualine_c, 2)
+      local lualine_c_overrides = {
+        {
+          -- Insert mid section
+          function()
+            return "%="
+          end,
+        },
+        {
+          "buffers",
+          max_length = function()
+            return vim.o.columns * 1 / 3
+          end,
+
+          buffers_color = {
+            -- Same values as the general color option can be used here.
+            active = "lualine_b_normal", -- Color for active buffer.
+            inactive = "lualine_b_inactive", -- Color for inactive buffer.
+          },
+
+          symbols = {
+            modified = " ●", -- Text to show when the buffer is modified
+            alternate_file = "", -- Text to show to identify the alternate file
+            directory = "", -- Text to show when the buffer is a directory
+          },
+
+          separator = { left = "", right = "" },
+        },
+      }
+      opts.sections.lualine_c = vim.list_extend(opts.sections.lualine_c or {}, lualine_c_overrides)
+
+      table.insert(opts.sections.lualine_x, diagnostics_element)
+
+      opts.sections.lualine_y = {
+        {
+          "progress",
+          cond = function()
+            local num_lines = vim.fn.line("$")
+            if vim.b[0].is_text_file then
+              return num_lines > 100
+            else
+              return num_lines > 500
+            end
+          end,
+          draw_empty = true,
+          padding = { left = 1, right = 1 },
+        },
+        {
+          "location",
+          cond = function()
+            return vim.o.colorcolumn ~= ""
+          end,
+          draw_empty = true,
+          padding = { left = 1, right = 1 },
+        },
+      }
+
+      local extensions_overrides = {
+        "mason",
+        "quickfix",
+        "trouble",
+      }
+
+      opts.extensions = vim.list_extend(opts.extensions or {}, extensions_overrides)
+
+      opts = vim.tbl_deep_extend("force", overrides, opts)
+      return opts
+    end,
   },
   {
     "folke/noice.nvim",

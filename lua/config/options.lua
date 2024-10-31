@@ -13,6 +13,7 @@ g.lazyvim_statuscolumn = {
   -- folds_githl = true, -- Only catches if first line of fold is diff
 }
 g.lazyvim_python_lsp = "basedpyright"
+g.trouble_lualine = false
 
 -- Plugin globals
 g.mkdp_port = 8999 -- markdown-preview.nvim requires "LocalForward 8999 [127.0.0.1]:8999"

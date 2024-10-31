@@ -19,10 +19,12 @@ g.mkdp_port = 8999 -- markdown-preview.nvim requires "LocalForward 8999 [127.0.0
 
 -- Custom globals
 g.clippy_level = 0
-g.codeium_enabled = false
 g.concerning_file_size = 100 * 1024 -- 100 KB
 g.minipairs_disable = true
 g.pyright_level = 2
+
+g.codeium_enabled = false
+g.supermaven_enabled = false
 
 -- Neovide Configuration
 if g.neovide then

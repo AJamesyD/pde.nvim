@@ -15,13 +15,15 @@ require("util").map_toggle("<leader>c<leader>", {
 require("util").map_toggle("<leader>c<CR>", {
   name = "Supermaven",
   get = function()
-    return require("supermaven-nvim.api").api.is_running()
+    return vim.g.supermaven_enabled and require("supermaven-nvim.api").is_running()
   end,
   set = function(state)
     if state then
-      require("supermaven-nvim.api").api.start()
+      require("supermaven-nvim.api").start()
+      vim.g.supermaven_enabled = true
     else
-      require("supermaven-nvim.api").api.stop()
+      require("supermaven-nvim.api").stop()
+      vim.g.supermaven_enabled = false
     end
   end,
 })
@@ -215,6 +217,13 @@ return {
       local prev_format = opts.formatting.format
 
       local overrides = {
+        completion = {
+          auto_complete = {
+            -- TODO: Experiment with InsertEnter and LLM cmp sources
+            types.cmp.TriggerEvent.InsertEnter,
+            types.cmp.TriggerEvent.TextChanged,
+          },
+        },
         formatting = {
           ---@param entry cmp.Entry
           ---@param vim_item vim.CompletedItem
@@ -275,22 +284,21 @@ return {
     priority = 1001,
   },
   {
+    "Exafunction/codeium.nvim",
+    cmd = "Codeium",
+    build = ":Codeium Auth",
+    opts = {},
+  },
+  {
     "hrsh7th/nvim-cmp",
-    dependencies = {
-      {
-        "Exafunction/codeium.nvim",
-        cmd = "Codeium",
-        build = ":Codeium Auth",
-        opts = {},
-      },
-    },
+    dependencies = { "Exafunction/codeium.nvim" },
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
       table.insert(opts.sources, 1, {
         name = "codeium",
         group_index = 1,
         priority = 100,
-        max_item_count = 5,
+        max_item_count = 10,
         entry_filter = function(_, _)
           return vim.g.codeium_enabled
         end,
@@ -299,15 +307,28 @@ return {
   },
   {
     "supermaven-inc/supermaven-nvim",
-    enabled = false,
+    cmd = {
+      "SupermavenStart",
+      "SupermavenStop",
+      "SupermavenRestart",
+      "SupermavenToggle",
+      "SupermavenStatus",
+      "SupermavenUseFree",
+      "SupermavenUsePro",
+      "SupermavenLogout",
+      "SupermavenShowLog",
+      "SupermavenClearLog",
+    },
     build = ":SupermavenUseFree",
     opts = function(_, opts)
       local overrides = {
-        keymaps = {
-          accept_suggestion = "<C-S-y>",
-          clear_suggestion = "<C-n>",
-          accept_word = "<C-y>",
-        },
+        -- keymaps = {
+        --   accept_suggestion = "<C-S-y>",
+        --   clear_suggestion = "<C-n>",
+        --   accept_word = "<C-y>",
+        -- },
+        -- disable_inline_completion = true,
+        disable_keymaps = false,
       }
 
       opts = vim.tbl_deep_extend("force", overrides, opts)
@@ -315,22 +336,19 @@ return {
     end,
   },
   {
-    "jackMort/ChatGPT.nvim",
-    enabled = false,
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "nvim-lua/plenary.nvim",
-      "folke/trouble.nvim",
-      "nvim-telescope/telescope.nvim",
-    },
-    opts = {
-      openai_params = {
-        model = "gpt-4-turbo-preview",
-      },
-      openai_edit_params = {
-        model = "gpt-4-turbo-preview",
-      },
-    },
-    config = true,
+    "hrsh7th/nvim-cmp",
+    dependencies = { "supermaven-inc/supermaven-nvim" },
+    ---@param opts cmp.ConfigSchema
+    opts = function(_, opts)
+      table.insert(opts.sources, 1, {
+        name = "supermaven",
+        group_index = 1,
+        priority = 100,
+        max_item_count = 10,
+        entry_filter = function(_, _)
+          return vim.g.supermaven_enabled and require("supermaven-nvim.api").is_running()
+        end,
+      })
+    end,
   },
 }

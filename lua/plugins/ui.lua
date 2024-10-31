@@ -180,8 +180,10 @@ return {
         "toggleterm",
         "lazyterm",
       },
+      scope = "window",
       custom_colorcolumn = {
-        -- lua = "120",
+        rust = "100",
+        lua = "120",
       },
     },
   },

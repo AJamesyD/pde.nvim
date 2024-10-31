@@ -156,18 +156,29 @@ return {
   },
   {
     "folke/which-key.nvim",
-    opts = {
-      preset = "modern",
-      spec = {
+    ---@param opts wk.Opts
+    opts = function(_, opts)
+      local overrides = {
+        preset = "modern",
+      }
+
+      local spec_overrides = {
         { "<leader>F", hidden = true },
         { "<leader>gw", group = "worktrees" },
-      },
-      triggers = {
+        { "s", group = "surround" },
+      }
+      vim.list_extend(opts.spec or {}, spec_overrides)
+
+      local triggers_overrides = {
         { "<auto>", mode = "nixsotc" },
         -- For mini.surround
         { "s", mode = { "n", "v" } },
-      },
-    },
+      }
+      opts.triggers = vim.list_extend(opts.triggers or {}, triggers_overrides)
+
+      opts = vim.tbl_deep_extend("force", overrides, opts)
+      return opts
+    end,
   },
   {
     "nvim-telescope/telescope.nvim",
@@ -320,13 +331,13 @@ return {
               "n",
               "<leader>e",
               actions.toggle_files,
-              { desc = "Explorer Diffview", silent = true, nowait = true, noremap = true },
+              { desc = "Explorer Diffview", silent = true, nowait = true, remap = false },
             },
             {
               "n",
               "<leader>ge",
               actions.toggle_files,
-              { desc = "Explorer Diffview", silent = true, nowait = true, noremap = true },
+              { desc = "Explorer Diffview", silent = true, nowait = true, remap = false },
             },
             { "n", "[x", actions.prev_conflict, { desc = "Prev Conflict" } },
             { "n", "]x", actions.next_conflict, { desc = "Next Conflict" } },
@@ -475,19 +486,28 @@ return {
   },
   {
     "lewis6991/gitsigns.nvim",
-    keys = {
-      {
-        "<leader>ug",
-        "<CMD>Gitsigns toggle_current_line_blame<CR>",
-        desc = "Toggle git line blame",
-      },
-    },
-    opts = {
-      current_line_blame_opts = {
-        virt_text_pos = "right_align",
-        delay = 500,
-      },
-    },
+    opts = function(_, opts)
+      MyUtils.map_toggle("<leader>ug", {
+        name = "Current Line Blame",
+        get = function()
+          return require("gitsigns.config").config.current_line_blame
+        end,
+        set = function(state)
+          require("gitsigns.config").config.current_line_blame = state
+          require("gitsigns.actions").refresh()
+        end,
+      })
+
+      local overrides = {
+        current_line_blame_opts = {
+          virt_text_pos = "right_align",
+          delay = 500,
+        },
+      }
+
+      opts = vim.tbl_deep_extend("force", overrides, opts)
+      return opts
+    end,
   },
   {
     "max397574/better-escape.nvim",

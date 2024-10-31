@@ -27,4 +27,4 @@ vim.keymap.set("n", "<leader>uD", function()
     settings = settings,
   })
   vim.cmd("LspRestart")
-end, { desc = "Toggle diagnostic level", buffer = bufnr })
+end, { desc = "Cycle Diagnostic Level", buffer = bufnr })

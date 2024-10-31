@@ -1,7 +1,35 @@
+require("util").map_toggle("<leader>uz", {
+  name = "ZenMode",
+  get = function()
+    return require("zen-mode.config").options.plugins.options.enabled
+  end,
+  set = function(state)
+    if state then
+      require("zen-mode").open()
+    else
+      require("zen-mode").close()
+    end
+  end,
+})
+
+require("util").map_toggle("<leader>uT", {
+  name = "Twilight",
+  get = function()
+    return require("twilight.view").enabled
+  end,
+  set = function(state)
+    if state then
+      require("twilight").enable()
+    else
+      require("twilight").disable()
+    end
+  end,
+})
+
 return {
   {
     "rcarriga/nvim-notify",
-    opts = function(opts)
+    opts = function(_, opts)
       if not vim.g.neovide then
         opts.stages = "static"
       end
@@ -342,97 +370,101 @@ return {
       "TwilightEnable",
       "TwilightDisable",
     },
-    keys = {
-      {
-        "<leader>uT",
-        "<cmd>Twilight<cr>",
-        desc = "Toggle Twilight",
-      },
-    },
-    opts = {
-      dimming = {
-        alpha = 0.5,
-        inactive = true,
-      },
-      context = 15,
-      exclude = {
-        "markdown",
-      },
-      expand = {
-        -- Python
-        "function_definition",
-        "class_definition",
-        "while_statement",
-        "for_statement",
-        "if_statement",
-        "with_statement",
-        "try_statement",
-        "match_statement",
-        "import_from_statement",
-        "parenthesized_expression",
-        "generator_expression",
-        "list_comprehension",
-        "set_comprehension",
-        "dictionary_comprehension",
-        "tuple",
-        "list",
-        "set",
-        "dictionary",
-        "string",
+    opts = function(_, opts)
+      local overrides = {
+        dimming = {
+          alpha = 0.5,
+          inactive = true,
+        },
+        context = 15,
+        exclude = {
+          "markdown",
+        },
+        expand = {
+          -- Python
+          "function_definition",
+          "class_definition",
+          "while_statement",
+          "for_statement",
+          "if_statement",
+          "with_statement",
+          "try_statement",
+          "match_statement",
+          "import_from_statement",
+          "parenthesized_expression",
+          "generator_expression",
+          "list_comprehension",
+          "set_comprehension",
+          "dictionary_comprehension",
+          "tuple",
+          "list",
+          "set",
+          "dictionary",
+          "string",
 
-        -- Lua
-        "do_statement",
-        "while_statement",
-        "repeat_statement",
-        "if_statement",
-        "for_statement",
-        "function_declaration",
-        "function_definition",
-        "table_constructor",
+          -- Lua
+          "do_statement",
+          "while_statement",
+          "repeat_statement",
+          "if_statement",
+          "for_statement",
+          "function_declaration",
+          "function_definition",
+          "table_constructor",
 
-        -- Rust
-        "mod_item",
-        "foreign_mod_item",
-        "function_item",
-        "struct_item",
-        "trait_item",
-        "enum_item",
-        "impl_item",
-        "type_item",
-        "union_item",
-        "const_item",
-        "use_declaration",
-        "let_declaration",
-        "loop_expression",
-        "for_expression",
-        "while_expression",
-        "if_expression",
-        "match_expression",
-        "call_expression",
-        "array_expression",
-        "macro_definition",
-        "macro_invocation",
-        "attribute_item",
+          -- Rust
+          "mod_item",
+          "foreign_mod_item",
+          "function_item",
+          "struct_item",
+          "trait_item",
+          "enum_item",
+          "impl_item",
+          "type_item",
+          "union_item",
+          "const_item",
+          "use_declaration",
+          "let_declaration",
+          "loop_expression",
+          "for_expression",
+          "while_expression",
+          "if_expression",
+          "match_expression",
+          "call_expression",
+          "array_expression",
+          "macro_definition",
+          "macro_invocation",
+          "attribute_item",
 
-        -- Common
-        "function",
-        "method",
-        "table",
-        "if_statement",
-      },
-    },
+          -- Common
+          "function",
+          "method",
+          "table",
+          "if_statement",
+        },
+      }
+
+      opts = vim.tbl_deep_extend("force", overrides, opts)
+      return opts
+    end,
   },
   {
     "folke/zen-mode.nvim",
     cmd = { "ZenMode" },
-    keys = {
-      { "<leader>uz", "<cmd>ZenMode<cr>", desc = "Toggle Zen Mode" },
-    },
     opts = {},
   },
   {
     "tzachar/highlight-undo.nvim",
-    keys = { { "u" }, { "<C-r>" } },
+    keys = {
+      {
+        "u",
+        desc = "which_key_ignore",
+      },
+      {
+        "<C-r>",
+        desc = "which_key_ignore",
+      },
+    },
     opts = {},
   },
   {
@@ -443,7 +475,7 @@ return {
         "luukvbaal/statuscol.nvim",
         -- TODO: experiment with this
         enabled = false,
-        opts = function(opts)
+        opts = function(_, opts)
           local builtin = require("statuscol.builtin")
           local overrides = {
             relculright = true,

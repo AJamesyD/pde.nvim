@@ -1,27 +1,57 @@
+require("util").map_toggle("<leader>c<leader>", {
+  name = "Codeium",
+  get = function()
+    return vim.g.codeium_enabled
+  end,
+  set = function(state)
+    if state then
+      vim.g.codeium_enabled = true
+    else
+      vim.g.codeium_enabled = false
+    end
+  end,
+})
+
+require("util").map_toggle("<leader>c<CR>", {
+  name = "Supermaven",
+  get = function()
+    return require("supermaven-nvim.api").api.is_running()
+  end,
+  set = function(state)
+    if state then
+      require("supermaven-nvim.api").api.start()
+    else
+      require("supermaven-nvim.api").api.stop()
+    end
+  end,
+})
+
 return {
   {
     "folke/lazydev.nvim",
     opts = {
       library = {
+        { path = "lazy.nvim" },
+        { path = "LazyVim" },
+
         { path = "edgy.nvim", words = { "edgy" } },
         { path = "grapple.nvim", words = { "grapple" } },
-        { path = "nvim-cmp-lsp-rs", words = { "rust" } },
         { path = "mason.nvim", words = { "mason" } },
+        { path = "nvim-cmp-lsp-rs", words = { "rust" } },
+        { path = "nvim-treesitter", words = { "TS", "treesitter" } },
         { path = "rustaceanvim", words = { "rust" } },
         { path = "telescope.nvim", words = { "telescope" } },
         { path = "tokyonight.nvim", words = { "tokyonight" } },
-        { path = "LazyVim" },
-        { path = "lazy.nvim" },
-        { path = "nvim-treesitter" },
+        { path = "which-key.nvim", words = { "wk", "which-key" } },
       },
     },
   },
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
-      "https://codeberg.org/FelipeLema/cmp-async-path",
+      { "https://codeberg.org/FelipeLema/cmp-async-path" },
+      { "f3fora/cmp-spell" },
       { "hrsh7th/cmp-path", enabled = false },
-      "f3fora/cmp-spell",
     },
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
@@ -29,7 +59,7 @@ return {
       local types = require("cmp.types")
 
       ---@type cmp.ComparatorFunction
-      local function prioritize_non_lsp_snippets(entry1, entry2)
+      local function compare_snippets(entry1, entry2)
         local entry1_is_snippet = entry1:get_kind() == types.lsp.CompletionItemKind.Snippet
         local entry2_is_snippet = entry2:get_kind() == types.lsp.CompletionItemKind.Snippet
         if not entry1_is_snippet or not entry2_is_snippet then
@@ -38,18 +68,10 @@ return {
 
         local entry1_source = entry1.source.name
         local entry2_source = entry2.source.name
-        assert(
-          vim.tbl_contains({ "snippets", "nvim_lsp" }, entry1_source),
-          "only snippets or nvim_lsp should provide snippets. Instead got: " .. entry1_source
-        )
-        assert(
-          vim.tbl_contains({ "snippets", "nvim_lsp" }, entry2_source),
-          "only snippets or nvim_lsp should provide snippets. Instead got: " .. entry2_source
-        )
         if entry1_source == entry2_source then
           return nil
         else
-          return entry1_source == "snippets"
+          return entry1_source == "nvim_lsp"
         end
       end
 
@@ -81,9 +103,9 @@ return {
 
       ---@type table<integer, integer>
       local modified_kind_priority = {
+        [types.lsp.CompletionItemKind.EnumMember] = 0, -- top
+        [types.lsp.CompletionItemKind.Keyword] = types.lsp.CompletionItemKind.Method, -- Method=2
         [types.lsp.CompletionItemKind.Variable] = types.lsp.CompletionItemKind.Method, -- Method=2
-        [types.lsp.CompletionItemKind.Keyword] = 0, -- top
-        [types.lsp.CompletionItemKind.Snippet] = 0, -- top
       }
       ---@param kind integer: kind of completion entry
       local function modified_kind(kind)
@@ -107,7 +129,7 @@ return {
       local recently_used = setmetatable({
         records = {},
         add_entry = function(self, e)
-          local bucket_size_millis = 1000 * 60 * 60 -- 1 hr
+          local bucket_size_millis = 1000 * 60 * 5 -- 5 minutes
           self.records[e.completion_item.label] = math.floor(vim.uv.now() / bucket_size_millis)
         end,
       }, {
@@ -124,8 +146,8 @@ return {
       ---@type cmp.SourceConfig[]
       local sources = cmp.config.sources({
         -- group_index = 1
-        { name = "snippets" }, -- Source first for dedup
-        { name = "nvim_lsp", keyword_length = 1 },
+        { name = "nvim_lsp" },
+        { name = "snippets", keyword_length = 2 },
         { name = "async_path" },
         {
           name = "spell",
@@ -139,6 +161,16 @@ return {
         },
       }, {
         -- group_index = 2
+        {
+          name = "spell",
+          option = {
+            keep_all_entries = false,
+            enable_in_context = function()
+              return require("cmp.config.context").in_treesitter_capture("spell")
+            end,
+            preselect_correct_word = true,
+          },
+        },
         { name = "buffer", keyword_length = 5 },
         { name = "async_path" },
       })
@@ -164,12 +196,12 @@ return {
         -- compare.order,
 
         --- My Overrides ---
-        prioritize_non_lsp_snippets,
+        compare.offset,
+        -- Magic number line for plugins/lang/rust.lua
+        compare_snippets,
         compare.exact,
         compare.score,
-        compare.offset,
         compare_under,
-        -- Magic number line for plugins/lang/rust.lua
         deprioritize(types.lsp.CompletionItemKind.Text),
         recently_used,
         compare.locality,
@@ -183,9 +215,6 @@ return {
       local prev_format = opts.formatting.format
 
       local overrides = {
-        completion = {
-          keyword_length = 2, -- default: 1
-        },
         formatting = {
           ---@param entry cmp.Entry
           ---@param vim_item vim.CompletedItem
@@ -195,6 +224,7 @@ return {
             -- NOTE: Expecting preference for snippets over lsp provided snippets
             item.dup = ({
               crates = 1,
+              nvim_lsp = 1,
               snippets = 1,
             })[entry.source.name] or nil
             return item
@@ -252,15 +282,6 @@ return {
         cmd = "Codeium",
         build = ":Codeium Auth",
         opts = {},
-        keys = {
-          {
-            "<leader>c<leader>",
-            function()
-              vim.g.codeium_enabled = not vim.g.codeium_enabled
-            end,
-            desc = "Toggle Codeium",
-          },
-        },
       },
     },
     ---@param opts cmp.ConfigSchema
@@ -280,20 +301,18 @@ return {
     "supermaven-inc/supermaven-nvim",
     enabled = false,
     build = ":SupermavenUseFree",
-    keys = {
-      {
-        "<leader>c<CR>",
-        "<cmd>SupermavenToggle<CR>",
-        desc = "Toggle Supermaven",
-      },
-    },
-    opts = {
-      keymaps = {
-        accept_suggestion = "<C-S-y>",
-        clear_suggestion = "<C-n>",
-        accept_word = "<C-y>",
-      },
-    },
+    opts = function(_, opts)
+      local overrides = {
+        keymaps = {
+          accept_suggestion = "<C-S-y>",
+          clear_suggestion = "<C-n>",
+          accept_word = "<C-y>",
+        },
+      }
+
+      opts = vim.tbl_deep_extend("force", overrides, opts)
+      return opts
+    end,
   },
   {
     "jackMort/ChatGPT.nvim",

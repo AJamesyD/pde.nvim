@@ -19,7 +19,6 @@ del("n", "<leader>fn")
 
 -- toggle options
 del("n", "<leader>ul")
-del("n", "<leader>uT")
 del("n", "<leader>ub")
 
 -- lazygit
@@ -48,12 +47,12 @@ map("n", "n", "'Nn'[v:searchforward].'zzzv'", { desc = "Next Search Result", exp
 map("n", "N", "'nN'[v:searchforward].'zzzv'", { desc = "Prev Search Result", expr = true })
 
 -- better movement
-map("n", "<C-u>", "<C-u>zz")
-map("n", "<C-d>", "<C-d>zz")
-map("n", "<C-b>", "<C-b>zz")
-map("n", "<C-f>", "<C-f>zz")
-map("n", "<C-o>", "<C-o>zz")
-map("n", "<C-i>", "<C-i>zz")
+map("n", "<C-u>", "<C-u>zz", { desc = "which_key_ignore" })
+map("n", "<C-d>", "<C-d>zz", { desc = "which_key_ignore" })
+map("n", "<C-b>", "<C-b>zz", { desc = "which_key_ignore" })
+map("n", "<C-f>", "<C-f>zz", { desc = "which_key_ignore" })
+map("n", "<C-o>", "<C-o>zz", { desc = "which_key_ignore" })
+map("n", "<C-i>", "<C-i>zz", { desc = "which_key_ignore" })
 
 -- Move lines up/down (default is A-j/A-k)
 map("v", "J", ":m '>+1<cr>gv=gv", { desc = "Move Down" })
@@ -61,9 +60,7 @@ map("v", "K", ":m '<-2<cr>gv=gv", { desc = "Move Up" })
 
 -- cut/copy/paste
 map({ "n", "v" }, "$", "g_", { desc = "Paste from clip", remap = true })
-map({ "n" }, "x", '"_x')
-map({ "x" }, "p", '"_dP')
-map({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clip" })
-map({ "n" }, "<leader>Y", '"+y$', { desc = "Yank to clip (EOL)" })
-map({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from clip" })
-map({ "n", "v" }, "<leader>P", '"+P', { desc = "Paste from clip" })
+map({ "n" }, "x", '"_x', { desc = "which_key_ignore" })
+map({ "x" }, "p", '"_dP', { desc = "Paste over" })
+map({ "n", "v" }, "<C-y>", '"+y', { desc = "Yank to clip" })
+map({ "n", "v" }, "<C-p>", '"+p', { desc = "Paste from clip" })

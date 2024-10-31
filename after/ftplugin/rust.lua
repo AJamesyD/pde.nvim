@@ -50,4 +50,4 @@ vim.keymap.set("n", "<leader>uD", function()
     settings_updater = settings_updater,
     restart_cmd = "RustAnalyzer restart",
   })
-end, { desc = "Toggle diagnostic level", buffer = bufnr })
+end, { desc = "Cycle Diagnostic Level", buffer = bufnr })

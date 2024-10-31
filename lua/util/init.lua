@@ -128,15 +128,42 @@ end
 ---@param rhs string|function
 ---@param opts? vim.keymap.set.Opts
 M.map = function(mode, lhs, rhs, opts)
-  -- set default value if not specify
-  if opts and opts.noremap == nil and opts.remap == nil then
-    opts.noremap = true
-  end
-  if opts and opts.silent == nil then
-    opts.silent = true
+  opts = opts or {}
+
+  opts.remap = false
+  if opts.remap then
+    opts.remap = opts.remap
   end
 
+  opts.silent = opts.silent ~= false
+
   vim.keymap.set(mode, lhs, rhs, opts)
+end
+
+---@param toggle lazyvim.Toggle
+function M.wrap(toggle)
+  return setmetatable(toggle, {
+    __call = function()
+      toggle.set(not toggle.get())
+      return toggle.get()
+    end,
+  })
+end
+
+---@param lhs string
+---@param toggle lazyvim.Toggle
+---@param silent? boolean
+M.map_toggle = function(lhs, toggle, silent)
+  local t
+  if silent then
+    t = M.wrap(toggle)
+  else
+    t = LazyVim.toggle.wrap(toggle)
+  end
+  M.map("n", lhs, function()
+    t()
+  end, { desc = "Toggle " .. toggle.name })
+  LazyVim.toggle.wk(lhs, toggle)
 end
 
 M.is_amazon = function()

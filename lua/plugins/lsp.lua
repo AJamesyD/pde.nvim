@@ -13,7 +13,7 @@ return {
       },
       ---@type lsp.CodeLensOptions
       codelens = {
-        enabled = true,
+        enabled = vim.g.neovide,
       },
     },
   },

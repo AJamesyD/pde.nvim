@@ -159,9 +159,43 @@ return {
             },
             inlayHints = {
               chainingHints = { enable = true },
+              closingBraceHints = { enable = true },
+              closureCaptureHints = { enable = true },
+              expressionAdjustmentHints = {
+                enable = true,
+                hideOutsideUnsafe = true,
+              },
+              genericParameterHints = {
+                lifetime = { enable = true },
+                type = { enable = true },
+              },
+            },
+            lens = {
+              enable = true,
+              debug = { enable = true },
+              references = {
+                adt = { enable = true },
+                enumVariant = { enable = true },
+                method = { enable = true },
+                trait = { enable = true },
+              },
+              run = { enable = false },
             },
             rustfmt = {
               extraArgs = "+nightly",
+            },
+            semanticHighlighting = {
+              operator = {
+                enable = false,
+                specialization = { enable = true },
+              },
+              punctuation = {
+                enable = false,
+                specialization = { enable = true },
+              },
+            },
+            typing = {
+              autoClosingAngleBrackets = { enable = true },
             },
           },
         },

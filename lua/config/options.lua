@@ -24,7 +24,6 @@ g.minipairs_disable = true
 g.pyright_level = 2
 
 g.codeium_enabled = false
-g.supermaven_enabled = false
 
 -- Neovide Configuration
 if g.neovide then

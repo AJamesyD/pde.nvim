@@ -12,22 +12,6 @@ require("util").map_toggle("<leader>c<leader>", {
   end,
 })
 
-require("util").map_toggle("<leader>c<CR>", {
-  name = "Supermaven",
-  get = function()
-    return vim.g.supermaven_enabled and require("supermaven-nvim.api").is_running()
-  end,
-  set = function(state)
-    if state then
-      require("supermaven-nvim.api").start()
-      vim.g.supermaven_enabled = true
-    else
-      require("supermaven-nvim.api").stop()
-      vim.g.supermaven_enabled = false
-    end
-  end,
-})
-
 return {
   {
     "folke/lazydev.nvim",
@@ -217,20 +201,12 @@ return {
       local prev_format = opts.formatting.format
 
       local overrides = {
-        completion = {
-          auto_complete = {
-            -- TODO: Experiment with InsertEnter and LLM cmp sources
-            types.cmp.TriggerEvent.InsertEnter,
-            types.cmp.TriggerEvent.TextChanged,
-          },
-        },
         formatting = {
           ---@param entry cmp.Entry
           ---@param vim_item vim.CompletedItem
           format = function(entry, vim_item)
             local item = prev_format(entry, vim_item)
             -- Allow a few sources to create entries no matter what
-            -- NOTE: Expecting preference for snippets over lsp provided snippets
             item.dup = ({
               crates = 1,
               nvim_lsp = 1,
@@ -301,52 +277,6 @@ return {
         max_item_count = 10,
         entry_filter = function(_, _)
           return vim.g.codeium_enabled
-        end,
-      })
-    end,
-  },
-  {
-    "supermaven-inc/supermaven-nvim",
-    cmd = {
-      "SupermavenStart",
-      "SupermavenStop",
-      "SupermavenRestart",
-      "SupermavenToggle",
-      "SupermavenStatus",
-      "SupermavenUseFree",
-      "SupermavenUsePro",
-      "SupermavenLogout",
-      "SupermavenShowLog",
-      "SupermavenClearLog",
-    },
-    build = ":SupermavenUseFree",
-    opts = function(_, opts)
-      local overrides = {
-        -- keymaps = {
-        --   accept_suggestion = "<C-S-y>",
-        --   clear_suggestion = "<C-n>",
-        --   accept_word = "<C-y>",
-        -- },
-        -- disable_inline_completion = true,
-        disable_keymaps = false,
-      }
-
-      opts = vim.tbl_deep_extend("force", overrides, opts)
-      return opts
-    end,
-  },
-  {
-    "hrsh7th/nvim-cmp",
-    dependencies = { "supermaven-inc/supermaven-nvim" },
-    ---@param opts cmp.ConfigSchema
-    opts = function(_, opts)
-      table.insert(opts.sources, 1, {
-        name = "supermaven",
-        group_index = 1,
-        priority = 100,
-        max_item_count = 10,
-        entry_filter = function(_, _)
-          return vim.g.supermaven_enabled and require("supermaven-nvim.api").is_running()
         end,
       })
     end,

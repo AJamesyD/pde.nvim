@@ -187,6 +187,9 @@ return {
   },
   {
     "mrjones2014/smart-splits.nvim",
+    -- Cannot be loaded just by <C-h/j/k/l> keys
+    -- or else tmux will capture first
+    event = "VeryLazy",
     keys = {
       -- resizing splits
       {

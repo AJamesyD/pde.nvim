@@ -203,39 +203,33 @@ return {
     },
   },
   {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      {
-        "zjp-CN/nvim-cmp-lsp-rs",
-        ---@type cmp_lsp_rs.Opts
-        opts = {
-          kind = function(kind)
-            return {
-              kind.Variable,
-              kind.EnumMember,
-              kind.Field,
-              kind.Method,
-              kind.Function,
-            }
-          end,
-        },
-        config = true,
-      },
+    "zjp-CN/nvim-cmp-lsp-rs",
+    lazy = true,
+    ---@type cmp_lsp_rs.Opts
+    opts = {
+      kind = function(kind)
+        return {
+          kind.Variable,
+          --
+          kind.EnumMember,
+          kind.Value,
+          kind.Field,
+          kind.Property,
+          --
+          kind.TypeParameter, -- ??
+          kind.Method,
+          --
+          kind.Module,
+          --
+          kind.Function,
+          kind.Constructor,
+          --
+          kind.Struct,
+          kind.Enum,
+          kind.Constant,
+          kind.Keyword,
+        }
+      end,
     },
-    ---@param opts cmp.ConfigSchema
-    opts = function(_, opts)
-      local cmp_lsp_rs = require("cmp_lsp_rs")
-      local rs_comparators = cmp_lsp_rs.comparators
-
-      -- TODO: Find a way to not use a magic number
-      table.insert(opts.sorting.comparators, 5, rs_comparators.inherent_import_inscope)
-      table.insert(opts.sorting.comparators, 6, rs_comparators.sort_by_label_but_underscore_last)
-
-      for _, source in ipairs(opts.sources) do
-        cmp_lsp_rs.filter_out.entry_filter(source)
-      end
-
-      return opts
-    end,
   },
 }

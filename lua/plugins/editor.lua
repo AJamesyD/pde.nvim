@@ -125,7 +125,7 @@ return {
         { "<leader>gw", group = "worktrees" },
         { "s", group = "surround" },
       }
-      vim.list_extend(opts.spec or {}, spec_overrides)
+      opts.spec = vim.list_extend(opts.spec or {}, spec_overrides)
 
       local triggers_overrides = {
         { "<auto>", mode = "nixsotc" },

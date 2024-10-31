@@ -37,29 +37,14 @@ return {
     dependencies = {
       { "https://codeberg.org/FelipeLema/cmp-async-path" },
       { "f3fora/cmp-spell" },
+      { "zjp-CN/nvim-cmp-lsp-rs" },
+      { "ryo33/nvim-cmp-rust" },
       { "hrsh7th/cmp-path", enabled = false },
     },
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
       local cmp = require("cmp")
       local types = require("cmp.types")
-
-      ---@type cmp.ComparatorFunction
-      local function compare_snippets(entry1, entry2)
-        local entry1_is_snippet = entry1:get_kind() == types.lsp.CompletionItemKind.Snippet
-        local entry2_is_snippet = entry2:get_kind() == types.lsp.CompletionItemKind.Snippet
-        if not entry1_is_snippet or not entry2_is_snippet then
-          return nil
-        end
-
-        local entry1_source = entry1.source.name
-        local entry2_source = entry2.source.name
-        if entry1_source == entry2_source then
-          return nil
-        else
-          return entry1_source == "nvim_lsp"
-        end
-      end
 
       ---@param kind lsp.CompletionItemKind: kind of completion entry
       local deprioritize = function(kind)
@@ -89,9 +74,18 @@ return {
 
       ---@type table<integer, integer>
       local modified_kind_priority = {
-        [types.lsp.CompletionItemKind.EnumMember] = 0, -- top
-        [types.lsp.CompletionItemKind.Keyword] = types.lsp.CompletionItemKind.Method, -- Method=2
-        [types.lsp.CompletionItemKind.Variable] = types.lsp.CompletionItemKind.Method, -- Method=2
+        [types.lsp.CompletionItemKind.EnumMember] = 0,
+        [types.lsp.CompletionItemKind.Variable] = 0,
+        [types.lsp.CompletionItemKind.Value] = 0,
+
+        [types.lsp.CompletionItemKind.Field] = 1,
+        [types.lsp.CompletionItemKind.Property] = 1,
+
+        [types.lsp.CompletionItemKind.Method] = 2,
+
+        [types.lsp.CompletionItemKind.Module] = 3,
+        [types.lsp.CompletionItemKind.Function] = 3,
+        [types.lsp.CompletionItemKind.Text] = 99,
       }
       ---@param kind integer: kind of completion entry
       local function modified_kind(kind)
@@ -99,7 +93,6 @@ return {
       end
       ---kind: Entires with smaller ordinal value of 'kind' will be ranked higher.
       ---(see lsp.CompletionItemKind enum).
-      ---Exceptions are that Text(1) will be ranked the lowest, and snippets be the highest.
       ---@type cmp.ComparatorFunction
       local compare_kind = function(entry1, entry2)
         local kind1 = modified_kind(entry1:get_kind())
@@ -129,11 +122,18 @@ return {
         end,
       })
 
+      local compare_sort_text = function(entry1, entry2) -- score by lsp, if available
+        local t1 = entry1.completion_item.sortText
+        local t2 = entry2.completion_item.sortText
+        if t1 ~= nil and t2 ~= nil and t1 ~= t2 then
+          return t1 < t2
+        end
+      end
+
       ---@type cmp.SourceConfig[]
-      local sources = cmp.config.sources({
+      local sources_overrides = cmp.config.sources({
         -- group_index = 1
         { name = "nvim_lsp" },
-        { name = "snippets", keyword_length = 2 },
         { name = "async_path" },
         {
           name = "spell",
@@ -145,6 +145,7 @@ return {
             preselect_correct_word = true,
           },
         },
+        { name = "snippets" },
       }, {
         -- group_index = 2
         {
@@ -163,12 +164,15 @@ return {
       ---@param source cmp.SourceConfig
       for _, source in ipairs(opts.sources or {}) do
         if not vim.tbl_contains({ "snippets", "nvim_lsp", "buffer", "path" }, source.name) then
-          table.insert(sources, source)
+          table.insert(sources_overrides, source)
         end
       end
 
       local compare = require("cmp.config.compare")
-      local comparators = {
+      local cmp_rs = require("cmp-rust")
+      local cmp_lsp_rs = require("cmp_lsp_rs")
+      local rs_comparators = cmp_lsp_rs.comparators
+      local comparators_overrides = {
         --- Default ---
         -- compare.offset,
         -- compare.exact,
@@ -182,23 +186,36 @@ return {
         -- compare.order,
 
         --- My Overrides ---
-        compare.offset,
-        -- Magic number line for plugins/lang/rust.lua
-        compare_snippets,
+        -- XXX: Lots of duplicated code between deprioritize, compare_kind, cmp_lsp_rs, ...
         compare.exact,
         compare.score,
-        compare_under,
         deprioritize(types.lsp.CompletionItemKind.Text),
+        -- deprioritize `.box`, `.mut`, etc.
+        cmp_rs.deprioritize_postfix,
+        -- deprioritize `Borrow::borrow` and `BorrowMut::borrow_mut`
+        cmp_rs.deprioritize_borrow,
+        -- deprioritize `Deref::deref` and `DerefMut::deref_mut`
+        cmp_rs.deprioritize_deref,
+        rs_comparators.inherent_import_inscope,
+        -- deprioritize `Into::into`, `Clone::clone`, etc.
+        cmp_rs.deprioritize_common_traits,
+        deprioritize(types.lsp.CompletionItemKind.Snippet),
+        compare_under,
         recently_used,
         compare.locality,
-        compare_kind,
-        compare.scopes,
-        compare.sort_text,
+        -- compare_kind, -- Redundant w/ cmp_lsp_rs?
+        -- compare_sort_text, -- Perf?
         compare.length,
         compare.order,
       }
 
-      local prev_format = opts.formatting.format
+      for _, source in ipairs(sources_overrides) do
+        cmp_lsp_rs.filter_out.entry_filter(source)
+      end
+
+      local prev_format = opts.formatting.format or function(_, v)
+        return v
+      end
 
       local overrides = {
         formatting = {
@@ -210,26 +227,27 @@ return {
             item.dup = ({
               crates = 1,
               nvim_lsp = 1,
-              snippets = 1,
             })[entry.source.name] or nil
             return item
           end,
         },
         performance = {
           debounce = 40, -- default: 60
-          trottle = 30, -- default: 30
+          throttle = 30, -- default: 30
           fetching_timeout = 300, -- default: 500
-          max_view_entries = 50, -- default: 200
-        },
-        sources = sources,
-        sorting = {
-          comparators = comparators,
+          max_view_entries = 75, -- default: 200
         },
         window = {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),
         },
       }
+
+      -- TODO: See if there is a way to parameterize array merge behavior in vim.tbl_deep_extend
+      opts.sources = sources_overrides
+
+      opts.sorting = opts.sorting or {}
+      opts.sorting.comparators = comparators_overrides
 
       opts = vim.tbl_deep_extend("force", overrides, opts)
       return opts

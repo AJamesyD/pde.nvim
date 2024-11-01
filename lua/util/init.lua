@@ -70,19 +70,24 @@ function M.reload_lsp_setting(opts)
 end
 
 ---@param full_file_name string
----@param root_dir? string
+---@param bufnr number
 ---@return boolean
-function M.is_relevant_file(full_file_name, root_dir)
+function M.is_relevant_file(full_file_name, bufnr)
+  -- XXX: This method does not yet work well
   if not full_file_name or full_file_name == "" then
+    vim.b[bufnr].is_relevant_file = true
     return true
   end
 
-  if not root_dir or root_dir == nil then
-    -- TODO: turns out this updates when you use goto definition...
-    -- Use project root since this may be executing from any buffer in a project with different cwd
-    root_dir = LazyVim.root.get({ normalize = true })
-    -- TODO: not sure if path_expand required, just mindlessly copying telescope
-    root_dir = require("telescope.utils").path_expand(root_dir)
+  local cwd = LazyVim.root.cwd()
+  local root = LazyVim.root.get({ normalize = true, buf = bufnr })
+
+  local cwd_in_root = root:find(cwd, 1, true) == 1
+  local root_in_cwd = cwd:find(root, 1, true) == 1
+  if not cwd_in_root and not root_in_cwd then
+    -- root and cwd are not related
+    vim.b[bufnr].is_relevant_file = false
+    return false
   end
 
   local find_command = (function()
@@ -95,28 +100,34 @@ function M.is_relevant_file(full_file_name, root_dir)
 
   if not find_command then
     vim.notify("You need to install fd", vim.log.levels.ERROR)
+    vim.b[bufnr].is_relevant_file = true
     return true
   end
 
   -- Include --full-path so that we don't accidentally match if the same filename is found elsewhere under root,
   -- E.g. Cargo.toml in a multi-package workspace
-  vim.list_extend(find_command, { "--full-path", "--base-directory", root_dir, full_file_name })
+  vim.list_extend(find_command, { "--full-path", "--base-directory", root, full_file_name })
 
   local out, exit_code = Process.exec(find_command)
   if exit_code ~= 0 then
     vim.notify("fd command failed. Output: " .. table.concat(out, "\n"), vim.log.levels.ERROR)
+    vim.b[bufnr].is_relevant_file = true
     return true
   end
 
   if #out <= 1 then
+    vim.b[bufnr].is_relevant_file = false
     return false
   elseif #out == 2 then
     -- Includes newline
+    vim.b[bufnr].is_relevant_file = true
     return true
   elseif #out > 2 then
     -- This can happen when opening a dir in NetRW
+    vim.b[bufnr].is_relevant_file = true
     return true
   end
+  vim.b[bufnr].is_relevant_file = false
   return false
 end
 

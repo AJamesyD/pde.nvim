@@ -39,7 +39,7 @@ return {
       }
 
       if vim.g.neovide then
-        overrides.draw.animation = indentscope.gen_animation.exponential()
+        overrides.draw.animation = indentscope.gen_animation.quadratic()
       end
 
       opts = vim.tbl_deep_extend("force", overrides, opts)

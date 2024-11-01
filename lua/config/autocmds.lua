@@ -58,17 +58,12 @@ autocmd({ "BufWinEnter" }, {
       return
     end
 
-    -- Use project root since this may be executing from any buffer in a project with different cwd
-    local root = LazyVim.root.get({ normalize = true, buf = bufnr })
-    -- TODO: not sure if path_expand required, just mindlessly copying telescope
-    root = require("telescope.utils").path_expand(root)
+    bufglobals.is_relevant_file = false
 
-    if MyUtils.is_relevant_file(bufname, root) then
+    if MyUtils.is_relevant_file(bufname, bufnr) then
       bufglobals.is_relevant_file = true
       return
     end
-
-    bufglobals.is_relevant_file = false
 
     autocmd({ "BufWinLeave" }, {
       desc = "Unlist irrelevant buffer",

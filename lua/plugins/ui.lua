@@ -12,20 +12,6 @@ require("util").map_toggle("<leader>uz", {
   end,
 })
 
-require("util").map_toggle("<leader>uT", {
-  name = "Twilight",
-  get = function()
-    return require("twilight.view").enabled
-  end,
-  set = function(state)
-    if state then
-      require("twilight").enable()
-    else
-      require("twilight").disable()
-    end
-  end,
-})
-
 return {
   {
     "rcarriga/nvim-notify",
@@ -147,38 +133,57 @@ return {
         },
       }
 
-      -- WARN: Scary magic number usage
-      local diagnostics_element = table.remove(opts.sections.lualine_c, 2)
-      local lualine_c_overrides = {
+      opts.sections.lualine_a = {
         {
-          -- Insert mid section
-          function()
-            return "%="
+          "mode",
+          ---@param str string
+          fmt = function(str)
+            if vim.tbl_contains({ "VISUAL", "INSERT", "COMMAND" }, str) then
+              return str:sub(1, 3)
+            elseif vim.tbl_contains({ "NORMAL", "REPLACE", "CONFIRM", "TERMINAL" }, str) then
+              return str:sub(1, 4)
+            end
+
+            return str
           end,
         },
+      }
+
+      -- WARN: Scary magic number usage
+      local pretty_path_element = table.remove(opts.sections.lualine_c, 4)
+      local filetype_icon_element = table.remove(opts.sections.lualine_c, 3)
+      local diagnostics_element = table.remove(opts.sections.lualine_c, 2)
+      local lualine_c_overrides = {
+        -- {
+        --   -- Insert mid section
+        --   function()
+        --     return "%="
+        --   end,
+        -- },
         {
           "buffers",
+
           max_length = function()
-            return vim.o.columns * 1 / 3
+            return vim.o.columns * 1 / 2
           end,
 
           buffers_color = {
             -- Same values as the general color option can be used here.
-            active = "lualine_b_normal", -- Color for active buffer.
-            inactive = "lualine_b_inactive", -- Color for inactive buffer.
+            active = "lualine_c_normal", -- Color for active buffer.
+            inactive = "lualine_c_inactive", -- Color for inactive buffer.
           },
 
           symbols = {
             modified = " ●", -- Text to show when the buffer is modified
-            alternate_file = "", -- Text to show to identify the alternate file
+            alternate_file = " ", -- Text to show to identify the alternate file
             directory = "", -- Text to show when the buffer is a directory
           },
-
-          separator = { left = "", right = "" },
+          separator = { right = "" },
         },
       }
       opts.sections.lualine_c = vim.list_extend(opts.sections.lualine_c or {}, lualine_c_overrides)
 
+      table.remove(opts.sections.lualine_x, 5) -- Remove diff
       table.insert(opts.sections.lualine_x, diagnostics_element)
 
       opts.sections.lualine_y = {
@@ -203,6 +208,10 @@ return {
           draw_empty = true,
           padding = { left = 1, right = 1 },
         },
+      }
+
+      opts.sections.lualine_z = {
+        { "grapple" },
       }
 
       local extensions_overrides = {
@@ -529,10 +538,11 @@ return {
       window = {
         width = 0.85,
         options = {
-          signcolumn = "no",
+          cursorcolumn = false,
+          laststatus = 0,
           number = false,
           relativenumber = false,
-          cursorcolumn = false,
+          signcolumn = "no",
         },
       },
       plugins = {
@@ -572,6 +582,14 @@ return {
           },
         },
       },
+      on_open = function(_)
+        require("ibl").setup_buffer(0, { enabled = false })
+        vim.b.miniindentscope_disable = true
+      end,
+      on_close = function()
+        require("ibl").setup_buffer(0, { enabled = true })
+        vim.b.miniindentscope_disable = false
+      end,
     },
   },
   {

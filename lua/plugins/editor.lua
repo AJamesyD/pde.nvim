@@ -148,12 +148,6 @@ return {
         end,
       },
       {
-        "nvim-telescope/telescope-project.nvim",
-        config = function()
-          require("telescope").load_extension("project")
-        end,
-      },
-      {
         "nvim-telescope/telescope-live-grep-args.nvim",
         -- This will not install any breaking changes.
         -- For major updates, this must be adjusted manually.
@@ -193,21 +187,20 @@ return {
       { "<leader>be", "<cmd>Telescope buffers<cr>", desc = "Expore buffers" },
       -- find
       { "<leader>fc", false },
-      { "<leader>fp", "<cmd>Telescope project<cr>", desc = "Projects" },
       -- git
       {
         "<leader>gwc",
         function()
           require("telescope").extensions.git_worktree.create_git_worktree()
         end,
-        desc = "Create git worktree",
+        desc = "New Worktree",
       },
       {
         "<leader>gws",
         function()
           require("telescope").extensions.git_worktree.git_worktrees()
         end,
-        desc = "Git worktrees",
+        desc = "List Worktrees",
       },
       -- search
       { '<leader>s"', false },
@@ -444,28 +437,12 @@ return {
   },
   {
     "lewis6991/gitsigns.nvim",
-    opts = function(_, opts)
-      MyUtils.map_toggle("<leader>ug", {
-        name = "Current Line Blame",
-        get = function()
-          return require("gitsigns.config").config.current_line_blame
-        end,
-        set = function(state)
-          require("gitsigns.config").config.current_line_blame = state
-          require("gitsigns.actions").refresh()
-        end,
-      })
-
-      local overrides = {
-        current_line_blame_opts = {
-          virt_text_pos = "right_align",
-          delay = 500,
-        },
-      }
-
-      opts = vim.tbl_deep_extend("force", overrides, opts)
-      return opts
-    end,
+    opts = {
+      current_line_blame_opts = {
+        virt_text_pos = "right_align",
+        delay = 500,
+      },
+    },
   },
   {
     "max397574/better-escape.nvim",

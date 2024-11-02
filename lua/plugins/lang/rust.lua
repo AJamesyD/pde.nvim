@@ -49,6 +49,7 @@ return {
       ---@type lspconfig.options
       servers = {
         rust_analyzer = {
+          enabled = false,
           mason = false,
         },
       },
@@ -63,19 +64,13 @@ return {
     "Saecki/crates.nvim",
     opts = {
       thousands_separator = ",",
-      popup = {
-        border = "rounded",
-        show_version_date = true,
-      },
       completion = {
         cmp = { enabled = true },
         crates = { enabled = true },
       },
-      lsp = {
-        enabled = true,
-        actions = true,
-        completion = true,
-        hover = true,
+      popup = {
+        border = "rounded",
+        show_version_date = true,
       },
     },
   },
@@ -128,6 +123,12 @@ return {
         default_settings = {
           -- rust-analyzer language server configuration
           ["rust-analyzer"] = {
+            assist = {
+              emitMustUse = true,
+            },
+            cachePriming = {
+              numThreads = "logical",
+            },
             cargo = {
               features = "all",
             },
@@ -136,10 +137,16 @@ return {
             checkOnSave = true,
             check = {
               command = "clippy",
+              extraArgs = {
+                "--no-deps",
+              },
               features = "all",
             },
             completion = {
               fullFunctionSignatures = { enable = true },
+              limit = 100,
+              postfix = { enable = false }, -- TODO: eventually try using these
+              termSearch = { enable = true }, -- TODO: experiment
             },
             diagnostics = {
               experimental = true,
@@ -149,18 +156,27 @@ return {
               styleLints = { enable = true },
             },
             hover = {
+              actions = {
+                references = { enable = true },
+              },
               show = {
                 enumVariants = 10,
                 fields = 10,
               },
             },
+            -- XXX: Should inherit .rustfmt config when available
             imports = {
               granularity = { enforce = true },
+              preferPrelude = true,
+              prefix = "self", -- This is what I've seen in CargoBrazil (I think?)
             },
             inlayHints = {
-              chainingHints = { enable = true },
-              closingBraceHints = { enable = true },
-              closureCaptureHints = { enable = true },
+              closingBraceHints = {
+                enable = true,
+                minLines = 35,
+              },
+              -- closureCaptureHints = { enable = true }, -- TODO: make toggle-able
+              closureReturnTypeHints = { enable = "block" },
               expressionAdjustmentHints = {
                 enable = true,
                 hideOutsideUnsafe = true,
@@ -170,32 +186,36 @@ return {
                 type = { enable = true },
               },
             },
+            interpret = {
+              tests = true, -- XXX: Experimental
+            },
             lens = {
               enable = true,
-              debug = { enable = true },
+              debug = { enable = false }, -- TODO: find better way to integrate with nvim-dap
+              implementations = { enable = true },
+              -- All references default to false.
+              -- TODO: make toggle-able
               references = {
-                adt = { enable = true },
-                enumVariant = { enable = true },
-                method = { enable = true },
-                trait = { enable = true },
+                -- adt = { enable = true },
+                -- enumVariant = { enable = true },
+                -- method = { enable = true },
+                -- trait = { enable = true },
               },
-              run = { enable = false },
+              run = { enable = false }, -- TODO: find better way to integrate with neotest
             },
+            numThreads = "logical",
             rustfmt = {
               extraArgs = "+nightly",
             },
             semanticHighlighting = {
-              operator = {
-                enable = false,
-                specialization = { enable = true },
-              },
-              punctuation = {
-                enable = false,
-                specialization = { enable = true },
-              },
+              nonStandardTokens = false, -- TODO: find theme that supports these better
             },
-            typing = {
-              autoClosingAngleBrackets = { enable = true },
+            workspace = {
+              symbol = {
+                search = {
+                  limit = 512,
+                },
+              },
             },
           },
         },
@@ -220,13 +240,14 @@ return {
           kind.Method,
           --
           kind.Module,
+          kind.Constructor,
           --
           kind.Function,
-          kind.Constructor,
           --
           kind.Struct,
           kind.Enum,
           kind.Constant,
+          --
           kind.Keyword,
         }
       end,

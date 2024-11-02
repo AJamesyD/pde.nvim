@@ -48,6 +48,6 @@ vim.keymap.set("n", "<leader>uD", function()
   MyUtils.reload_lsp_setting({
     client_filter = client_filter,
     settings_updater = settings_updater,
-    restart_cmd = "RustAnalyzer restart",
+    restart_cmd = "RustAnalyzer reloadSettings",
   })
 end, { desc = "Cycle Diagnostic Level", buffer = bufnr })

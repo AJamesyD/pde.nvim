@@ -23,35 +23,8 @@ return {
     end,
   },
   {
-    "echasnovski/mini.indentscope",
-    optional = true,
-    opts = function(_, opts)
-      local indentscope = require("mini.indentscope")
-      local overrides = {
-        draw = {
-          animation = indentscope.gen_animation.none(),
-        },
-        options = {
-          -- Whether to use cursor column when computing reference indent.
-          -- Useful to see incremental scopes with horizontal cursor movements.
-          indent_at_cursor = false,
-        },
-      }
-
-      if vim.g.neovide then
-        overrides.draw.animation = indentscope.gen_animation.quadratic()
-      end
-
-      opts = vim.tbl_deep_extend("force", overrides, opts)
-      return opts
-    end,
-  },
-  {
     "akinsho/bufferline.nvim",
-    dependencies = {
-      "tiagovla/scope.nvim",
-      config = true,
-    },
+    enabled = vim.g.neovide or false,
     keys = {
       { "<leader>bP", false },
       { "<leader>br", false },
@@ -71,8 +44,6 @@ return {
         show_buffer_close_icons = false,
         show_close_icon = false,
         move_wraps_at_ends = true,
-        always_show_bufferline = false,
-        auto_toggle_bufferline = false,
         tab_size = 12,
         groups = {
           options = {
@@ -142,6 +113,8 @@ return {
               return str:sub(1, 3)
             elseif vim.tbl_contains({ "NORMAL", "REPLACE", "CONFIRM", "TERMINAL" }, str) then
               return str:sub(1, 4)
+            elseif vim.tbl_contains({ "O-PENDING", "V-REPLACE" }, str) then
+              return str:sub(1, 6)
             end
 
             return str
@@ -149,39 +122,41 @@ return {
         },
       }
 
-      -- WARN: Scary magic number usage
-      local pretty_path_element = table.remove(opts.sections.lualine_c, 4)
-      local filetype_icon_element = table.remove(opts.sections.lualine_c, 3)
+      if not vim.g.neovide then
+        -- WARN: Scary magic number usage
+        local pretty_path_element = table.remove(opts.sections.lualine_c, 4)
+        local filetype_icon_element = table.remove(opts.sections.lualine_c, 3)
+        local lualine_c_overrides = {
+          -- {
+          --   -- Insert mid section
+          --   function()
+          --     return "%="
+          --   end,
+          -- },
+          {
+            "buffers",
+
+            max_length = function()
+              return vim.o.columns * 1 / 2
+            end,
+
+            buffers_color = {
+              -- Same values as the general color option can be used here.
+              active = "lualine_c_normal", -- Color for active buffer.
+              inactive = "lualine_c_inactive", -- Color for inactive buffer.
+            },
+
+            symbols = {
+              modified = " ●", -- Text to show when the buffer is modified
+              alternate_file = " ", -- Text to show to identify the alternate file
+              directory = "", -- Text to show when the buffer is a directory
+            },
+            separator = { right = "" },
+          },
+        }
+        opts.sections.lualine_c = vim.list_extend(opts.sections.lualine_c or {}, lualine_c_overrides)
+      end
       local diagnostics_element = table.remove(opts.sections.lualine_c, 2)
-      local lualine_c_overrides = {
-        -- {
-        --   -- Insert mid section
-        --   function()
-        --     return "%="
-        --   end,
-        -- },
-        {
-          "buffers",
-
-          max_length = function()
-            return vim.o.columns * 1 / 2
-          end,
-
-          buffers_color = {
-            -- Same values as the general color option can be used here.
-            active = "lualine_c_normal", -- Color for active buffer.
-            inactive = "lualine_c_inactive", -- Color for inactive buffer.
-          },
-
-          symbols = {
-            modified = " ●", -- Text to show when the buffer is modified
-            alternate_file = " ", -- Text to show to identify the alternate file
-            directory = "", -- Text to show when the buffer is a directory
-          },
-          separator = { right = "" },
-        },
-      }
-      opts.sections.lualine_c = vim.list_extend(opts.sections.lualine_c or {}, lualine_c_overrides)
 
       table.remove(opts.sections.lualine_x, 5) -- Remove diff
       table.insert(opts.sections.lualine_x, diagnostics_element)
@@ -219,7 +194,6 @@ return {
         "quickfix",
         "trouble",
       }
-
       opts.extensions = vim.list_extend(opts.extensions or {}, extensions_overrides)
 
       opts = vim.tbl_deep_extend("force", overrides, opts)
@@ -238,6 +212,30 @@ return {
         lsp_doc_border = true,
       },
     },
+  },
+  {
+    "echasnovski/mini.indentscope",
+    optional = true,
+    opts = function(_, opts)
+      local indentscope = require("mini.indentscope")
+      local overrides = {
+        draw = {
+          animation = (vim.g.neovide and indentscope.gen_animation.quadratic()) or indentscope.gen_animation.none(),
+        },
+        options = {
+          -- Whether to use cursor column when computing reference indent.
+          -- Useful to see incremental scopes with horizontal cursor movements.
+          indent_at_cursor = false,
+        },
+      }
+
+      opts = vim.tbl_deep_extend("force", overrides, opts)
+      return opts
+    end,
+  },
+  {
+    "tiagovla/scope.nvim",
+    config = true,
   },
   {
     "m4xshen/smartcolumn.nvim",
@@ -583,12 +581,12 @@ return {
         },
       },
       on_open = function(_)
-        require("ibl").setup_buffer(0, { enabled = false })
         vim.b.miniindentscope_disable = true
+        require("ibl").setup_buffer(0, { enabled = false })
       end,
       on_close = function()
-        require("ibl").setup_buffer(0, { enabled = true })
         vim.b.miniindentscope_disable = false
+        require("ibl").setup_buffer(0, { enabled = true })
       end,
     },
   },

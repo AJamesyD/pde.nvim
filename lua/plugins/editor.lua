@@ -170,7 +170,12 @@ return {
 
           worktree.on_tree_change(function(op, metadata)
             if op == worktree.Operations.Switch then
-              local venv = vim.fn.findfile("pyproject.toml", vim.fn.getcwd() .. ";")
+              local new_path = metadata.path
+              local root_files = {
+                "pyproject.toml",
+                "requirements.txt",
+              }
+              local venv = require("lspconfig.util").root_pattern(unpack(root_files))(new_path)
               if venv ~= "" then
                 require("venv-selector").retrieve_from_cache()
               end
@@ -183,11 +188,15 @@ return {
       { "<leader>,", false },
       { "<leader>/", false },
       { "<leader>:", false },
-      -- buffer
-      { "<leader>be", "<cmd>Telescope buffers<cr>", desc = "Expore buffers" },
+      { "<leader><space>", "<cmd>Telescope resume<cr>", desc = "Resume Search" },
+      { "<leader><cr>", "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>", desc = "Switch Buffer" },
       -- find
       { "<leader>fc", false },
+      { "<leader>fr", LazyVim.pick("oldfiles"), desc = "Recent (Root Dir)" },
+      { "<leader>fR", LazyVim.pick("oldfiles", { cwd = vim.uv.cwd() }), desc = "Recent (cwd)" },
       -- git
+      { "<leader>gc", false },
+      { "<leader>gs", false },
       {
         "<leader>gwc",
         function()
@@ -205,44 +214,59 @@ return {
       -- search
       { '<leader>s"', false },
       { "<leader>sa", false },
+      { "<leader>sb", false },
+      { "<leader>sc", false },
+      { "<leader>sC", false },
       { "<leader>sH", false },
       { "<leader>sM", false },
       { "<leader>sm", false },
-      { "<leader>sR", false },
-      { "<leader>sa", "<cmd>Telescope live_grep_args<cr>", desc = "Grep w/ args" },
-      { "<leader>s<CR>", "<cmd>Telescope resume<cr>", desc = "Resume" },
+      { "<leader>so", false },
+      { "<leader>ss", false },
+      { "<leader>sS", false },
+      { "<leader>sa", "<cmd>Telescope live_grep_args<cr>", desc = "Grep w/ Args" },
       -- undo
-      { "<leader>su", "<CMD>Telescope undo<CR>", desc = "Undo history" },
+      { "<leader>su", "<CMD>Telescope undo<CR>", desc = "Undo History" },
       -- spell
+      { "<leader>ss", "<CMD>Telescope spell_suggest<CR>", desc = "Spelling Suggestions" },
       { "z=", "<CMD>Telescope spell_suggest<CR>", desc = "Spelling Suggestions" },
     },
-    opts = {
-      defaults = {
-        file_ignore_patterns = {
-          "%.venv/.*",
-          "venv/.*",
-          ".*%.out/.*",
-          "node_modules/.*",
-          "dist/.*",
+    opts = function(_, opts)
+      local overrides = {
+        defaults = {
+          path_display = {
+            filename_first = {
+              reverse_directories = true,
+            },
+          },
+          layout_config = {
+            horizontal = { prompt_position = "top", preview_width = 0.6 },
+            vertical = { mirror = false },
+            width = 0.90,
+            height = 0.90,
+          },
+          sorting_strategy = "ascending",
         },
-        sorting_strategy = "ascending",
-        layout_config = {
-          horizontal = { prompt_position = "top", preview_width = 0.55 },
-          vertical = { mirror = false },
-          width = 0.87,
-          height = 0.80,
-          preview_cutoff = 120,
+        pickers = {
+          buffers = {
+            mappings = {
+              n = {
+                ["d"] = require("telescope.actions").delete_buffer,
+              },
+            },
+          },
+          spell_suggest = {
+            theme = "cursor",
+          },
         },
-      },
-      pickers = {
-        spell_suggest = {
-          theme = "cursor",
-        },
-      },
-    },
+      }
+
+      opts = vim.tbl_deep_extend("force", overrides, opts)
+      return opts
+    end,
   },
   {
     "linux-cultist/venv-selector.nvim",
+    cmd = { "VenvSelect" },
     branch = "regexp",
   },
   {
@@ -442,13 +466,6 @@ return {
         virt_text_pos = "right_align",
         delay = 500,
       },
-    },
-  },
-  {
-    "max397574/better-escape.nvim",
-    event = "InsertEnter",
-    opts = {
-      timeout = 500,
     },
   },
   {

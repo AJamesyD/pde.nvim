@@ -145,4 +145,12 @@ return {
     priority = 1000,
     opts = {},
   },
+  {
+    "eldritch-theme/eldritch.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {
+      dim_inactive = true,
+    },
+  },
 }

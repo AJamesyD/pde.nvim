@@ -98,7 +98,7 @@ autocmd({ "FileType" }, {
 })
 
 autocmd({ "FileType" }, {
-  desc = "Mark text files for faster identification in bufferline",
+  desc = "Mark text files",
   pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
   callback = function(event)
     local bufnr = event.buf
@@ -108,7 +108,7 @@ autocmd({ "FileType" }, {
 })
 
 autocmd({ "BufAdd" }, {
-  desc = "Mark test files for faster identification in bufferline",
+  desc = "Mark test files",
   callback = function(event)
     local bufnr = event.buf
     local bufglobals = vim.b[bufnr]

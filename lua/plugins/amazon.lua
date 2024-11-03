@@ -65,7 +65,9 @@ return {
             cmd = { "barium" },
             filetypes = { "brazil-config" },
             root_dir = function(fname)
-              return lspconfig.util.find_git_ancestor(fname) or lspconfig.util.root_pattern("Config")
+              local primary = lspconfig.util.root_pattern("Config")(fname)
+              local fallback = lspconfig.util.find_git_ancestor(fname)
+              return primary or fallback
             end,
             settings = {},
           },

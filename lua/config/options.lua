@@ -16,7 +16,10 @@ g.lazyvim_python_lsp = "basedpyright"
 g.trouble_lualine = false
 
 -- Plugin globals
-g.mkdp_port = 8999 -- markdown-preview.nvim requires "LocalForward 8999 [127.0.0.1]:8999"
+if vim.fn.exists("$SSH_CLIENT") ~= 0 then
+  -- markdown-preview.nvim requires "LocalForward 8999 [127.0.0.1]:8999"
+  g.mkdp_port = 8999
+end
 
 -- Custom globals
 g.clippy_level = 0

@@ -37,61 +37,67 @@ return {
       { "<leader>bb", "<CMD>BufferLinePick<CR>", desc = "Pick buffer open" },
       { "<leader>bc", "<CMD>BufferLinePickClose<CR>", desc = "Pick buffer close" },
     },
-    opts = {
-      options = {
-        style_preset = require("bufferline").style_preset.no_italic,
-        separator_style = "slant",
-        show_buffer_close_icons = false,
-        show_close_icon = false,
-        move_wraps_at_ends = true,
-        tab_size = 12,
-        groups = {
-          options = {
-            toggle_hidden_on_enter = true,
-          },
-          items = {
-            require("bufferline.groups").builtin.pinned:with({
-              icon = " ",
-              separator = {
-                style = require("bufferline.groups").separator.pill,
-              },
-            }),
-            require("bufferline.groups").builtin.ungrouped:with({
-              name = " ",
-              separator = {
-                style = require("bufferline.groups").separator.pill,
-              },
-            }),
-            {
-              name = " test",
-              ---@param buf bufferline.Buffer
-              matcher = function(buf)
-                local is_test_file = vim.b[buf.id].is_test_file
-                return type(is_test_file) ~= "nil" and is_test_file
-              end,
+    opts = function(_, opts)
+      local bufferline_groups = require("bufferline.groups")
+      local overrides = {
+        options = {
+          style_preset = require("bufferline").style_preset.no_italic,
+          separator_style = "slant",
+          show_buffer_close_icons = false,
+          show_close_icon = false,
+          move_wraps_at_ends = true,
+          tab_size = 12,
+          groups = {
+            options = {
+              toggle_hidden_on_enter = true,
             },
-            {
-              name = " docs",
-              ---@param buf bufferline.Buffer
-              matcher = function(buf)
-                local is_text_file = vim.b[buf.id].is_text_file
-                return type(is_text_file) ~= "nil" and is_text_file
-              end,
-            },
-            {
-              name = " misc",
-              ---@type vim.api.keyset.highlight
-              highlight = { underline = true },
-              ---@param buf bufferline.Buffer
-              matcher = function(buf)
-                local is_relevant_file = vim.b[buf.id].is_relevant_file
-                return type(is_relevant_file) ~= "nil" and not is_relevant_file
-              end,
+            items = {
+              bufferline_groups.builtin.pinned:with({
+                icon = " ",
+                separator = {
+                  style = bufferline_groups.separator.pill,
+                },
+              }),
+              bufferline_groups.builtin.ungrouped:with({
+                name = " ",
+                separator = {
+                  style = bufferline_groups.separator.pill,
+                },
+              }),
+              {
+                name = " test",
+                ---@param buf bufferline.Buffer
+                matcher = function(buf)
+                  local is_test_file = vim.b[buf.id].is_test_file
+                  return type(is_test_file) ~= "nil" and is_test_file
+                end,
+              },
+              {
+                name = " docs",
+                ---@param buf bufferline.Buffer
+                matcher = function(buf)
+                  local is_text_file = vim.b[buf.id].is_text_file
+                  return type(is_text_file) ~= "nil" and is_text_file
+                end,
+              },
+              {
+                name = " misc",
+                ---@type vim.api.keyset.highlight
+                highlight = { underline = true },
+                ---@param buf bufferline.Buffer
+                matcher = function(buf)
+                  local is_relevant_file = vim.b[buf.id].is_relevant_file
+                  return type(is_relevant_file) ~= "nil" and not is_relevant_file
+                end,
+              },
             },
           },
         },
-      },
-    },
+      }
+
+      opts = vim.tbl_deep_extend("force", overrides, opts)
+      return opts
+    end,
   },
   {
     "nvim-lualine/lualine.nvim",

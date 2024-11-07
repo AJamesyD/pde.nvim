@@ -25,10 +25,12 @@ return {
     opts = {
       formatters_by_ft = {
         -- Use the "*" filetype to run formatters on all filetypes.
-        ["*"] = { "trim_whitespace" },
+        -- TODO: Re-enable once I figure out how to it respect vim.g/b.autoformat
+        -- ["*"] = { "trim_whitespace" },
         -- Use the "_" filetype to run formatters on filetypes that don't
         -- have other formatters configured.
-        ["_"] = { "trim_whitespace", "trim_newlines" },
+        -- TODO: Re-enable once I figure out how to it respect vim.g/b.autoformat
+        -- ["_"] = { "trim_newlines" },
       },
     },
   },

@@ -178,4 +178,8 @@ M.is_amazon = function()
   return os.getenv("USER") == "angaidan"
 end
 
+M.min_sidebar_size = function(min_size, max_size, fraction_of_max)
+  return math.max(math.floor(max_size * fraction_of_max), min_size)
+end
+
 return M

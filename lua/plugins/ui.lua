@@ -376,9 +376,6 @@ return {
       ---@param min_size integer
       ---@param max_size integer
       ---@param fraction_of_max number
-      local function min_sidebar_size(min_size, max_size, fraction_of_max)
-        return math.max(math.floor(max_size * fraction_of_max), min_size)
-      end
       ---@type Edgy.Config
       local overrides = {
         keys = {
@@ -406,12 +403,12 @@ return {
         options = {
           left = {
             size = function()
-              return min_sidebar_size(30, vim.o.columns, 0.1)
+              return MyUtils.min_sidebar_size(30, vim.o.columns, 0.1)
             end,
           },
           right = {
             size = function()
-              return min_sidebar_size(30, vim.o.columns, 0.1)
+              return MyUtils.min_sidebar_size(30, vim.o.columns, 0.1)
             end,
           },
         },
@@ -423,11 +420,19 @@ return {
       }
       opts = vim.tbl_deep_extend("force", overrides, opts)
 
+      for _, config in ipairs(opts.left) do
+        -- Reconfigure neo-tree defaults
+        if type(config) == "table" and config.ft == "neo-tree" then
+          config.pinned = false
+        end
+      end
+
       local temp_right = opts.right
       for _, config in ipairs(temp_right) do
+        -- Reconfigure grug-far defaults
         if type(config) == "table" and config.ft == "grug-far" then
           config.size.width = function()
-            return min_sidebar_size(10, vim.o.columns, 0.25)
+            return MyUtils.min_sidebar_size(10, vim.o.columns, 0.25)
           end
         end
       end

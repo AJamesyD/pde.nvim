@@ -123,6 +123,7 @@ return {
       local spec_overrides = {
         { "<leader>F", hidden = true },
         { "<leader>gw", group = "worktrees" },
+        { "<leader>a", group = "Avante AI" },
         { "s", group = "surround" },
       }
       opts.spec = vim.list_extend(opts.spec or {}, spec_overrides)

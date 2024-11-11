@@ -92,8 +92,18 @@ return {
         test_executor = "background",
         crate_test_executor = "background",
       },
+      ---@type rustaceanvim.lsp.ClientConfig
       server = {
-        on_attach = function(_, bufnr)
+        on_attach = function(client, bufnr)
+          local capability_overrides = {
+            textDocument = {
+              foldingRange = {
+                dynamicRegistration = false,
+                lineFoldingOnly = true,
+              },
+            },
+          }
+          client.capabilities = vim.tbl_deep_extend("force", capability_overrides, client.capabilities or {})
           local map = MyUtils.map
 
           map("n", "<leader>dr", function()

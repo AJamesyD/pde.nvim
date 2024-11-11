@@ -621,6 +621,7 @@ return {
   },
   {
     "kevinhwang91/nvim-ufo",
+    event = "LazyFile",
     dependencies = {
       "kevinhwang91/promise-async",
       {
@@ -630,14 +631,26 @@ return {
           keys[#keys + 1] = {
             "K",
             function()
-              local ok, ufo = pcall(require, "ufo")
-              local winid = ok and ufo.peekFoldedLinesUnderCursor()
+              local winid = require("ufo").peekFoldedLinesUnderCursor()
               if not winid then
                 require("noice.lsp").hover()
               end
             end,
             desc = "Hover",
           }
+
+          local overrides = {
+            capabilities = {
+              textDocument = {
+                foldingRange = {
+                  dynamicRegistration = false,
+                  lineFoldingOnly = true,
+                },
+              },
+            },
+          }
+
+          opts = vim.tbl_deep_extend("force", overrides, opts)
           return opts
         end,
       },
@@ -665,8 +678,7 @@ return {
     opts = function(_, opts)
       local handler = function(virtText, lnum, endLnum, width, truncate)
         local newVirtText = {}
-        local foldedLines = endLnum - lnum
-        local suffix = ("  %d"):format(foldedLines)
+        local suffix = (" 󰁂 %d "):format(endLnum - lnum)
         local sufWidth = vim.fn.strdisplaywidth(suffix)
         local targetWidth = width - sufWidth
         local curWidth = 0
@@ -688,18 +700,51 @@ return {
           end
           curWidth = curWidth + chunkWidth
         end
-        local rAlignAppndx = math.max(math.min(vim.opt.textwidth["_value"], width - 1) - curWidth - sufWidth, 0)
-        suffix = (" "):rep(rAlignAppndx) .. suffix
         table.insert(newVirtText, { suffix, "MoreMsg" })
         return newVirtText
       end
+
+      local ftMap = {
+        git = "",
+        lua = { "treesitter", "indent" },
+        python = { "indent" },
+        ["vim"] = "indent",
+      }
+
+      -- lsp->treesitter->indent
+      ---@param bufnr number
+      ---@return Promise
+      local function customizeSelector(bufnr)
+        local ufo = require("ufo")
+        local promise = require("promise")
+        local function handleFallbackException(err, providerName)
+          if type(err) == "string" and err:match("UfoFallbackException") then
+            return promise.resolve(ufo.getFolds(bufnr, providerName))
+          else
+            return promise.reject(err)
+          end
+        end
+
+        return promise
+          .resolve(ufo.getFolds(bufnr, "lsp"))
+          :catch(function(err)
+            return handleFallbackException(err, "treesitter")
+          end)
+          :catch(function(err)
+            return handleFallbackException(err, "indent")
+          end)
+      end
+
       local overrides = {
-        -- INFO: Uncomment to use treeitter as fold provider, otherwise nvim lsp is used
-        -- provider_selector = function(bufnr, filetype, buftype)
-        --   return { "treesitter", "indent" }
-        -- end,
+        -- return a string type use ufo providers
+        -- return a string in a table like a string type
+        -- return empty string '' will disable any providers
+        -- return `nil` will use default value {'lsp', 'indent'}
+        provider_selector = function(bufnr, filetype, _buftype)
+          return ftMap[filetype] or customizeSelector
+        end,
         close_fold_kinds_for_ft = {
-          default = {},
+          default = { "imports" },
         },
         fold_virt_text_handler = handler,
         preview = {

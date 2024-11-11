@@ -74,26 +74,30 @@ map({ "n", "v" }, "<C-y>", '"+y', { desc = "Yank to clip" })
 map({ "n", "v" }, "<C-p>", '"+p', { desc = "Paste from clip" })
 
 -- toggle options. Overrides of LazyVim default keymaps must go in this file (why?)
-require("util").map_toggle("<leader>ug", {
-  name = "Current Line Blame",
-  get = function()
-    return require("gitsigns.config").config.current_line_blame
-  end,
-  set = function(state)
-    require("gitsigns.config").config.current_line_blame = state
-    require("gitsigns.actions").refresh()
-  end,
-})
-require("util").map_toggle("<leader>uT", {
-  name = "Twilight",
-  get = function()
-    return require("twilight.view").enabled
-  end,
-  set = function(state)
-    if state then
-      require("twilight").enable()
-    else
-      require("twilight").disable()
-    end
-  end,
-})
+require("snacks")
+  .toggle({
+    name = "Current Line Blame",
+    get = function()
+      return require("gitsigns.config").config.current_line_blame
+    end,
+    set = function(state)
+      require("gitsigns.config").config.current_line_blame = state
+      require("gitsigns.actions").refresh()
+    end,
+  })
+  :map("<leader>ug")
+require("snacks")
+  .toggle({
+    name = "Twilight",
+    get = function()
+      return require("twilight.view").enabled
+    end,
+    set = function(state)
+      if state then
+        require("twilight").enable()
+      else
+        require("twilight").disable()
+      end
+    end,
+  })
+  :map("<leader>uT")

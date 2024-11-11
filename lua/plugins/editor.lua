@@ -515,24 +515,12 @@ return {
   {
     "hedyhli/outline.nvim",
     optional = true,
-    opts = {
-      outline_window = {
-        show_numbers = true,
-        show_relative_numbers = true,
-      },
-    },
+    opts = {},
   },
   {
     "stevearc/aerial.nvim",
     optional = true,
     opts = {
-      layout = {
-        win_opts = {
-          number = true,
-          relativenumber = true,
-          statuscolumn = vim.opt.statuscolumn["_value"],
-        },
-      },
       highlight_mode = "last",
       highlight_on_hover = true,
     },

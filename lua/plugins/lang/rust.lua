@@ -11,11 +11,11 @@ local lazyterm_executor = {
     for i, str in ipairs(cmd) do
       print("cmd part " .. i .. ": " .. str)
     end
-    ---@type LazyTermOpts
+    ---@type snacks.terminal.Opts
     local term_opts = {
       cwd = cwd,
     }
-    LazyVim.terminal(cmd, term_opts)
+    Snacks.terminal.open(cmd, term_opts)
   end,
 }
 
@@ -46,7 +46,6 @@ return {
     "neovim/nvim-lspconfig",
     ---@class PluginLspOpts
     opts = {
-      ---@type lspconfig.options
       servers = {
         rust_analyzer = {
           enabled = false,

@@ -1,22 +1,28 @@
-require("util").map_toggle("<leader>m", {
-  name = "Split/Join",
-  get = function()
-    return true
-  end,
-  set = function(_)
-    require("treesj").toggle()
-  end,
-}, true)
+require("snacks")
+  .toggle({
+    name = "Split/Join",
+    get = function()
+      return true
+    end,
+    set = function(_)
+      require("treesj").toggle()
+    end,
+    notify = false,
+  })
+  :map("<leader>m")
 
-require("util").map_toggle("<leader>M", {
-  name = "Split/Join (Recursive)",
-  get = function()
-    return true
-  end,
-  set = function(_)
-    require("treesj").toggle({ split = { recursive = true } })
-  end,
-}, true)
+require("snacks")
+  .toggle({
+    name = "Split/Join (Recursive)",
+    get = function()
+      return true
+    end,
+    set = function(_)
+      require("treesj").toggle({ split = { recursive = true } })
+    end,
+    notify = false,
+  })
+  :map("<leader>M")
 
 return {
   {

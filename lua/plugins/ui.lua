@@ -1,16 +1,18 @@
-require("util").map_toggle("<leader>uz", {
-  name = "ZenMode",
-  get = function()
-    return require("zen-mode.view").is_open()
-  end,
-  set = function(state)
-    if state then
-      require("zen-mode").open()
-    else
-      require("zen-mode").close()
-    end
-  end,
-})
+require("snacks")
+  .toggle({
+    name = "ZenMode",
+    get = function()
+      return require("zen-mode.view").is_open()
+    end,
+    set = function(state)
+      if state then
+        require("zen-mode").open()
+      else
+        require("zen-mode").close()
+      end
+    end,
+  })
+  :map("<leader>uz")
 
 return {
   {
@@ -603,6 +605,8 @@ return {
   },
   {
     "tzachar/highlight-undo.nvim",
+    -- TODO: Remove either when I move to nvim 0.11 or when plugin fixes this
+    commit = "c87a6ec1ded241ef223269077cbd5f97a6f0d5bf",
     keys = {
       {
         "u",
@@ -619,26 +623,6 @@ return {
     "kevinhwang91/nvim-ufo",
     dependencies = {
       "kevinhwang91/promise-async",
-      {
-        "luukvbaal/statuscol.nvim",
-        -- TODO: experiment with this
-        enabled = false,
-        opts = function(_, opts)
-          local builtin = require("statuscol.builtin")
-          local overrides = {
-            relculright = true,
-            segments = {
-              { text = { "%s" }, click = "v:lua.ScSa" },
-              { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" },
-              { text = { builtin.foldfunc }, click = "v:lua.ScFa" },
-            },
-          }
-
-          opts = vim.tbl_deep_extend("force", overrides, opts)
-          return opts
-        end,
-        config = true,
-      },
       {
         "neovim/nvim-lspconfig",
         opts = function(_, opts)

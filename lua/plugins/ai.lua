@@ -1,33 +1,64 @@
-require("snacks")
-  .toggle({
-    name = "Codeium",
-    get = function()
-      return vim.g.codeium_enabled
-    end,
-    set = function(state)
-      if state then
-        vim.g.codeium_enabled = true
-      else
-        vim.g.codeium_enabled = false
-      end
-    end,
-  })
-  :map("<leader>c<leader>")
 return {
   {
     "hrsh7th/nvim-cmp",
     optional = true,
-    dependencies = { "Exafunction/codeium.nvim" },
-    ---@param opts cmp.ConfigSchema
+    dependencies = { "codeium.nvim" },
     opts = function(_, opts)
-      for _, source in ipairs(opts.sources) do
-        if source.name == "codeium" then
-          source.max_item_count = 20
-          source.entry_filter = function(_, _)
+      table.insert(opts.sources, 1, {
+        name = "codeium",
+        group_index = 1,
+        priority = 100,
+        entry_filter = function(_, _)
+          return vim.g.codeium_enabled
+        end,
+      })
+      return opts
+    end,
+  },
+  {
+    "Exafunction/codeium.nvim",
+    optional = true,
+    cmd = "Codeium",
+    build = ":Codeium Auth",
+    opts = function(_, opts)
+      require("snacks")
+        .toggle({
+          name = "Codeium",
+          get = function()
             return vim.g.codeium_enabled
-          end
+          end,
+          set = function(state)
+            if state then
+              vim.g.codeium_enabled = true
+            else
+              vim.g.codeium_enabled = false
+            end
+          end,
+        })
+        :map("<leader>ac")
+
+      LazyVim.cmp.actions.ai_accept = function()
+        if require("codeium.virtual_text").get_current_completion_item() then
+          LazyVim.create_undo()
+          vim.api.nvim_input(require("codeium.virtual_text").accept())
+          return true
         end
       end
+
+      local overrides = {
+        enable_cmp_source = vim.g.ai_cmp,
+        virtual_text = {
+          enabled = not vim.g.ai_cmp,
+          key_bindings = {
+            accept = false, -- handled by nvim-cmp / blink.cmp
+            next = "<M-]>",
+            prev = "<M-[>",
+          },
+        },
+      }
+
+      opts = vim.tbl_deep_extend("force", overrides, opts)
+      return opts
     end,
   },
   {

@@ -1,8 +1,8 @@
 return {
   {
     "folke/lazydev.nvim",
-    opts = {
-      library = {
+    opts = function(_, opts)
+      local library_overrides = {
         { path = "lazy.nvim" },
         { path = "LazyVim" },
 
@@ -16,8 +16,11 @@ return {
         { path = "telescope.nvim", words = { "telescope" } },
         { path = "tokyonight.nvim", words = { "tokyonight" } },
         { path = "which-key.nvim", words = { "wk", "which-key" } },
-      },
-    },
+      }
+
+      opts.library = vim.list_extend(opts.library or {}, library_overrides)
+      return opts
+    end,
   },
   {
     "hrsh7th/nvim-cmp",
@@ -59,21 +62,6 @@ return {
         end
       end
 
-      ---@type table<integer, integer>
-      local modified_kind_priority = {
-        [types.lsp.CompletionItemKind.EnumMember] = 0,
-        [types.lsp.CompletionItemKind.Variable] = 0,
-        [types.lsp.CompletionItemKind.Value] = 0,
-
-        [types.lsp.CompletionItemKind.Field] = 1,
-        [types.lsp.CompletionItemKind.Property] = 1,
-
-        [types.lsp.CompletionItemKind.Method] = 2,
-
-        [types.lsp.CompletionItemKind.Module] = 3,
-        [types.lsp.CompletionItemKind.Function] = 3,
-        [types.lsp.CompletionItemKind.Text] = 99,
-      }
       ---recently_used: Entries that are used recently will be ranked higher.
       ---We bucket times in order to ensure fallback to other comparators
       ---@type cmp.ComparatorFunctor

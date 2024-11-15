@@ -4,6 +4,8 @@ return {
     ---@class PluginLspOpts
     opts = {
       servers = {
+        ---@type vim.lsp.ClientConfig
+        ---@diagnostic disable-next-line: missing-fields
         nil_ls = {
           settings = {
             ["nil"] = {
@@ -15,15 +17,13 @@ return {
               },
             },
           },
-          setup = {
-            ["nil"] = function()
-              LazyVim.lsp.on_attach(function(client, _)
-                -- TODO: Re-enable when semantic highlighting is better
-                client.server_capabilities.semanticTokensProvider = nil
-              end, "nil")
-            end,
-          },
+          on_attach = function(client, bufnr)
+            -- TODO: Re-enable when semantic highlighting is better
+            client.server_capabilities.semanticTokensProvider = nil
+          end,
         },
+        ---@type vim.lsp.ClientConfig
+        ---@diagnostic disable-next-line: missing-fields
         nixd = {
           settings = {
             nixd = {
@@ -37,14 +37,10 @@ return {
               },
             },
           },
-          setup = {
-            ["nixd"] = function()
-              LazyVim.lsp.on_attach(function(client, _)
-                -- TODO: Re-enable when semantic highlighting is better
-                client.server_capabilities.semanticTokensProvider = nil
-              end, "nixd")
-            end,
-          },
+          on_attach = function(client, bufnr)
+            -- TODO: Re-enable when semantic highlighting is better
+            client.server_capabilities.semanticTokensProvider = nil
+          end,
         },
       },
     },

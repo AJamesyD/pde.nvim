@@ -1,5 +1,5 @@
 ---@type rustaceanvim.Executor
-local lazyterm_executor = {
+local terminal_executor = {
   execute_command = function(command, args, cwd, _)
     local shell = require("rustaceanvim.shell")
 
@@ -88,7 +88,7 @@ return {
           open_split = "vertical",
           width = 0.8,
         },
-        executor = lazyterm_executor,
+        executor = terminal_executor,
         test_executor = "background",
         crate_test_executor = "background",
       },
@@ -211,6 +211,9 @@ return {
                 -- trait = { enable = true },
               },
               run = { enable = false }, -- TODO: find better way to integrate with neotest
+            },
+            lru = {
+              capacity = 4096,
             },
             numThreads = "logical",
             rustfmt = {

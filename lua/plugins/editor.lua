@@ -52,15 +52,6 @@ return {
       window = {
         width = 40,
       },
-      event_handlers = {
-        {
-          event = "neo_tree_buffer_enter",
-          handler = function()
-            vim.opt.relativenumber = true
-            vim.opt.number = true
-          end,
-        },
-      },
     },
     keys = {
       { "<leader>ge", false },

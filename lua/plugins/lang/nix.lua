@@ -10,8 +10,9 @@ return {
           settings = {
             ["nil"] = {
               nix = {
-                maxMemoryMB = 3072,
+                maxMemoryMB = nil,
                 flake = {
+                  autoArchive = true,
                   autoEvalInputs = true,
                 },
               },

@@ -83,6 +83,11 @@ return {
           replace_builtin_hover = false,
         },
         ---@type rustaceanvim.FloatWinConfig|vim.api.keyset.win_config
+        float_win_config = {
+          auto_focus = true,
+          open_split = "vertical",
+          width = 0.8,
+        },
         executor = terminal_executor,
         test_executor = "background",
         crate_test_executor = "background",
@@ -130,6 +135,9 @@ return {
             assist = {
               emitMustUse = true,
             },
+            cachePriming = {
+              numThreads = "logical",
+            },
             cargo = {
               features = "all",
             },
@@ -147,6 +155,7 @@ return {
               fullFunctionSignatures = { enable = true },
               limit = 100,
               postfix = { enable = false }, -- TODO: eventually try using these
+              termSearch = { enable = true }, -- TODO: experiment
             },
             diagnostics = {
               experimental = true,
@@ -168,6 +177,7 @@ return {
             imports = {
               granularity = { enforce = true },
               preferPrelude = true,
+              prefix = "self", -- This is what I've seen in CargoBrazil (I think?)
             },
             inlayHints = {
               closingBraceHints = {
@@ -176,10 +186,17 @@ return {
               },
               -- closureCaptureHints = { enable = true }, -- TODO: make toggle-able
               closureReturnTypeHints = { enable = "block" },
+              expressionAdjustmentHints = {
+                enable = true,
+                hideOutsideUnsafe = true,
+              },
               genericParameterHints = {
                 lifetime = { enable = true },
                 type = { enable = true },
               },
+            },
+            interpret = {
+              tests = true, -- XXX: Experimental
             },
             lens = {
               enable = true,
@@ -187,19 +204,30 @@ return {
               implementations = { enable = true },
               -- All references default to false.
               -- TODO: make toggle-able
-              -- references = {
-              -- adt = { enable = true },
-              -- enumVariant = { enable = true },
-              -- method = { enable = true },
-              -- trait = { enable = true },
-              -- },
+              references = {
+                -- adt = { enable = true },
+                -- enumVariant = { enable = true },
+                -- method = { enable = true },
+                -- trait = { enable = true },
+              },
               run = { enable = false }, -- TODO: find better way to integrate with neotest
             },
+            lru = {
+              capacity = 4096,
+            },
+            numThreads = "logical",
             rustfmt = {
               extraArgs = "+nightly",
             },
             semanticHighlighting = {
               nonStandardTokens = false, -- TODO: find theme that supports these better
+            },
+            workspace = {
+              symbol = {
+                search = {
+                  limit = 512,
+                },
+              },
             },
           },
         },

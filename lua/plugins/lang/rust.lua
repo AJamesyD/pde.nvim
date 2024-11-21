@@ -128,6 +128,18 @@ return {
           map("n", "J", function()
             vim.cmd.RustLsp("joinLines")
           end, { desc = "Join Lines", buffer = bufnr })
+
+          -- HACK: Workaround to ignore ServerCancelled error
+          -- https://github.com/neovim/neovim/issues/30985#issuecomment-2447329525
+          for _, method in ipairs({ "textDocument/diagnostic", "workspace/diagnostic" }) do
+            local default_diagnostic_handler = vim.lsp.handlers[method]
+            vim.lsp.handlers[method] = function(err, result, context, config)
+              if err ~= nil and err.code == -32802 then
+                return
+              end
+              return default_diagnostic_handler(err, result, context, config)
+            end
+          end
         end,
         default_settings = {
           -- rust-analyzer language server configuration
@@ -213,7 +225,7 @@ return {
               run = { enable = false }, -- TODO: find better way to integrate with neotest
             },
             lru = {
-              capacity = 4096,
+              capacity = 512,
             },
             numThreads = "logical",
             rustfmt = {

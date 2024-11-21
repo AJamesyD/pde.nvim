@@ -74,7 +74,7 @@ return {
         },
       }
 
-      opts = vim.tbl_deep_extend("force", overrides, opts)
+      opts = vim.tbl_deep_extend("force", opts, overrides)
       local ensure_installed = {
         "comment",
         "devicetree", -- For qmk.nvim

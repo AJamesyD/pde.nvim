@@ -98,7 +98,7 @@ return {
               },
             },
           }
-          client.capabilities = vim.tbl_deep_extend("force", capability_overrides, client.capabilities or {})
+          client.capabilities = vim.tbl_deep_extend("force", client.capabilities or {}, capability_overrides)
           local map = MyUtils.map
 
           map("n", "<leader>dr", function()

@@ -97,7 +97,7 @@ return {
         },
       }
 
-      opts = vim.tbl_deep_extend("force", overrides, opts)
+      opts = vim.tbl_deep_extend("force", opts, overrides)
       return opts
     end,
   },
@@ -204,7 +204,7 @@ return {
       }
       opts.extensions = vim.list_extend(opts.extensions or {}, extensions_overrides)
 
-      opts = vim.tbl_deep_extend("force", overrides, opts)
+      opts = vim.tbl_deep_extend("force", opts, overrides)
       return opts
     end,
   },
@@ -237,7 +237,7 @@ return {
         },
       }
 
-      opts = vim.tbl_deep_extend("force", overrides, opts)
+      opts = vim.tbl_deep_extend("force", opts, overrides)
       return opts
     end,
   },
@@ -420,7 +420,7 @@ return {
         exit_when_last = true,
         close_when_all_hidden = true,
       }
-      opts = vim.tbl_deep_extend("force", overrides, opts)
+      opts = vim.tbl_deep_extend("force", opts, overrides)
 
       for _, config in ipairs(opts.left) do
         -- Reconfigure neo-tree defaults
@@ -538,7 +538,7 @@ return {
         },
       }
 
-      opts = vim.tbl_deep_extend("force", overrides, opts)
+      opts = vim.tbl_deep_extend("force", opts, overrides)
       return opts
     end,
   },
@@ -650,7 +650,7 @@ return {
             },
           }
 
-          opts = vim.tbl_deep_extend("force", overrides, opts)
+          opts = vim.tbl_deep_extend("force", opts, overrides)
           return opts
         end,
       },
@@ -757,7 +757,7 @@ return {
         },
       }
 
-      opts = vim.tbl_deep_extend("force", overrides, opts)
+      opts = vim.tbl_deep_extend("force", opts, overrides)
       return opts
     end,
     init = function()

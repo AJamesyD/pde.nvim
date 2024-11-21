@@ -126,7 +126,7 @@ return {
       }
       opts.triggers = vim.list_extend(opts.triggers or {}, triggers_overrides)
 
-      opts = vim.tbl_deep_extend("force", overrides, opts)
+      opts = vim.tbl_deep_extend("force", opts, overrides)
       return opts
     end,
   },
@@ -252,7 +252,7 @@ return {
         },
       }
 
-      opts = vim.tbl_deep_extend("force", overrides, opts)
+      opts = vim.tbl_deep_extend("force", opts, overrides)
       return opts
     end,
   },
@@ -428,7 +428,7 @@ return {
         },
       }
 
-      opts = vim.tbl_deep_extend("force", overrides, opts)
+      opts = vim.tbl_deep_extend("force", opts, overrides)
       return opts
     end,
   },

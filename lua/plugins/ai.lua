@@ -57,7 +57,7 @@ return {
         },
       }
 
-      opts = vim.tbl_deep_extend("force", overrides, opts)
+      opts = vim.tbl_deep_extend("force", opts, overrides)
       return opts
     end,
   },

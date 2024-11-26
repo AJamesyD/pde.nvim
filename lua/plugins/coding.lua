@@ -62,6 +62,16 @@ return {
         end
       end
 
+      ---@param fun cmp.ComparatorFunction
+      ---@return cmp.ComparatorFunction
+      local reverse_compare = function(fun)
+        ---@type cmp.ComparatorFunction
+        local nested_func = function(entry1, entry2)
+          return fun(entry2, entry1)
+        end
+        return nested_func
+      end
+
       ---recently_used: Entries that are used recently will be ranked higher.
       ---We bucket times in order to ensure fallback to other comparators
       ---@type cmp.ComparatorFunctor
@@ -138,27 +148,24 @@ return {
         -- compare.order,
 
         --- My Overrides ---
-        -- XXX: Lots of duplicated code between deprioritize, compare_kind, cmp_lsp_rs, ...
         compare.exact,
         compare.score,
-        deprioritize(types.lsp.CompletionItemKind.Text),
         -- deprioritize `.box`, `.mut`, etc.
         cmp_rs.deprioritize_postfix,
         -- deprioritize `Borrow::borrow` and `BorrowMut::borrow_mut`
         cmp_rs.deprioritize_borrow,
         -- deprioritize `Deref::deref` and `DerefMut::deref_mut`
         cmp_rs.deprioritize_deref,
-        rs_comparators.inherent_import_inscope,
         -- deprioritize `Into::into`, `Clone::clone`, etc.
         cmp_rs.deprioritize_common_traits,
-        deprioritize(types.lsp.CompletionItemKind.Snippet),
+        -- XXX: For some reason the inherent/trait methods are show up backwards?
+        -- TODO: Fork and fix
+        reverse_compare(rs_comparators.inherent_import_inscope),
         compare_under,
         recently_used,
+        deprioritize(types.lsp.CompletionItemKind.Text),
+        deprioritize(types.lsp.CompletionItemKind.Snippet),
         compare.locality,
-        -- compare_kind, -- Redundant w/ cmp_lsp_rs?
-        -- compare_sort_text, -- Perf?
-        compare.length,
-        compare.order,
       }
 
       for _, source in ipairs(sources_overrides) do
@@ -169,10 +176,10 @@ return {
         return v
       end
 
+      ---@type cmp.ConfigSchema
       local overrides = {
+        ---@diagnostic disable-next-line: missing-fields
         formatting = {
-          ---@param entry cmp.Entry
-          ---@param vim_item vim.CompletedItem
           format = function(entry, vim_item)
             local item = prev_format(entry, vim_item)
             -- Allow a few sources to create entries no matter what
@@ -183,12 +190,19 @@ return {
             return item
           end,
         },
+        ---@diagnostic disable-next-line: missing-fields
         performance = {
           debounce = 40, -- default: 60
           throttle = 30, -- default: 30
-          fetching_timeout = 300, -- default: 500
-          max_view_entries = 75, -- default: 200
+          fetching_timeout = 500, -- default: 500
+          max_view_entries = 100, -- default: 200
         },
+        ---@diagnostic disable-next-line: missing-fields
+        sorting = {
+          comparators = comparators_overrides,
+        },
+        sources = sources_overrides,
+        ---@diagnostic disable-next-line: missing-fields
         window = {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),

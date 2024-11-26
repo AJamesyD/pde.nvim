@@ -246,35 +246,4 @@ return {
       },
     },
   },
-  {
-    "zjp-CN/nvim-cmp-lsp-rs",
-    lazy = true,
-    ---@type cmp_lsp_rs.Opts
-    opts = {
-      kind = function(kind)
-        return {
-          kind.Variable,
-          --
-          kind.EnumMember,
-          kind.Value,
-          kind.Field,
-          kind.Property,
-          --
-          kind.TypeParameter, -- ??
-          kind.Method,
-          --
-          kind.Module,
-          kind.Constructor,
-          --
-          kind.Function,
-          --
-          kind.Struct,
-          kind.Enum,
-          kind.Constant,
-          --
-          kind.Keyword,
-        }
-      end,
-    },
-  },
 }

@@ -704,44 +704,27 @@ return {
         return newVirtText
       end
 
-      local ftMap = {
-        git = "",
-        lua = { "treesitter", "indent" },
-        python = { "indent" },
-        ["vim"] = "indent",
-      }
-
-      -- lsp->treesitter->indent
-      ---@param bufnr number
-      ---@return Promise
-      local function customizeSelector(bufnr)
-        local ufo = require("ufo")
-        local promise = require("promise")
-        local function handleFallbackException(err, providerName)
-          if type(err) == "string" and err:match("UfoFallbackException") then
-            return promise.resolve(ufo.getFolds(bufnr, providerName))
-          else
-            return promise.reject(err)
-          end
-        end
-
-        return promise
-          .resolve(ufo.getFolds(bufnr, "lsp"))
-          :catch(function(err)
-            return handleFallbackException(err, "treesitter")
-          end)
-          :catch(function(err)
-            return handleFallbackException(err, "indent")
-          end)
-      end
-
       local overrides = {
-        -- return a string type use ufo providers
-        -- return a string in a table like a string type
-        -- return empty string '' will disable any providers
-        -- return `nil` will use default value {'lsp', 'indent'}
-        provider_selector = function(bufnr, filetype, _buftype)
-          return ftMap[filetype] or customizeSelector
+        provider_selector = function(_, filetype, buftype)
+          local function handleFallbackException(bufnr, err, providerName)
+            if type(err) == "string" and err:match("UfoFallbackException") then
+              return require("ufo").getFolds(bufnr, providerName)
+            else
+              return require("promise").reject(err)
+            end
+          end
+
+          return (filetype == "" or buftype == "nofile") and "indent" -- only use indent until a file is opened
+            or function(bufnr)
+              return require("ufo")
+                .getFolds(bufnr, "lsp")
+                :catch(function(err)
+                  return handleFallbackException(bufnr, err, "treesitter")
+                end)
+                :catch(function(err)
+                  return handleFallbackException(bufnr, err, "indent")
+                end)
+            end
         end,
         close_fold_kinds_for_ft = {
           default = { "imports" },

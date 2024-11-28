@@ -1,23 +1,3 @@
-local function bemol()
-  local bemol_dir = vim.fs.find({ ".bemol" }, { upward = true, type = "directory" })[1]
-  local ws_folders_lsp = {}
-  if bemol_dir then
-    -- Often want to disable autoformatting in Brazil projects
-    -- vim.g.autoformat = false
-    local file = io.open(bemol_dir .. "/ws_root_folders", "r")
-    if file then
-      for line in file:lines() do
-        table.insert(ws_folders_lsp, line)
-      end
-      file:close()
-    end
-  end
-
-  for _, line in ipairs(ws_folders_lsp) do
-    vim.lsp.buf.add_workspace_folder(line)
-  end
-end
-
 -- Make my own filetype thing to override neovim applying ".conf" file type.
 -- You may or may not need this depending on your setup.
 vim.filetype.add({
@@ -33,21 +13,22 @@ vim.filetype.add({
 })
 
 vim.api.nvim_create_autocmd("LspAttach", {
-  desc = "Run bemol when entering compatible Amazon project",
+  desc = "Amazon project setup",
   callback = function(event)
     local bufnr = event.buf
     local filepath = vim.api.nvim_buf_get_name(bufnr)
-    local filetype = vim.bo[event.buf].filetype
-    local brazil_root = require("lspconfig.util").root_pattern("Config")(filepath)
 
-    if brazil_root and filetype == "sh" then
-      vim.b.autoformat = false
+    local is_brazil_proj = MyUtils.amazon.brazil_root(filepath)
+    local is_peru_proj = MyUtils.amazon.peru_root(filepath)
+
+    if is_brazil_proj then
+      -- Often want to disable autoformatting in Brazil projects
+      vim.g.autoformat = false
       vim.bo[event.buf].expandtab = false
     end
 
-    -- TODO: Only run on supported languages https://w.amazon.com/bin/view/Bemol#HPluginFeatures
-    if brazil_root then
-      bemol()
+    if MyUtils.amazon.is_bemol_proj(bufnr) then
+      MyUtils.amazon.bemol()
     end
   end,
 })
@@ -56,7 +37,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = function(_, opts)
-      if MyUtils.is_amazon() then
+      if require("util").amazon.is_amazon() then
         local lspconfig = require("lspconfig")
         local configs = require("lspconfig.configs")
         ---@type lspconfig.Config
@@ -71,7 +52,6 @@ return {
             end,
             settings = {},
           },
-          on_attach = bemol,
         }
         lspconfig.barium.setup({})
       end
@@ -96,7 +76,7 @@ return {
   {
     url = "angaidan@git.amazon.com:pkg/NinjaHooks",
     branch = "mainline",
-    cond = require("util").is_amazon(),
+    cond = require("util").amazon.is_amazon(),
     lazy = false,
     config = function(plugin)
       local nvim_conf_dir = "~/.config/nvim"

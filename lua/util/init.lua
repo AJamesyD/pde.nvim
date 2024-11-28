@@ -1,6 +1,4 @@
 -- Many of the following utils are ~~plagiarized from~~ inspired by https://github.com/nvim-telescope/telescope.nvim
-
-local Path = require("plenary.path")
 local Process = require("lazy.manage.process")
 
 ---@param separator string
@@ -148,12 +146,10 @@ M.map = function(mode, lhs, rhs, opts)
   vim.keymap.set(mode, lhs, rhs, opts)
 end
 
-M.is_amazon = function()
-  return os.getenv("USER") == "angaidan"
-end
-
 M.min_sidebar_size = function(min_size, max_size, fraction_of_max)
   return math.max(math.floor(max_size * fraction_of_max), min_size)
 end
+
+M.amazon = require("util.amazon")
 
 return M

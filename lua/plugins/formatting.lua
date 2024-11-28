@@ -53,4 +53,8 @@ return {
       return opts
     end,
   },
+  {
+    "NMAC427/guess-indent.nvim",
+    config = true,
+  },
 }

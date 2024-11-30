@@ -34,6 +34,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 return {
+  -- Reconfigure LazyVim defaults
   {
     "neovim/nvim-lspconfig",
     opts = function(_, opts)
@@ -73,6 +74,39 @@ return {
       },
     },
   },
+
+  -- Reconfigure LazyVim extras
+  {
+    "stevearc/overseer.nvim",
+    optional = true,
+    ---@param opts overseer.Config
+    opts = function(_, opts)
+      local overseer = require("overseer")
+      overseer.register_template({
+        name = "brazil build package (bb)",
+        builder = function()
+          ---@type overseer.TaskDefinition
+          return {
+            cmd = { "brazil-build" },
+          }
+        end,
+      })
+      overseer.register_template({
+        name = "brazil build workspace (bbb)",
+        builder = function()
+          ---@type overseer.TaskDefinition
+          return {
+            cmd = { "brazil-recursive-cmd" },
+            args = { "--allPackages", "brazil-build" },
+          }
+        end,
+      })
+
+      return opts
+    end,
+  },
+
+  -- Other
   {
     url = "angaidan@git.amazon.com:pkg/NinjaHooks",
     branch = "mainline",

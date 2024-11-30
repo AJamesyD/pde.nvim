@@ -4,8 +4,6 @@ return {
     opts = function(_, opts)
       ---@type lspconfig.Config
       local overrides = {
-        on_attach = MyUtils.amazon.bemol,
-
         settings = {
           java = {
             references = {

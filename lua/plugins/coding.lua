@@ -1,5 +1,5 @@
 return {
-	-- Reconfigure LazyVim defaults
+  -- Reconfigure LazyVim defaults
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -210,6 +210,7 @@ return {
         { path = "mason.nvim", words = { "mason" } },
         { path = "nvim-cmp-lsp-rs", words = { "rust" } },
         { path = "nvim-treesitter", words = { "TS", "treesitter" } },
+        { path = "overseer.nvim", words = { "overseer" } },
         { path = "rustaceanvim", words = { "rust" } },
         { path = "telescope.nvim", words = { "telescope" } },
         { path = "tokyonight.nvim", words = { "tokyonight" } },
@@ -221,7 +222,7 @@ return {
     end,
   },
 
-	-- Reconfigure LazyVim extras
+  -- Reconfigure LazyVim extras
   {
     "echasnovski/mini.surround",
     opts = {
@@ -240,7 +241,7 @@ return {
     },
   },
 
-	-- Other
+  -- Other
   {
     "willothy/flatten.nvim",
     config = true,

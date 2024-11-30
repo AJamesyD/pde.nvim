@@ -146,6 +146,9 @@ M.map = function(mode, lhs, rhs, opts)
   vim.keymap.set(mode, lhs, rhs, opts)
 end
 
+---@param min_size integer
+---@param max_size integer
+---@param fraction_of_max number
 M.min_sidebar_size = function(min_size, max_size, fraction_of_max)
   return math.max(math.floor(max_size * fraction_of_max), min_size)
 end

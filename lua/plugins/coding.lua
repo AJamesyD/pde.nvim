@@ -1,27 +1,5 @@
 return {
-  {
-    "folke/lazydev.nvim",
-    opts = function(_, opts)
-      local library_overrides = {
-        { path = "lazy.nvim" },
-        { path = "LazyVim" },
-
-        { path = "avante.nvim", words = { "avante" } },
-        { path = "edgy.nvim", words = { "edgy" } },
-        { path = "grapple.nvim", words = { "grapple" } },
-        { path = "mason.nvim", words = { "mason" } },
-        { path = "nvim-cmp-lsp-rs", words = { "rust" } },
-        { path = "nvim-treesitter", words = { "TS", "treesitter" } },
-        { path = "rustaceanvim", words = { "rust" } },
-        { path = "telescope.nvim", words = { "telescope" } },
-        { path = "tokyonight.nvim", words = { "tokyonight" } },
-        { path = "which-key.nvim", words = { "wk", "which-key" } },
-      }
-
-      opts.library = vim.list_extend(opts.library or {}, library_overrides)
-      return opts
-    end,
-  },
+	-- Reconfigure LazyVim defaults
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -220,6 +198,31 @@ return {
     end,
   },
   {
+    "folke/lazydev.nvim",
+    opts = function(_, opts)
+      local library_overrides = {
+        { path = "lazy.nvim" },
+        { path = "LazyVim" },
+
+        { path = "avante.nvim", words = { "avante" } },
+        { path = "edgy.nvim", words = { "edgy" } },
+        { path = "grapple.nvim", words = { "grapple" } },
+        { path = "mason.nvim", words = { "mason" } },
+        { path = "nvim-cmp-lsp-rs", words = { "rust" } },
+        { path = "nvim-treesitter", words = { "TS", "treesitter" } },
+        { path = "rustaceanvim", words = { "rust" } },
+        { path = "telescope.nvim", words = { "telescope" } },
+        { path = "tokyonight.nvim", words = { "tokyonight" } },
+        { path = "which-key.nvim", words = { "wk", "which-key" } },
+      }
+
+      opts.library = vim.list_extend(opts.library or {}, library_overrides)
+      return opts
+    end,
+  },
+
+	-- Reconfigure LazyVim extras
+  {
     "echasnovski/mini.surround",
     opts = {
       mappings = {
@@ -236,6 +239,8 @@ return {
       },
     },
   },
+
+	-- Other
   {
     "willothy/flatten.nvim",
     config = true,

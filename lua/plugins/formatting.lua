@@ -25,6 +25,7 @@ require("snacks")
   :map("<leader>M")
 
 return {
+  -- Reconfigure LazyVim defaults
   {
     "stevearc/conform.nvim",
     optional = true,
@@ -40,6 +41,8 @@ return {
       },
     },
   },
+
+  -- Other
   {
     "Wansmer/treesj",
     event = "LazyFile",

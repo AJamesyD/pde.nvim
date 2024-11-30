@@ -1,4 +1,5 @@
 return {
+  -- Reconfigure LazyVim defaults
   {
     "nvim-treesitter/nvim-treesitter",
     cmd = { "TSInstallFromGrammar" },
@@ -114,7 +115,10 @@ return {
   --     },
   --   },
   -- },
+
+  -- Other
   {
+
     "chrisgrieser/nvim-various-textobjs",
     keys = {
       {

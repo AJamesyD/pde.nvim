@@ -1,4 +1,34 @@
 return {
+
+  -- Reconfigure LazyVim extras
+  {
+    "folke/edgy.nvim",
+    optional = true,
+    opts = function(_, opts)
+      -- Will get swapped to right by other edgy conf
+      ---@type Edgy.View.Opts[]
+      local left_overrides = {
+        {
+          title = "Avante",
+          ft = "Avante",
+          size = {
+            width = MyUtils.min_sidebar_size(40, vim.o.columns, 0.20),
+          },
+        },
+        {
+          title = "Avante Input",
+          ft = "AvanteInput",
+          size = {
+            height = MyUtils.min_sidebar_size(10, vim.o.lines, 0.10),
+          },
+        },
+      }
+
+      opts.left = opts.left or {}
+      opts.left = vim.list_extend(left_overrides, opts.left or {})
+      return opts
+    end,
+  },
   {
     "hrsh7th/nvim-cmp",
     optional = true,
@@ -61,6 +91,8 @@ return {
       return opts
     end,
   },
+
+  -- Other
   {
     "yetone/avante.nvim",
     event = "VeryLazy",
@@ -117,33 +149,5 @@ return {
         ft = { "markdown", "Avante" },
       },
     },
-  },
-  {
-    "folke/edgy.nvim",
-    optional = true,
-    opts = function(_, opts)
-      -- Will get swapped to right by other edgy conf
-      ---@type Edgy.View.Opts[]
-      local left_overrides = {
-        {
-          title = "Avante",
-          ft = "Avante",
-          size = {
-            width = MyUtils.min_sidebar_size(40, vim.o.columns, 0.20),
-          },
-        },
-        {
-          title = "Avante Input",
-          ft = "AvanteInput",
-          size = {
-            height = MyUtils.min_sidebar_size(10, vim.o.lines, 0.10),
-          },
-        },
-      }
-
-      opts.left = opts.left or {}
-      opts.left = vim.list_extend(left_overrides, opts.left or {})
-      return opts
-    end,
   },
 }

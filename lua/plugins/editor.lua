@@ -1,4 +1,5 @@
 return {
+  -- Reconfigure LazyVim defaults
   {
     "nvim-neo-tree/neo-tree.nvim",
     dependencies = {
@@ -6,6 +7,10 @@ return {
         "antosha417/nvim-lsp-file-operations",
         priority = 1000,
       },
+    },
+    keys = {
+      { "<leader>ge", false },
+      { "<leader>be", false },
     },
     opts = {
       auto_clean_after_session_restore = true,
@@ -52,10 +57,6 @@ return {
       window = {
         width = 40,
       },
-    },
-    keys = {
-      { "<leader>ge", false },
-      { "<leader>be", false },
     },
   },
   {
@@ -130,6 +131,16 @@ return {
       return opts
     end,
   },
+  {
+    "lewis6991/gitsigns.nvim",
+    opts = {
+      current_line_blame_opts = {
+        virt_text_pos = "right_align",
+        delay = 500,
+      },
+    },
+  },
+  -- Reconfigure LazyVim extras
   {
     "nvim-telescope/telescope.nvim",
     dependencies = {
@@ -256,6 +267,27 @@ return {
       return opts
     end,
   },
+  {
+    "folke/edgy.nvim",
+    optional = true,
+    opts = function(_, opts)
+      -- Will get swapped to right by other edgy conf
+      opts.left = opts.left or {}
+      table.insert(opts.left, 1, {
+        title = "Diffview Files",
+        ft = "DiffviewFiles",
+      })
+
+      opts.bottom = opts.bottom or {}
+      table.insert(opts.bottom, {
+        title = "Diffview File History",
+        ft = "DiffviewFileHistory",
+        size = { height = 0.4 },
+      })
+    end,
+  },
+
+  -- Other
   {
     "linux-cultist/venv-selector.nvim",
     cmd = { "VenvSelect" },
@@ -433,34 +465,6 @@ return {
     end,
   },
   {
-    "folke/edgy.nvim",
-    optional = true,
-    opts = function(_, opts)
-      -- Will get swapped to right by other edgy conf
-      opts.left = opts.left or {}
-      table.insert(opts.left, 1, {
-        title = "Diffview Files",
-        ft = "DiffviewFiles",
-      })
-
-      opts.bottom = opts.bottom or {}
-      table.insert(opts.bottom, {
-        title = "Diffview File History",
-        ft = "DiffviewFileHistory",
-        size = { height = 0.4 },
-      })
-    end,
-  },
-  {
-    "lewis6991/gitsigns.nvim",
-    opts = {
-      current_line_blame_opts = {
-        virt_text_pos = "right_align",
-        delay = 500,
-      },
-    },
-  },
-  {
     "cbochs/grapple.nvim",
     ---@type grapple.settings
     event = { "BufReadPost", "BufNewFile" },
@@ -501,19 +505,6 @@ return {
           fallback = "git",
         },
       },
-    },
-  },
-  {
-    "hedyhli/outline.nvim",
-    optional = true,
-    opts = {},
-  },
-  {
-    "stevearc/aerial.nvim",
-    optional = true,
-    opts = {
-      highlight_mode = "last",
-      highlight_on_hover = true,
     },
   },
   {

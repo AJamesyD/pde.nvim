@@ -3,6 +3,7 @@ vim.diagnostic.config({
 })
 
 return {
+  -- Reconfigure LazyVim defaults
   {
     "neovim/nvim-lspconfig",
     ---@type PluginLspOpts

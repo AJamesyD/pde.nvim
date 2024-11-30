@@ -1,4 +1,5 @@
 return {
+  -- Reconfigure LazyVim defaults
   {
     "mfussenegger/nvim-lint",
     opts = {

@@ -176,11 +176,6 @@ return {
           max_view_entries = 100, -- default: 200
         },
         ---@diagnostic disable-next-line: missing-fields
-        sorting = {
-          comparators = comparators_overrides,
-        },
-        sources = sources_overrides,
-        ---@diagnostic disable-next-line: missing-fields
         window = {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),

@@ -2,7 +2,7 @@ return {
   -- Reconfigure LazyVim defaults
   {
     "folke/tokyonight.nvim",
-    lazy = true,
+    lazy = false,
     priority = 1000,
     opts = {
       style = "night",
@@ -83,6 +83,9 @@ return {
           }
         end,
       },
+      integrations = {
+        ufo = true,
+      },
       color_overrides = {
         macchiato = {
           rosewater = "#F5B8AB",
@@ -125,7 +128,7 @@ return {
   },
   {
     "Shatur/neovim-ayu",
-    lazy = true,
+    lazy = false,
     priority = 1000,
     opts = {
       overrides = {
@@ -139,14 +142,37 @@ return {
   },
   {
     "EdenEast/nightfox.nvim",
-    lazy = true,
+    lazy = false,
     priority = 1000,
   },
   {
     "marko-cerovac/material.nvim",
-    lazy = true,
+    lazy = false,
     priority = 1000,
-    opts = {},
+    opts = {
+      contrast = {
+        terminal = true, -- Enable contrast for the built-in terminal
+        sidebars = true, -- Enable contrast for sidebar-like windows ( for example Nvim-Tree )
+        floating_windows = true, -- Enable contrast for floating windows
+        cursor_line = true, -- Enable darker background for the cursor line
+        non_current_windows = true, -- Enable contrasted background for non-current windows
+      },
+
+      disable = {
+        colored_cursor = true, -- Disable the colored cursor
+      },
+
+      high_visibility = {
+        lighter = false, -- Enable higher contrast text for lighter style
+        darker = true, -- Enable higher contrast text for darker style
+      },
+
+      async_loading = true, -- Load parts of the theme asynchronously for faster startup (turned on by default)
+
+      custom_colors = nil, -- If you want to override the default colors, set this to a function
+
+      custom_highlights = {}, -- Overwrite highlights with your own
+    },
   },
   {
     "eldritch-theme/eldritch.nvim",
@@ -154,6 +180,14 @@ return {
     priority = 1000,
     opts = {
       dim_inactive = true,
+    },
+  },
+  {
+    "olivercederborg/poimandres.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {
+      bold_vert_split = true,
     },
   },
 }

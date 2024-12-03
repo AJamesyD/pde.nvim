@@ -30,26 +30,27 @@ return {
     end,
   },
   {
-    "hrsh7th/nvim-cmp",
-    optional = true,
-    dependencies = { "codeium.nvim" },
-    opts = function(_, opts)
-      table.insert(opts.sources, 1, {
-        name = "codeium",
-        group_index = 1,
-        priority = 100,
-        entry_filter = function(_, _)
-          return vim.g.codeium_enabled
-        end,
-      })
-      return opts
-    end,
-  },
-  {
     "Exafunction/codeium.nvim",
     optional = true,
     cmd = "Codeium",
     build = ":Codeium Auth",
+    dependencies = {
+      {
+        "hrsh7th/nvim-cmp",
+        optional = true,
+        opts = function(_, opts)
+          table.insert(opts.sources, 1, {
+            name = "codeium",
+            group_index = 1,
+            priority = 100,
+            entry_filter = function(_, _)
+              return vim.g.codeium_enabled
+            end,
+          })
+          return opts
+        end,
+      },
+    },
     opts = function(_, opts)
       require("snacks")
         .toggle({

@@ -5,8 +5,9 @@ return {
     dependencies = {
       { "https://codeberg.org/FelipeLema/cmp-async-path" },
       { "f3fora/cmp-spell" },
-      { "zjp-CN/nvim-cmp-lsp-rs" },
       { "ryo33/nvim-cmp-rust" },
+      { "zjp-CN/nvim-cmp-lsp-rs" },
+      { "jmbuhr/otter.nvim" },
       { "hrsh7th/cmp-path", enabled = false },
     },
     ---@param opts cmp.ConfigSchema
@@ -74,6 +75,7 @@ return {
       local sources_overrides = cmp.config.sources({
         -- group_index = 1
         { name = "nvim_lsp" },
+        { name = "otter" },
         { name = "async_path" },
         {
           name = "spell",

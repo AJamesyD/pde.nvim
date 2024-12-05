@@ -42,9 +42,52 @@ return {
   -- Other
   {
     "jmbuhr/otter.nvim",
+    event = "LazyFile",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
     },
-    opts = {},
+    opts = function(_, opts)
+      vim.api.nvim_create_autocmd({ "BufReadPost" }, {
+        desc = "otter.nvim setup",
+        callback = function(event)
+          local bufnr = event.buf
+
+          local is_relevant_file_set_callback = function()
+            return type(vim.b[bufnr].is_relevant_file) ~= "nil"
+          end
+
+          local ts_active_callback = function()
+            return vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()]
+          end
+
+          if not vim.wait(1000, is_relevant_file_set_callback, 200) then
+            return
+          end
+
+          if vim.wait(5000, ts_active_callback, 500) then
+            require("otter").activate()
+          else
+            vim.notify("Treesitter not active, could not setup otter.nvim", vim.log.levels.WARN)
+          end
+        end,
+      })
+
+      local overrides = {
+        lsp = {
+          diagnostic_update_events = { "BufWritePost", "InsertLeave" },
+          root_dir = function(_, bufnr)
+            return LazyVim.root.get({ buf = bufnr or 0 }) or LazyVim.root.cwd()
+          end,
+        },
+        buffers = {
+          set_filetype = true,
+          -- write_to_disk = true,
+        },
+        handle_leading_whitespace = true,
+      }
+
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+      return opts
+    end,
   },
 }

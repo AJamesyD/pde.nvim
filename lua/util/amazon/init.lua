@@ -15,12 +15,15 @@ local PERU_SUPPORTED_FTS = {
 
 local M = {}
 
--- One function's level of indirection required to prevent loading lspconfig early
-M.brazil_root = function(...)
-  return require("lspconfig.util").root_pattern("Config")(...)
+M.brazil_root = function(filename)
+  return vim.fs.find(function(name, _)
+    return name:match("^Config$")
+  end, { path = filename, upward = true })[1]
 end
-M.peru_root = function(...)
-  return require("lspconfig.util").root_pattern("brazil.ion")(...)
+M.peru_root = function(filename)
+  return vim.fs.find(function(name, _)
+    return name:match("^brazil%.ion$")
+  end, { path = filename, upward = true })[1]
 end
 
 M.is_amazon = function()
@@ -57,6 +60,7 @@ M.bemol = function()
       ---@type overseer.TaskDefinition
       return {
         cmd = { "bemol" },
+        args = { "--verbose" },
         components = {
           { "amazon.lsp_setup" }, -- custom component
           "default",

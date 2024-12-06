@@ -19,7 +19,10 @@ local terminal_executor = {
   end,
 }
 
+local diagnostics = vim.g.lazyvim_rust_diagnostics or "rust-analyzer"
+
 return {
+  -- Reconfigure LazyVim defaults
   {
     "stevearc/conform.nvim",
     optional = true,
@@ -53,6 +56,9 @@ return {
         },
       },
       setup = {
+        bacon_ls = function()
+          return false
+        end,
         rust_analyzer = function()
           return true
         end,
@@ -60,12 +66,23 @@ return {
     },
   },
   {
+    "williamboman/mason.nvim",
+    opts = function(_, opts)
+      opts.ensure_installed = opts.ensure_installed or {}
+      if diagnostics == "bacon-ls" then
+        -- XXX: This should be handled by LazyVim extra
+        vim.list_extend(opts.ensure_installed, { "bacon-ls" })
+      end
+    end,
+  },
+
+  -- Reconfigure LazyVim extras
+  {
     "Saecki/crates.nvim",
     opts = {
       thousands_separator = ",",
       completion = {
         cmp = { enabled = true },
-        crates = { enabled = true },
       },
       popup = {
         border = "rounded",
@@ -152,9 +169,8 @@ return {
             cargo = {
               features = "all",
             },
-            -- TODO: conditionally disable for big projects
-            -- use bacon or flycheck instead
-            checkOnSave = true,
+            -- NOTE: Let LazyVim extra set
+            -- checkOnSave = true,
             check = {
               command = "clippy",
               extraArgs = {
@@ -164,12 +180,11 @@ return {
             },
             completion = {
               fullFunctionSignatures = { enable = true },
-              limit = 100,
               postfix = { enable = false }, -- TODO: eventually try using these
-              termSearch = { enable = true }, -- TODO: experiment
             },
             diagnostics = {
-              enable = true,
+              -- NOTE: Let LazyVim extra set
+              -- enable = true,
               experimental = true,
               disabled = {
                 "unresolved-proc-macro",
@@ -229,6 +244,7 @@ return {
             workspace = {
               symbol = {
                 search = {
+                  kind = "all_symbols",
                   limit = 512,
                 },
               },

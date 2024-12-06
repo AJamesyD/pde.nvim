@@ -619,6 +619,7 @@ return {
       "kevinhwang91/promise-async",
       {
         "neovim/nvim-lspconfig",
+        ---@param opts PluginLspOpts
         opts = function(_, opts)
           local keys = require("lazyvim.plugins.lsp.keymaps").get()
           keys[#keys + 1] = {
@@ -632,6 +633,7 @@ return {
             desc = "Hover",
           }
 
+          ---@type PluginLspOpts
           local overrides = {
             capabilities = {
               textDocument = {

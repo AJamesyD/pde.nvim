@@ -8,6 +8,7 @@ local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 
 -- Override default LazyVim globals
 g.lazyvim_python_lsp = "basedpyright"
+g.lazyvim_rust_diagnostics = "bacon-ls"
 g.trouble_lualine = false
 
 -- Plugin globals

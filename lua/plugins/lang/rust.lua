@@ -93,6 +93,7 @@ return {
         crate_test_executor = "background",
       },
       ---@type rustaceanvim.lsp.ClientConfig
+      ---@diagnostic disable-next-line: missing-fields
       server = {
         on_attach = function(client, bufnr)
           local capability_overrides = {
@@ -141,14 +142,12 @@ return {
             end
           end
         end,
+
         default_settings = {
           -- rust-analyzer language server configuration
           ["rust-analyzer"] = {
             assist = {
               emitMustUse = true,
-            },
-            cachePriming = {
-              numThreads = "logical",
             },
             cargo = {
               features = "all",
@@ -170,6 +169,7 @@ return {
               termSearch = { enable = true }, -- TODO: experiment
             },
             diagnostics = {
+              enable = true,
               experimental = true,
               disabled = {
                 "unresolved-proc-macro",
@@ -189,7 +189,6 @@ return {
             imports = {
               granularity = { enforce = true },
               preferPrelude = true,
-              prefix = "self", -- This is what I've seen in CargoBrazil (I think?)
             },
             inlayHints = {
               closingBraceHints = {
@@ -206,9 +205,6 @@ return {
                 lifetime = { enable = true },
                 type = { enable = true },
               },
-            },
-            interpret = {
-              tests = true, -- XXX: Experimental
             },
             lens = {
               enable = true,
@@ -227,12 +223,8 @@ return {
             lru = {
               capacity = 512,
             },
-            numThreads = "logical",
             rustfmt = {
               extraArgs = "+nightly",
-            },
-            semanticHighlighting = {
-              nonStandardTokens = false, -- TODO: find theme that supports these better
             },
             workspace = {
               symbol = {

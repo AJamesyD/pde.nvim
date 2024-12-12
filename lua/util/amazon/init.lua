@@ -16,14 +16,16 @@ local PERU_SUPPORTED_FTS = {
 local M = {}
 
 M.brazil_root = function(filename)
-  return vim.fs.find(function(name, _)
+  local root_file = vim.fs.find(function(name, _)
     return name:match("^Config$")
   end, { path = filename, upward = true })[1]
+  return vim.fs.dirname(root_file)
 end
 M.peru_root = function(filename)
-  return vim.fs.find(function(name, _)
+  local root_file = vim.fs.find(function(name, _)
     return name:match("^brazil%.ion$")
   end, { path = filename, upward = true })[1]
+  return vim.fs.dirname(root_file)
 end
 
 M.is_amazon = function()

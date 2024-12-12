@@ -86,7 +86,6 @@ autocmd({ "BufWinEnter" }, {
   end,
 })
 
--- FileType specific options
 autocmd({ "FileType" }, {
   desc = "KDL opts",
   pattern = "kdl",
@@ -118,3 +117,69 @@ autocmd({ "BufAdd" }, {
     end
   end,
 })
+
+autocmd({ "BufReadPost" }, {
+  desc = "Disable spell if treesitter inactive",
+  callback = function(event)
+    local ts_active_callback = function()
+      return vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()]
+    end
+
+    if not vim.wait(2000, ts_active_callback, 200) then
+      vim.opt_local.spell = false
+    end
+  end,
+})
+
+if require("util").amazon.is_amazon() then
+  autocmd({ "FileType" }, {
+    desc = "ion opts",
+    pattern = "ion",
+    callback = function(event)
+      local bufnr = event.buf
+      local bufglobals = vim.b[bufnr]
+      local filepath = vim.api.nvim_buf_get_name(bufnr)
+
+      local is_brazil_proj = MyUtils.amazon.brazil_root(filepath)
+      local is_peru_proj = MyUtils.amazon.peru_root(filepath)
+
+      if is_brazil_proj or is_peru_proj then
+        bufglobals.autoformat = false
+      end
+    end,
+  })
+
+  autocmd({ "FileType" }, {
+    desc = "sh opts",
+    pattern = "sh",
+    callback = function(event)
+      local bufnr = event.buf
+      local filepath = vim.api.nvim_buf_get_name(bufnr)
+
+      local is_brazil_proj = MyUtils.amazon.brazil_root(filepath)
+
+      if is_brazil_proj then
+        vim.opt_local.expandtab = false
+      end
+    end,
+  })
+
+  autocmd("LspAttach", {
+    desc = "Amazon project setup",
+    callback = function(event)
+      local bufnr = event.buf
+      local filepath = vim.api.nvim_buf_get_name(bufnr)
+
+      local is_brazil_proj = MyUtils.amazon.brazil_root(filepath)
+
+      if is_brazil_proj then
+        -- Often want to disable autoformatting in Brazil projects
+        vim.g.autoformat = false
+      end
+
+      if MyUtils.amazon.is_bemol_proj(bufnr) then
+        MyUtils.amazon.bemol()
+      end
+    end,
+  })
+end

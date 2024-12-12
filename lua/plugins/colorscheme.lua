@@ -4,50 +4,109 @@ return {
     "folke/tokyonight.nvim",
     lazy = false,
     priority = 1000,
-    opts = {
-      style = "night",
-      dim_inactive = true,
-      ---@param c ColorScheme
-      on_colors = function(c)
-        local Util = require("tokyonight.util")
-        c.bg = "#0d0d11"
-        c.bg_dark = "#000000"
-        ------
-        Util.bg = c.bg
 
-        c.diff = {
-          add = Util.blend_bg(c.green2, 0.15),
-          delete = Util.blend_bg(c.red1, 0.15),
-          change = Util.blend_bg(c.blue7, 0.15),
-        }
+    ---@param opts tokyonight.Config
+    opts = function(_, opts)
+      ---@type tokyonight.Config
+      local overrides = {
+        style = "night",
+        dim_inactive = true,
+        ---@param colors ColorScheme
+        on_colors = function(colors)
+          local Util = require("tokyonight.util")
+          colors.bg = colors.bg_dark
+          colors.bg_dark = Util.blend(colors.bg, 0.8, "#000000")
+          colors.fg = "#FFFFFF"
+          colors.fg_dark = Util.blend(colors.fg, 0.5, "#000000")
+          colors.fg_gutter = Util.blend(colors.fg_dark, 0.5, "#000000")
 
-        c.black = Util.blend_bg(c.bg, 0.8, "#000000")
-        c.border_highlight = Util.blend_bg(c.blue1, 0.8)
-        c.border = c.black
+          -----------
+          -- Rerun parts of default setup that rely on changed colors
+          -- https://github.com/folke/tokyonight.nvim/blob/b262293ef481b0d1f7a14c708ea7ca649672e200/lua/tokyonight/colors/init.lua
+          Util.bg = colors.bg
+          Util.fg = colors.fg
 
-        -- Popups and statusline always get a dark background
-        c.bg_popup = c.bg_dark
-        c.bg_statusline = c.bg_dark
+          colors.none = "NONE"
 
-        -- Sidebar and Floats are configurable
-        c.bg_sidebar = c.bg_dark
-        c.bg_float = c.bg_dark
+          colors.diff = {
+            add = Util.blend_bg(colors.green2, 0.15),
+            delete = Util.blend_bg(colors.red1, 0.15),
+            change = Util.blend_bg(colors.blue7, 0.15),
+            text = colors.blue7,
+          }
 
-        c.bg_visual = Util.blend_bg(c.blue0, 0.4)
-        ------
+          colors.git.ignore = colors.dark3
+          colors.black = Util.blend_bg(colors.bg, 0.8, "#000000")
+          colors.border_highlight = Util.blend_bg(colors.blue1, 0.8)
+          colors.border = colors.black
 
-        c.border = c.comment
-      end,
-      ---@param hl tokyonight.Highlights
-      ---@param c ColorScheme
-      on_highlights = function(hl, c)
-        hl.CursorLineNr = { fg = c.orange, bold = true }
-        hl.LineNr = { fg = c.orange, bold = true }
-        hl.LineNrAbove = { fg = c.fg }
-        hl.LineNrBelow = { fg = c.fg }
-      end,
-    },
-    config = true,
+          -- Popups and statusline always get a dark background
+          colors.bg_popup = colors.bg_dark
+          colors.bg_statusline = colors.bg_dark
+
+          -- Sidebar and Floats are configurable
+          colors.bg_sidebar = colors.bg_dark
+          colors.bg_float = colors.bg_dark
+
+          colors.bg_visual = Util.blend_bg(colors.blue0, 0.4)
+          colors.bg_search = colors.blue0
+          colors.fg_sidebar = colors.fg_dark
+          colors.fg_float = colors.fg
+
+          colors.error = colors.red1
+          colors.todo = colors.blue
+          colors.warning = colors.yellow
+          colors.info = colors.blue2
+          colors.hint = colors.teal
+
+          colors.rainbow = {
+            colors.blue,
+            colors.yellow,
+            colors.green,
+            colors.teal,
+            colors.magenta,
+            colors.purple,
+            colors.orange,
+            colors.red,
+          }
+
+          -- stylua: ignore
+          --- @class TerminalColors
+          colors.terminal = {
+            black          = colors.black,
+            black_bright   = colors.terminal_black,
+            red            = colors.red,
+            red_bright     = Util.brighten(colors.red),
+            green          = colors.green,
+            green_bright   = Util.brighten(colors.green),
+            yellow         = colors.yellow,
+            yellow_bright  = Util.brighten(colors.yellow),
+            blue           = colors.blue,
+            blue_bright    = Util.brighten(colors.blue),
+            magenta        = colors.magenta,
+            magenta_bright = Util.brighten(colors.magenta),
+            cyan           = colors.cyan,
+            cyan_bright    = Util.brighten(colors.cyan),
+            white          = colors.fg_dark,
+            white_bright   = colors.fg,
+          }
+          -----------
+
+          colors.border = Util.blend_fg(colors.border, 0.5)
+        end,
+        ---@param hl tokyonight.Highlights
+        ---@param c ColorScheme
+        on_highlights = function(hl, c)
+          hl.CursorLineNr = { fg = c.orange, bold = true }
+          hl.LineNr = { fg = c.orange, bold = true }
+          hl.LineNrAbove = { fg = c.fg }
+          hl.LineNrBelow = { fg = c.fg }
+        end,
+      }
+
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+      return opts
+    end,
   },
   {
     "catppuccin/nvim",

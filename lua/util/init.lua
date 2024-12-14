@@ -149,6 +149,7 @@ end
 ---@param min_size integer
 ---@param max_size integer
 ---@param fraction_of_max number
+---@return number
 M.min_sidebar_size = function(min_size, max_size, fraction_of_max)
   return math.max(math.floor(max_size * fraction_of_max), min_size)
 end

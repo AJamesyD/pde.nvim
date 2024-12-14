@@ -1,6 +1,51 @@
 return {
   -- Reconfigure LazyVim defaults
   {
+    "saghen/blink.cmp",
+    optional = true,
+    dependencies = {
+      { "jmbuhr/otter.nvim" },
+    },
+    ---@param opts blink.cmp.Config
+    opts = function(_, opts)
+      ---@type blink.cmp.Config
+      ---@diagnostic disable-next-line: missing-fields
+      local overrides = {
+        completion = {
+          menu = {
+            border = "rounded",
+          },
+          documentation = {
+            window = { border = "rounded" },
+          },
+        },
+        -- experimental signature help support
+        signature = {
+          enabled = true,
+          window = {
+            border = "rounded",
+          },
+        },
+
+        sources = {
+          -- adding any nvim-cmp sources here will enable them
+          -- with blink.compat
+          compat = { "otter" },
+          default = { "lsp", "path", "snippets" },
+        },
+
+        keymap = {
+          preset = "enter",
+          ["<S-Tab>"] = { "select_prev", "fallback" },
+          ["<Tab>"] = { "select_next", "fallback" },
+        },
+      }
+
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+      return opts
+    end,
+  },
+  {
     "hrsh7th/nvim-cmp",
     dependencies = {
       { "https://codeberg.org/FelipeLema/cmp-async-path" },
@@ -74,6 +119,7 @@ return {
       ---@type cmp.SourceConfig[]
       local sources_overrides = cmp.config.sources({
         -- group_index = 1
+        { name = "lazydev" },
         { name = "nvim_lsp" },
         { name = "otter" },
         { name = "async_path" },
@@ -202,6 +248,7 @@ return {
         { path = "LazyVim" },
 
         { path = "avante.nvim", words = { "avante" } },
+        { path = "blink.cmp", words = { "blink" } },
         { path = "edgy.nvim", words = { "edgy" } },
         { path = "grapple.nvim", words = { "grapple" } },
         { path = "mason.nvim", words = { "mason" } },

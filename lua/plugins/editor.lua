@@ -143,6 +143,7 @@ return {
   -- Reconfigure LazyVim extras
   {
     "nvim-telescope/telescope.nvim",
+    optional = true,
     dependencies = {
       {
         "debugloop/telescope-undo.nvim",

@@ -1,19 +1,3 @@
-require("snacks")
-  .toggle({
-    name = "ZenMode",
-    get = function()
-      return require("zen-mode.view").is_open()
-    end,
-    set = function(state)
-      if state then
-        require("zen-mode").open()
-      else
-        require("zen-mode").close()
-      end
-    end,
-  })
-  :map("<leader>uz")
-
 return {
   -- Reconfigure LazyVim defaults
   {
@@ -204,7 +188,6 @@ return {
     "folke/noice.nvim",
     keys = {
       { "<leader>snl", false },
-      { "<leader>snh", "<CMD>Telescope noice<CR>", desc = "Noice History" },
     },
     opts = {
       presets = {
@@ -586,14 +569,6 @@ return {
           },
         },
       },
-      on_open = function(_)
-        vim.b.miniindentscope_disable = true
-        require("ibl").setup_buffer(0, { enabled = false })
-      end,
-      on_close = function()
-        vim.b.miniindentscope_disable = false
-        require("ibl").setup_buffer(0, { enabled = true })
-      end,
     },
   },
   {

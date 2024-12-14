@@ -1,5 +1,5 @@
 local bufnr = vim.api.nvim_get_current_buf()
-vim.keymap.set("n", "<leader>uD", function()
+vim.keymap.set("n", "<leader>cD", function()
   local client = vim.lsp.get_clients({
     bufnr = bufnr,
     name = "lua_ls",

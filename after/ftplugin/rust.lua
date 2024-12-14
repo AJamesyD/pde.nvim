@@ -40,7 +40,7 @@ local function settings_updater(settings)
   return settings
 end
 
-vim.keymap.set("n", "<leader>uD", function()
+vim.keymap.set("n", "<leader>cD", function()
   local client_filter = {
     bufnr = bufnr,
     name = "rust-analyzer",

@@ -5,6 +5,10 @@ return {
     optional = true,
     dependencies = {
       { "jmbuhr/otter.nvim" },
+      {
+        "saghen/blink.compat",
+        optional = false,
+      },
     },
     ---@param opts blink.cmp.Config
     opts = function(_, opts)

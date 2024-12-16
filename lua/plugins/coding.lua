@@ -50,7 +50,19 @@ return {
     end,
   },
   {
-    "hrsh7th/nvim-cmp",
+    -- NOTE: Overrides nvim-cmp with magazine
+    "iguanacucumber/magazine.nvim",
+    name = "nvim-cmp", -- Otherwise highlighting gets messed up
+    dependencies = {
+      --* the sources *--
+      { "iguanacucumber/mag-nvim-lsp", name = "cmp-nvim-lsp", opts = {} },
+      { "iguanacucumber/mag-nvim-lua", name = "cmp-nvim-lua" },
+      { "iguanacucumber/mag-buffer", name = "cmp-buffer" },
+      { "iguanacucumber/mag-cmdline", name = "cmp-cmdline" },
+    },
+  },
+  {
+    "nvim-cmp",
     dependencies = {
       { "https://codeberg.org/FelipeLema/cmp-async-path" },
       { "f3fora/cmp-spell" },

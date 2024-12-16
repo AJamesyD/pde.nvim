@@ -40,7 +40,8 @@ return {
     },
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "hrsh7th/nvim-cmp",
+      -- TODO: Find a way to integrate with arbitrary completion plugin (magazine, blink.cmp, etc)
+      -- "hrsh7th/nvim-cmp",
     },
     opts = {
       workspaces = {

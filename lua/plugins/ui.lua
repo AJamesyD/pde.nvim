@@ -268,26 +268,6 @@ return {
       return opts
     end,
   },
-  {
-    "echasnovski/mini.indentscope",
-    optional = true,
-    opts = function(_, opts)
-      local indentscope = require("mini.indentscope")
-      local overrides = {
-        draw = {
-          animation = (vim.g.neovide and indentscope.gen_animation.quadratic()) or indentscope.gen_animation.none(),
-        },
-        options = {
-          -- Whether to use cursor column when computing reference indent.
-          -- Useful to see incremental scopes with horizontal cursor movements.
-          indent_at_cursor = false,
-        },
-      }
-
-      opts = vim.tbl_deep_extend("force", opts, overrides)
-      return opts
-    end,
-  },
 
   -- Other
   {

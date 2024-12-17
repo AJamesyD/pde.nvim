@@ -53,6 +53,7 @@ return {
     -- NOTE: Overrides nvim-cmp with magazine
     "iguanacucumber/magazine.nvim",
     name = "nvim-cmp", -- Otherwise highlighting gets messed up
+    optional = true,
     dependencies = {
       --* the sources *--
       { "iguanacucumber/mag-nvim-lsp", name = "cmp-nvim-lsp", opts = {} },
@@ -63,6 +64,7 @@ return {
   },
   {
     "nvim-cmp",
+    optional = true,
     dependencies = {
       { "https://codeberg.org/FelipeLema/cmp-async-path" },
       { "f3fora/cmp-spell" },

@@ -49,19 +49,19 @@ return {
       return opts
     end,
   },
-  {
-    -- NOTE: Overrides nvim-cmp with magazine
-    "iguanacucumber/magazine.nvim",
-    name = "nvim-cmp", -- Otherwise highlighting gets messed up
-    optional = true,
-    dependencies = {
-      --* the sources *--
-      { "iguanacucumber/mag-nvim-lsp", name = "cmp-nvim-lsp", opts = {} },
-      { "iguanacucumber/mag-nvim-lua", name = "cmp-nvim-lua" },
-      { "iguanacucumber/mag-buffer", name = "cmp-buffer" },
-      { "iguanacucumber/mag-cmdline", name = "cmp-cmdline" },
-    },
-  },
+  -- {
+  --   -- NOTE: Overrides nvim-cmp with magazine
+  --   "iguanacucumber/magazine.nvim",
+  --   name = "nvim-cmp", -- Otherwise highlighting gets messed up
+  --   optional = true,
+  --   dependencies = {
+  --     --* the sources *--
+  --     { "iguanacucumber/mag-nvim-lsp", name = "cmp-nvim-lsp", opts = {} },
+  --     { "iguanacucumber/mag-nvim-lua", name = "cmp-nvim-lua" },
+  --     { "iguanacucumber/mag-buffer", name = "cmp-buffer" },
+  --     { "iguanacucumber/mag-cmdline", name = "cmp-cmdline" },
+  --   },
+  -- },
   {
     "nvim-cmp",
     optional = true,
@@ -194,6 +194,7 @@ return {
         --- My Overrides ---
         compare.exact,
         compare.score,
+        rs_comparators.inherent_import_inscope,
         -- deprioritize `.box`, `.mut`, etc.
         cmp_rs.deprioritize_postfix,
         -- deprioritize `Borrow::borrow` and `BorrowMut::borrow_mut`
@@ -204,7 +205,7 @@ return {
         cmp_rs.deprioritize_common_traits,
         -- XXX: For some reason the inherent/trait methods are show up backwards?
         -- TODO: Fork and fix
-        reverse_compare(rs_comparators.inherent_import_inscope),
+        -- reverse_compare(rs_comparators.inherent_import_inscope),
         compare_under,
         recently_used,
         deprioritize(types.lsp.CompletionItemKind.Text),
@@ -230,6 +231,8 @@ return {
             item.dup = ({
               crates = 1,
               nvim_lsp = 1,
+              otter = 1,
+              snippets = 1,
             })[entry.source.name] or nil
             return item
           end,

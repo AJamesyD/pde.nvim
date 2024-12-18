@@ -67,11 +67,12 @@ map("v", "J", ":m '>+1<cr>gv=gv", { desc = "Move Down" })
 map("v", "K", ":m '<-2<cr>gv=gv", { desc = "Move Up" })
 
 -- cut/copy/paste
-map({ "n", "v" }, "$", "g_", { desc = "Paste from clip", remap = true })
-map({ "n" }, "x", '"_x', { desc = "which_key_ignore" })
-map({ "x" }, "p", '"_dP', { desc = "Paste over" })
 map({ "n", "v" }, "<C-y>", '"+y', { desc = "Yank to clip" })
 map({ "n", "v" }, "<C-p>", '"+p', { desc = "Paste from clip" })
+map({ "n", "v" }, "$", "g_", { desc = "which_key_ignore", remap = true })
+map({ "n", "v" }, "c", '"_c', { desc = "which_key_ignore" })
+map({ "n" }, "x", '"_x', { desc = "which_key_ignore" })
+map({ "x" }, "p", '"_p', { desc = "which_key_ignore" })
 
 -- toggle options. Overrides of LazyVim default keymaps must go in this file (why?)
 require("snacks")

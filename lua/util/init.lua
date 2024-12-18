@@ -136,12 +136,17 @@ end
 M.map = function(mode, lhs, rhs, opts)
   opts = opts or {}
 
-  opts.remap = false
-  if opts.remap then
+  -- Default is no recursive remap
+  if type(opts.remap) == "boolean" then
     opts.remap = opts.remap
+  elseif type(opts.noremap) == "boolean" then
+    opts.noremap = opts.noremap
   end
 
-  opts.silent = opts.silent ~= false
+  -- Unsure of what default is, but I want it to be silent
+  if type(opts.silent) == "nil" then
+    opts.silent = true
+  end
 
   vim.keymap.set(mode, lhs, rhs, opts)
 end

@@ -142,8 +142,26 @@ return {
   },
   -- Reconfigure LazyVim extras
   {
+    "ibhagwan/fzf-lua",
+    optional = true,
+    opts = function(opts)
+      local overrides = {
+        winopts = {
+          height = 0.9,
+          width = 0.9,
+          row = 0.50,
+          col = 0.50,
+        },
+      }
+
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+      return opts
+    end,
+  },
+  {
     "nvim-telescope/telescope.nvim",
     optional = true,
+    enabled = vim.g.lazyvim_picker == "telescope",
     dependencies = {
       {
         "debugloop/telescope-undo.nvim",

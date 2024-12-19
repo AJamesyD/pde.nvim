@@ -33,8 +33,16 @@ return {
   -- Other
   {
     "yetone/avante.nvim",
-    event = "VeryLazy",
-    lazy = false,
+    lazy = true,
+    keys = {
+      {
+        -- Avante sets its own keymaps, but I still want to lazy load it to speed up startup
+        "<leader>a",
+        function()
+          require("avante")
+        end,
+      },
+    },
     version = false, -- set this if you want to always pull the latest change
     opts = {
       provider = "openai",

@@ -1,4 +1,5 @@
 return {
+  -- Reconfigure LazyVim defaults
   {
     "neovim/nvim-lspconfig",
     ---@class PluginLspOpts

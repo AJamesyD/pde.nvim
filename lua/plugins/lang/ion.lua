@@ -1,4 +1,5 @@
 return {
+  -- Reconfigure LazyVim defaults
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)

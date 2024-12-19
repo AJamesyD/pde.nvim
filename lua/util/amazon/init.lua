@@ -1,5 +1,5 @@
 -- https://w.amazon.com/bin/view/Bemol#HPluginFeatures
-local BRAZIL_SUPPORTED_FTS = {
+local BRAZIL_BEMOL_SUPPORTED_FTS = {
   "cpp", -- beta
   "c", -- beta
   "java",
@@ -7,7 +7,7 @@ local BRAZIL_SUPPORTED_FTS = {
   "python",
   "ruby",
 }
-local PERU_SUPPORTED_FTS = {
+local PERU_BEMOL_SUPPORTED_FTS = {
   "javascript",
   "typescript",
   "python",
@@ -18,13 +18,29 @@ local M = {}
 M.brazil_root = function(filename)
   local root_file = vim.fs.find(function(name, _)
     return name:match("^Config$")
-  end, { path = filename, upward = true })[1]
+  end, { path = filename, type = "file", upward = true })[1]
   return vim.fs.dirname(root_file)
 end
 M.peru_root = function(filename)
   local root_file = vim.fs.find(function(name, _)
     return name:match("^brazil%.ion$")
-  end, { path = filename, upward = true })[1]
+  end, { path = filename, type = "file", upward = true })[1]
+  return vim.fs.dirname(root_file)
+end
+---@param filename string
+---@param build_system? "brazil"|"peru"
+--- Build system. Defaults to both Brazil and Peru
+M.amazon_root = function(filename, build_system)
+  local root_file = vim.fs.find(function(name, _)
+    local is_brazil = name:match("^Config$")
+    local is_peru = name:match("^brazil%.ion$")
+    if build_system == "brazil" then
+      return is_brazil
+    elseif build_system == "peru" then
+      return is_peru
+    end
+    return is_brazil or is_peru
+  end, { path = filename, type = "file", upward = true })[1]
   return vim.fs.dirname(root_file)
 end
 
@@ -37,8 +53,8 @@ M.is_bemol_proj = function(bufnr)
   local filepath = vim.api.nvim_buf_get_name(bufnr)
   local filetype = vim.bo[bufnr].filetype
 
-  local is_brazil_broj = M.brazil_root(filepath) and vim.tbl_contains(BRAZIL_SUPPORTED_FTS, filetype)
-  local is_peru_proj = M.peru_root(filepath) and vim.tbl_contains(PERU_SUPPORTED_FTS, filetype)
+  local is_brazil_broj = M.brazil_root(filepath) and vim.tbl_contains(BRAZIL_BEMOL_SUPPORTED_FTS, filetype)
+  local is_peru_proj = M.peru_root(filepath) and vim.tbl_contains(PERU_BEMOL_SUPPORTED_FTS, filetype)
 
   return is_brazil_broj or is_peru_proj
 end

@@ -3,9 +3,9 @@ local work_vault = vim.fn.expand("~") .. "/Documents/Work-Vault/"
 local markdownlint_config = vim.fn.expand("~") .. "/.config/markdownlint-cli/.markdownlint-cli2.yaml"
 
 return {
+  -- Reconfigure LazyVim defaults
   {
     "stevearc/conform.nvim",
-    optional = true,
     opts = {
       formatters = {
         ["markdownlint-cli2"] = {
@@ -19,7 +19,6 @@ return {
   },
   {
     "mfussenegger/nvim-lint",
-    optional = true,
     opts = {
       linters = {
         ["markdownlint-cli2"] = {
@@ -28,6 +27,8 @@ return {
       },
     },
   },
+
+  -- Other
   {
     "epwalsh/obsidian.nvim",
     version = "*",

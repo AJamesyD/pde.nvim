@@ -1,6 +1,8 @@
 return {
+  -- Reconfigure LazyVim extras
   {
     "mfussenegger/nvim-jdtls",
+    optional = true,
     opts = function(_, opts)
       ---@type lspconfig.Config
       local overrides = {

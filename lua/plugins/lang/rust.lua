@@ -20,9 +20,9 @@ local terminal_executor = {
 }
 
 return {
+  -- Reconfigure LazyVim defaults
   {
     "stevearc/conform.nvim",
-    optional = true,
     opts = {
       formatters = {
         rust = {
@@ -59,8 +59,11 @@ return {
       },
     },
   },
+
+  -- Reconfigure LazyVim extras
   {
     "Saecki/crates.nvim",
+    optional = true,
     opts = {
       thousands_separator = ",",
       completion = {
@@ -75,6 +78,7 @@ return {
   },
   {
     "mrcjkb/rustaceanvim",
+    optional = true,
     version = "^5",
     ---@type rustaceanvim.Opts
     opts = {

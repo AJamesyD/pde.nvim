@@ -28,7 +28,6 @@ return {
   -- Reconfigure LazyVim defaults
   {
     "stevearc/conform.nvim",
-    optional = true,
     opts = {
       formatters_by_ft = {
         -- TODO: Figure out how to make * and _ respect vim.b/g.autoformat
@@ -44,7 +43,7 @@ return {
   -- Other
   {
     "Wansmer/treesj",
-    event = "LazyFile",
+    lazy = true,
     opts = function(_, opts)
       local overrides = {
         use_default_keymaps = false,

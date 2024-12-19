@@ -290,6 +290,7 @@ return {
   -- Reconfigure LazyVim extras
   {
     "echasnovski/mini.surround",
+    optional = true,
     opts = {
       mappings = {
         add = "sa", -- Add surrounding in Normal and Visual modes

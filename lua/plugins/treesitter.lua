@@ -118,7 +118,6 @@ return {
 
   -- Other
   {
-
     "chrisgrieser/nvim-various-textobjs",
     keys = {
       {

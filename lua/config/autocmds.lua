@@ -96,28 +96,6 @@ autocmd({ "FileType" }, {
   end,
 })
 
-autocmd({ "FileType" }, {
-  desc = "Mark text files",
-  pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
-  callback = function(event)
-    local bufnr = event.buf
-    local bufglobals = vim.b[bufnr]
-    bufglobals.is_text_file = true
-  end,
-})
-
-autocmd({ "BufAdd" }, {
-  desc = "Mark test files",
-  callback = function(event)
-    local bufnr = event.buf
-    local bufglobals = vim.b[bufnr]
-    local filename = vim.fn.expand("<afile>")
-    if filename:match("tests/") or filename:match("test/") or filename:match("tst/") then
-      bufglobals.is_test_file = true
-    end
-  end,
-})
-
 autocmd({ "BufReadPost" }, {
   desc = "Disable spell if treesitter inactive",
   callback = function(event)

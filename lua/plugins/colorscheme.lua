@@ -187,7 +187,7 @@ return {
   },
   {
     "Shatur/neovim-ayu",
-    lazy = false,
+    lazy = true,
     priority = 1000,
     opts = {
       overrides = {
@@ -201,12 +201,12 @@ return {
   },
   {
     "EdenEast/nightfox.nvim",
-    lazy = false,
+    lazy = true,
     priority = 1000,
   },
   {
     "marko-cerovac/material.nvim",
-    lazy = false,
+    lazy = true,
     priority = 1000,
     opts = {
       contrast = {
@@ -235,7 +235,7 @@ return {
   },
   {
     "eldritch-theme/eldritch.nvim",
-    lazy = false,
+    lazy = true,
     priority = 1000,
     opts = {
       dim_inactive = true,
@@ -243,7 +243,7 @@ return {
   },
   {
     "olivercederborg/poimandres.nvim",
-    lazy = false,
+    lazy = true,
     priority = 1000,
     opts = {
       bold_vert_split = true,

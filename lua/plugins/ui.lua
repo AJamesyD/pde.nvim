@@ -16,6 +16,28 @@ return {
       { "<leader>bc", "<CMD>BufferLinePickClose<CR>", desc = "Pick buffer close" },
     },
     opts = function(_, opts)
+      vim.api.nvim_create_autocmd({ "FileType" }, {
+        desc = "Mark text files",
+        pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
+        callback = function(event)
+          local bufnr = event.buf
+          local bufglobals = vim.b[bufnr]
+          bufglobals.is_text_file = true
+        end,
+      })
+
+      vim.api.nvim_create_autocmd({ "BufAdd" }, {
+        desc = "Mark test files",
+        callback = function(event)
+          local bufnr = event.buf
+          local bufglobals = vim.b[bufnr]
+          local filename = vim.fn.expand("<afile>")
+          if filename:match("tests/") or filename:match("test/") or filename:match("tst/") then
+            bufglobals.is_test_file = true
+          end
+        end,
+      })
+
       local bufferline_groups = require("bufferline.groups")
       local overrides = {
         options = {
@@ -149,12 +171,7 @@ return {
         {
           "progress",
           cond = function()
-            local num_lines = vim.fn.line("$")
-            if vim.b[0].is_text_file then
-              return num_lines > 100
-            else
-              return num_lines > 500
-            end
+            return vim.fn.line("$") > 500
           end,
           draw_empty = true,
           padding = { left = 1, right = 1 },
@@ -280,20 +297,24 @@ return {
     opts = {
       colorcolumn = "120",
       disabled_filetypes = {
-        "help",
-        "text",
-        "markdown",
         "TelescopePrompt",
         "TelescopeResults",
+        "Trouble",
         "alpha",
         "dashboard",
-        "neo-tree",
-        "Trouble",
+        "help",
         "lazy",
+        "markdown",
         "mason",
+        "neo-tree",
         "notify",
+        "snacks_dashboard",
+        "snacks_notif",
+        "snacks_terminal",
+        "snacks_win",
+        "text",
         "toggleterm",
-        "lazyterm",
+        "trouble",
       },
       scope = "window",
       custom_colorcolumn = {
@@ -715,7 +736,22 @@ return {
         fg = "#1F3442",
       },
       -- This plugin will not be activated for filetype in the following table.
-      no_exec_files = { "packer", "TelescopePrompt", "mason", "CompetiTest", "NvimTree" },
+      no_exec_files = {
+        "TelescopePrompt",
+        "TelescopeResults",
+        "Trouble",
+        "alpha",
+        "dashboard",
+        "lazy",
+        "mason",
+        "neo-tree",
+        "notify",
+        "snacks_dashboard",
+        "snacks_notif",
+        "snacks_terminal",
+        "snacks_win",
+        "toggleterm",
+      },
       -- Symbols for separator lines, the order: horizontal, vertical, top left, top right, bottom left, bottom right.
       symbols = { "━", "┃", "┏", "┓", "┗", "┛" },
       -- #70: https://github.com/nvim-zh/colorful-winsep.nvim/discussions/70

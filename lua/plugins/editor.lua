@@ -144,8 +144,18 @@ return {
   {
     "ibhagwan/fzf-lua",
     optional = true,
-    opts = function(opts)
+    opts = function(_, opts)
       local overrides = {
+        keymap = {
+          fzf = {
+            -- use cltr-q to select all items and convert to quickfix list
+            ["ctrl-q"] = "select-all+accept",
+          },
+        },
+        oldfiles = {
+          cwd_only = true,
+          include_current_session = true,
+        },
         winopts = {
           height = 0.9,
           width = 0.9,
@@ -333,7 +343,7 @@ return {
       "DiffviewRefresh",
       "DiffviewFileHistory",
     },
-    opts = function(opts)
+    opts = function(_, opts)
       local actions = require("diffview.config").actions
       local overrides = {
         enhanced_diff_hl = true,

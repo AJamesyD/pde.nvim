@@ -50,6 +50,9 @@ end
 
 ---@param bufnr? integer
 M.is_bemol_proj = function(bufnr)
+  if type(bufnr) == "nil" then
+    bufnr = 0 -- Current bufnr
+  end
   local filepath = vim.api.nvim_buf_get_name(bufnr)
   local filetype = vim.bo[bufnr].filetype
 

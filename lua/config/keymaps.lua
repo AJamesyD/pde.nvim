@@ -87,18 +87,3 @@ require("snacks")
     end,
   })
   :map("<leader>ug")
-require("snacks")
-  .toggle({
-    name = "Twilight",
-    get = function()
-      return require("twilight.view").enabled
-    end,
-    set = function(state)
-      if state then
-        require("twilight").enable()
-      else
-        require("twilight").disable()
-      end
-    end,
-  })
-  :map("<leader>uT")

@@ -213,6 +213,75 @@ return {
       },
     },
   },
+  {
+    "folke/snacks.nvim",
+    ---@type snacks.Config
+    opts = {
+      dim = {
+        ---@type snacks.scope.Config
+        ---@diagnostic disable-next-line: missing-fields
+        scope = {
+          min_size = 5,
+          max_size = 30,
+          siblings = true,
+          treesitter = {
+            blocks = {
+              enabled = true,
+              -- Default
+              "function_declaration",
+              "function_definition",
+              "method_declaration",
+              "method_definition",
+              "class_declaration",
+              "class_definition",
+              "do_statement",
+              "while_statement",
+              "repeat_statement",
+              "if_statement",
+              "for_statement",
+
+              -- Rust
+              "array_expression",
+              "attribute_item",
+              "call_expression",
+              "const_item",
+              "enum_item",
+              "for_expression",
+              "foreign_mod_item",
+              "function_item",
+              "if_expression",
+              "impl_item",
+              "let_declaration",
+              "loop_expression",
+              "macro_definition",
+              "macro_invocation",
+              "match_expression",
+              "mod_item",
+              "struct_item",
+              "trait_item",
+              "type_item",
+              "union_item",
+              "use_declaration",
+              "while_expression",
+
+              -- Common
+              "function",
+              "method",
+            },
+          },
+        },
+        filter = function(bufnr)
+          local filetype = vim.bo[bufnr].filetype
+          local exclude_fts = { "markdown" }
+          if vim.tbl_contains(exclude_fts, filetype) then
+            return false
+          end
+
+          return vim.g.snacks_dim ~= false and vim.b[bufnr].snacks_dim ~= false and vim.bo[bufnr].buftype == ""
+        end,
+      },
+    },
+  },
 
   -- Reconfigure LazyVim extras
   {
@@ -433,91 +502,6 @@ return {
     keys = {
       { "<leader>FML", "<CMD>CellularAutomaton make_it_rain<CR>", desc = "FML" },
     },
-  },
-  {
-    "folke/twilight.nvim",
-    cmd = {
-      "Twilight",
-      "TwilightEnable",
-      "TwilightDisable",
-    },
-    opts = function(_, opts)
-      local overrides = {
-        dimming = {
-          alpha = 0.5,
-          inactive = true,
-        },
-        context = 15,
-        exclude = {
-          "markdown",
-        },
-        expand = {
-          -- Python
-          "function_definition",
-          "class_definition",
-          "while_statement",
-          "for_statement",
-          "if_statement",
-          "with_statement",
-          "try_statement",
-          "match_statement",
-          "import_from_statement",
-          "parenthesized_expression",
-          "generator_expression",
-          "list_comprehension",
-          "set_comprehension",
-          "dictionary_comprehension",
-          "tuple",
-          "list",
-          "set",
-          "dictionary",
-          "string",
-
-          -- Lua
-          "do_statement",
-          "while_statement",
-          "repeat_statement",
-          "if_statement",
-          "for_statement",
-          "function_declaration",
-          "function_definition",
-          "table_constructor",
-
-          -- Rust
-          "mod_item",
-          "foreign_mod_item",
-          "function_item",
-          "struct_item",
-          "trait_item",
-          "enum_item",
-          "impl_item",
-          "type_item",
-          "union_item",
-          "const_item",
-          "use_declaration",
-          "let_declaration",
-          "loop_expression",
-          "for_expression",
-          "while_expression",
-          "if_expression",
-          "match_expression",
-          "call_expression",
-          "array_expression",
-          "macro_definition",
-          "macro_invocation",
-          "attribute_item",
-
-          -- Common
-          "function",
-          "method",
-          "table",
-          "if_statement",
-        },
-      }
-
-      opts = vim.tbl_deep_extend("force", opts, overrides)
-      return opts
-    end,
   },
   {
     "folke/zen-mode.nvim",

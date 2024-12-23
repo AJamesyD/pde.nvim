@@ -277,6 +277,7 @@ return {
         { path = "nvim-treesitter", words = { "TS", "treesitter" } },
         { path = "overseer.nvim", words = { "overseer" } },
         { path = "rustaceanvim", words = { "rust" } },
+        { path = "snacks.nvim", words = { "snacks" } },
         { path = "telescope.nvim", words = { "telescope" } },
         { path = "tokyonight.nvim", words = { "tokyonight" } },
         { path = "which-key.nvim", words = { "wk", "which-key" } },

@@ -79,6 +79,7 @@ return {
         ---@type rustaceanvim.lsp.ClientConfig
         ---@diagnostic disable-next-line: missing-fields
         server = {
+          standalone = false,
           on_attach = function(client, bufnr)
             local capability_overrides = {
               textDocument = {

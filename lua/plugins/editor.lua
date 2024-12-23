@@ -144,6 +144,36 @@ return {
   {
     "ibhagwan/fzf-lua",
     optional = true,
+    keys = {
+      { "<leader>,", false },
+      { "<leader>/", false },
+      { "<leader>:", false },
+      { "<leader><space>", "<cmd>FzfLua resume<cr>", desc = "Resume Search" },
+      -- find
+      { "<leader>fc", false },
+      { "<leader>fr", LazyVim.pick("oldfiles"), desc = "Recent (Root Dir)" },
+      { "<leader>fR", LazyVim.pick("oldfiles", { cwd = vim.uv.cwd() }), desc = "Recent (cwd)" },
+      -- git
+      { "<leader>gc", false },
+      { "<leader>gs", false },
+      -- search
+      { '<leader>s"', false },
+      { "<leader>sa", false },
+      { "<leader>sb", false },
+      { "<leader>sc", false },
+      { "<leader>sC", false },
+      { "<leader>sH", false },
+      { "<leader>sM", false },
+      { "<leader>sm", false },
+      { "<leader>so", false },
+      { "<leader>ss", false },
+      { "<leader>sS", false },
+      -- undo
+      -- TODO: undo keymaps
+      -- spell
+      { "<leader>ss", "<cmd>FzfLua spell_suggest<cr>", desc = "Spelling Suggestions" },
+      { "z=", "<CMD>Telescope spell_suggest<CR>", desc = "Spelling Suggestions" },
+    },
     opts = function(_, opts)
       local overrides = {
         keymap = {

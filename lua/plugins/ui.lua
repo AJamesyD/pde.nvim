@@ -504,59 +504,6 @@ return {
     },
   },
   {
-    "folke/zen-mode.nvim",
-    cmd = { "ZenMode" },
-    opts = {
-      window = {
-        width = 0.85,
-        options = {
-          cursorcolumn = false,
-          laststatus = 0,
-          number = false,
-          relativenumber = false,
-          signcolumn = "no",
-        },
-      },
-      plugins = {
-        -- disables git signs
-        gitsigns = { enabled = true },
-        -- disables the tmux statusline
-        tmux = { enabled = true },
-        -- this will change the font size on kitty when in zen mode
-        -- to make this work, you need to set the following kitty options:
-        -- - allow_remote_control socket-only
-        -- - listen_on unix:/tmp/kitty
-        kitty = {
-          enabled = true,
-          font = "+4", -- font size increment
-        },
-        -- this will change the font size on alacritty when in zen mode
-        -- requires  Alacritty Version 0.10.0 or higher
-        -- uses `alacritty msg` subcommand to change font size
-        alacritty = {
-          enabled = true,
-          font = "18", -- font size
-        },
-        -- this will change the scale factor in Neovide when in zen mode
-        -- See alse also the Plugins/Wezterm section in this projects README
-        neovide = {
-          enabled = true,
-          -- Will multiply the current scale factor by this number
-          scale = 1.2,
-          -- disable the Neovide animations while in Zen mode
-          disable_animations = {
-            neovide_animation_length = 0,
-            neovide_cursor_animate_command_line = false,
-            neovide_scroll_animation_length = 0,
-            neovide_position_animation_length = 0,
-            neovide_cursor_animation_length = 0,
-            neovide_cursor_vfx_mode = "",
-          },
-        },
-      },
-    },
-  },
-  {
     "tzachar/highlight-undo.nvim",
     -- TODO: Remove either when I move to nvim 0.11 or when plugin fixes this
     commit = "c87a6ec1ded241ef223269077cbd5f97a6f0d5bf",

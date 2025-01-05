@@ -99,8 +99,22 @@ autocmd({ "FileType" }, {
 autocmd({ "BufReadPost" }, {
   desc = "Disable spell if treesitter inactive",
   callback = function(event)
+    local bufnr = event.buf
+
+    local is_relevant_file = vim.b[bufnr].is_relevant_file
+    local is_relevant_file_set_callback = function()
+      is_relevant_file = vim.b[bufnr].is_relevant_file
+      return type(is_relevant_file) == "boolean"
+    end
+
     local ts_active_callback = function()
       return vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()]
+    end
+
+    if vim.wait(500, is_relevant_file_set_callback, 50) then
+      if not is_relevant_file then
+        return
+      end
     end
 
     if not vim.wait(2000, ts_active_callback, 200) then

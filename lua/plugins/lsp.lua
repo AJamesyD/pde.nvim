@@ -47,24 +47,29 @@ return {
       "nvim-treesitter/nvim-treesitter",
     },
     opts = function(_, opts)
-      vim.api.nvim_create_autocmd({ "BufReadPost" }, {
+      vim.api.nvim_create_autocmd({ "FileType" }, {
         desc = "otter.nvim setup",
+        pattern = { "markdown", "nix" },
         callback = function(event)
           local bufnr = event.buf
 
+          local is_relevant_file = vim.b[bufnr].is_relevant_file
           local is_relevant_file_set_callback = function()
-            return type(vim.b[bufnr].is_relevant_file) ~= "nil"
+            is_relevant_file = vim.b[bufnr].is_relevant_file
+            return type(is_relevant_file) == "boolean"
           end
 
           local ts_active_callback = function()
             return vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()]
           end
 
-          if not vim.wait(1000, is_relevant_file_set_callback, 200) then
-            return
+          if vim.wait(500, is_relevant_file_set_callback, 50) then
+            if not is_relevant_file then
+              return
+            end
           end
 
-          if vim.wait(5000, ts_active_callback, 500) then
+          if vim.wait(2000, ts_active_callback, 200) then
             require("otter").activate()
           else
             vim.notify("Treesitter not active, could not setup otter.nvim", vim.log.levels.WARN)

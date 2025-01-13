@@ -270,6 +270,7 @@ return {
 
         { path = "avante.nvim", words = { "avante" } },
         { path = "blink.cmp", words = { "blink" } },
+        { path = "conform.nvim", words = { "conform" } },
         { path = "edgy.nvim", words = { "edgy" } },
         { path = "grapple.nvim", words = { "grapple" } },
         { path = "mason.nvim", words = { "mason" } },

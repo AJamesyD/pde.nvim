@@ -1,34 +1,41 @@
 return {
-
   -- Reconfigure LazyVim extras
-  {
-    "folke/edgy.nvim",
-    optional = true,
-    opts = function(_, opts)
-      -- Will get swapped to right by other edgy conf
-      ---@type Edgy.View.Opts[]
-      local left_overrides = {
-        {
-          title = "Avante",
-          ft = "Avante",
-          size = {
-            width = MyUtils.min_sidebar_size(40, vim.o.columns, 0.20),
-          },
-        },
-        {
-          title = "Avante Input",
-          ft = "AvanteInput",
-          size = {
-            height = MyUtils.min_sidebar_size(10, vim.o.lines, 0.10),
-          },
-        },
-      }
-
-      opts.left = opts.left or {}
-      opts.left = vim.list_extend(left_overrides, opts.left or {})
-      return opts
-    end,
-  },
+  -- TODO: Re-enable when https://github.com/folke/edgy.nvim/issues/113 resolved
+  -- {
+  --   "folke/edgy.nvim",
+  --   optional = true,
+  --   opts = function(_, opts)
+  --     -- Will get swapped to right by other edgy conf
+  --     ---@type Edgy.View.Opts[]
+  --     local left_overrides = {
+  --       {
+  --         title = "Avante",
+  --         ft = "Avante",
+  --         size = {
+  --           width = MyUtils.min_sidebar_size(40, vim.o.columns, 0.20),
+  --         },
+  --       },
+  --       {
+  --         title = "Avante Selected Files",
+  --         ft = "AvanteSelectedFiles",
+  --         size = {
+  --           height = 3,
+  --         },
+  --       },
+  --       {
+  --         title = "Avante Input",
+  --         ft = "AvanteInput",
+  --         size = {
+  --           height = MyUtils.min_sidebar_size(10, vim.o.lines, 0.10),
+  --         },
+  --       },
+  --     }
+  --
+  --     opts.left = opts.left or {}
+  --     opts.left = vim.list_extend(left_overrides, opts.left or {})
+  --     return opts
+  --   end,
+  -- },
 
   -- Other
   {
@@ -50,7 +57,7 @@ return {
       openai = {
         endpoint = "https://api.openai.com/v1",
         -- TODO: Make toggle-able
-        model = "gpt-4o-mini",
+        model = "gpt-4o",
         timeout = 30000, -- Timeout in milliseconds
         temperature = 0,
         max_tokens = 4096,
@@ -67,12 +74,12 @@ return {
       },
       windows = {
         -- For use with edgy.nvim
-        width = 100,
-        height = 100,
-        input = {
-          -- For use with edgy.nvim
-          height = 100,
-        },
+        -- width = 100,
+        -- height = 100,
+        -- input = {
+        --   height = 100,
+        -- },
+        width = 25,
       },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`

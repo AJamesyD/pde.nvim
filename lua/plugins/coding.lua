@@ -34,7 +34,12 @@ return {
         sources = {
           -- adding any nvim-cmp sources here will enable them
           -- with blink.compat
-          compat = { "otter" },
+          compat = {
+            "otter",
+            "avante_commands",
+            "avante_mentions",
+            "avante_files",
+          },
           default = { "lsp", "path", "snippets" },
         },
 

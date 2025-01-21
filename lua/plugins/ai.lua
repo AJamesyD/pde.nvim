@@ -55,21 +55,8 @@ return {
       provider = "openai",
       ---@type AvanteSupportedProvider
       openai = {
-        endpoint = "https://api.openai.com/v1",
         -- TODO: Make toggle-able
         model = "gpt-4o",
-        timeout = 30000, -- Timeout in milliseconds
-        temperature = 0,
-        max_tokens = 4096,
-        ["local"] = false,
-      },
-      behavior = {
-        -- auto_set_keymaps = false,
-        history = {
-          max_tokens = 4096,
-        },
-      },
-      history = {
         max_tokens = 8192,
       },
       windows = {

@@ -149,36 +149,35 @@ return {
               },
               completion = {
                 fullFunctionSignatures = { enable = true },
-                limit = 100,
                 postfix = { enable = false }, -- TODO: eventually try using these
-                termSearch = { enable = true }, -- TODO: experiment
               },
               diagnostics = {
                 enable = true,
-                experimental = true,
+                experimental = {
+                  enable = true,
+                },
                 disabled = {
                   "unresolved-proc-macro",
                 },
                 styleLints = { enable = true },
               },
               files = {
-                excludeDirs = {
+                exclude = {
+                  ".cargo",
+                  ".config",
                   ".direnv",
                   ".git",
                   ".github",
                   ".gitlab",
+                  ".venv",
                   "bin",
                   "build",
                   "node_modules",
                   "target",
                   "venv",
-                  ".venv",
                 },
               },
               hover = {
-                actions = {
-                  references = { enable = true },
-                },
                 show = {
                   enumVariants = 10,
                   fields = 10,
@@ -221,6 +220,9 @@ return {
               },
               lru = {
                 capacity = 512,
+              },
+              references = {
+                excludeImports = true,
               },
               rustfmt = {
                 extraArgs = "+nightly",

@@ -40,7 +40,7 @@ return {
             "avante_mentions",
             "avante_files",
           },
-          default = { "lsp", "path", "snippets" },
+          default = { "lsp", "path", "snippets", "buffer" },
         },
 
         keymap = {
@@ -54,19 +54,6 @@ return {
       return opts
     end,
   },
-  -- {
-  --   -- NOTE: Overrides nvim-cmp with magazine
-  --   "iguanacucumber/magazine.nvim",
-  --   name = "nvim-cmp", -- Otherwise highlighting gets messed up
-  --   optional = true,
-  --   dependencies = {
-  --     --* the sources *--
-  --     { "iguanacucumber/mag-nvim-lsp", name = "cmp-nvim-lsp", opts = {} },
-  --     { "iguanacucumber/mag-nvim-lua", name = "cmp-nvim-lua" },
-  --     { "iguanacucumber/mag-buffer", name = "cmp-buffer" },
-  --     { "iguanacucumber/mag-cmdline", name = "cmp-cmdline" },
-  --   },
-  -- },
   {
     "nvim-cmp",
     optional = true,

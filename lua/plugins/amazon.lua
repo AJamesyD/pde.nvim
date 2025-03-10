@@ -17,7 +17,7 @@ return {
             filetypes = { "brazil-config" },
             root_dir = function(fname)
               local primary = MyUtils.amazon.brazil_root(fname)
-              local fallback = lspconfig.util.find_git_ancestor(fname)
+              local fallback = vim.fs.dirname(vim.fs.find(".git", { path = fname, upward = true })[1])
               return primary or fallback
             end,
             settings = {},

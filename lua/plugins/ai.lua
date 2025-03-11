@@ -51,24 +51,39 @@ return {
       },
     },
     version = false, -- set this if you want to always pull the latest change
-    opts = {
-      provider = "openai",
-      ---@type AvanteSupportedProvider
-      openai = {
-        -- TODO: Make toggle-able
-        model = "gpt-4o",
-        max_tokens = 8192,
-      },
-      windows = {
-        -- For use with edgy.nvim
-        -- width = 100,
-        -- height = 100,
-        -- input = {
-        --   height = 100,
-        -- },
-        width = 25,
-      },
-    },
+    opts = function(_, opts)
+      local overrides = {
+        provider = "openai",
+        ---@type AvanteSupportedProvider
+        openai = {
+          -- TODO: Make toggle-able
+          model = "o3-mini",
+          max_tokens = 8192,
+        },
+        bedrock = {
+          model = "us.anthropic.claude-3-5-sonnet-20240620-v1:0",
+          -- model = "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+          max_tokens = 16384,
+        },
+        windows = {
+          -- For use with edgy.nvim
+          -- width = 100,
+          -- height = 100,
+          -- input = {
+          --   height = 100,
+          -- },
+          width = 25,
+        },
+      }
+
+      if require("util").amazon.is_amazon() then
+        overrides.provider = "bedrock"
+        require("util").amazon.set_bedrock_keys()
+      end
+
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+      return opts
+    end,
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = "make",
     -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows

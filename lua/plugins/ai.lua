@@ -54,15 +54,18 @@ return {
     opts = function(_, opts)
       local overrides = {
         provider = "openai",
-        ---@type AvanteSupportedProvider
         openai = {
           -- TODO: Make toggle-able
           model = "o3-mini",
           max_tokens = 8192,
         },
         bedrock = {
-          model = "us.anthropic.claude-3-5-sonnet-20240620-v1:0",
-          -- model = "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+          model = "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+          max_tokens = 16384,
+        },
+        deepseek = {
+          __inherited_from = "bedrock",
+          model = "us.deepseek.r1-v1:0",
           max_tokens = 16384,
         },
         windows = {
@@ -77,7 +80,14 @@ return {
       }
 
       if require("util").amazon.is_amazon() then
-        overrides.provider = "bedrock"
+        overrides = vim.tbl_deep_extend("force", overrides, {
+          provider = "bedrock",
+          cursor_applying_provider = "bedrock",
+          behaviour = {
+            enable_cursor_planning_mode = true,
+          },
+        })
+        overrides.behaviour.enable_cursor_planning_mode = true
         require("util").amazon.set_bedrock_keys()
       end
 

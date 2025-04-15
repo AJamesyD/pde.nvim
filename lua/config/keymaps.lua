@@ -54,14 +54,6 @@ map("n", "<C-f>", "<C-f>zz", { desc = "which_key_ignore" })
 map("n", "<C-o>", "<C-o>zz", { desc = "which_key_ignore" })
 map("n", "<C-i>", "<C-i>zz", { desc = "which_key_ignore" })
 
--- buffers
-if not vim.g.neovide then
-  map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-  map("n", "<S-h>", "<cmd>bprev<cr>", { desc = "Prev Buffer" })
-  map("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-  map("n", "[b", "<cmd>bprev<cr>", { desc = "Prev Buffer" })
-end
-
 -- Move lines up/down (default is A-j/A-k)
 map("v", "J", ":m '>+1<cr>gv=gv", { desc = "Move Down" })
 map("v", "K", ":m '<-2<cr>gv=gv", { desc = "Move Up" })

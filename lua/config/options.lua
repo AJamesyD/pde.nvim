@@ -44,10 +44,6 @@ if g.neovide then
 
   g.neovide_cursor_smooth_blink = true
   g.neovide_cursor_vfx_mode = "railgun"
-  g.neovide_cursor_animation_length = 0.05
-  g.neovide_cursor_trail_size = 0.5
-  g.neovide_cursor_vfx_particle_lifetime = 2
-  g.neovide_cursor_vfx_particle_speed = 20.0
 
   g.neovide_refresh_rate = 120
   g.neovide_refresh_rate_idle = 60

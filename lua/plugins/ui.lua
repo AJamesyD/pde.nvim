@@ -2,102 +2,7 @@ return {
   -- Reconfigure LazyVim defaults
   {
     "akinsho/bufferline.nvim",
-    enabled = vim.g.neovide or false,
-    keys = {
-      { "<leader>bP", false },
-      { "<leader>br", false },
-      { "<leader>bl", false },
-      { "[B", false },
-      { "]B", false },
-      { "<B", "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer prev" },
-      { ">B", "<cmd>BufferLineMoveNext<cr>", desc = "Move buffer next" },
-      { "<leader>bl", false },
-      { "<leader>bb", "<CMD>BufferLinePick<CR>", desc = "Pick buffer open" },
-      { "<leader>bc", "<CMD>BufferLinePickClose<CR>", desc = "Pick buffer close" },
-    },
-    opts = function(_, opts)
-      vim.api.nvim_create_autocmd({ "FileType" }, {
-        desc = "Mark text files",
-        pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
-        callback = function(event)
-          local bufnr = event.buf
-          local bufglobals = vim.b[bufnr]
-          bufglobals.is_text_file = true
-        end,
-      })
-
-      vim.api.nvim_create_autocmd({ "BufAdd" }, {
-        desc = "Mark test files",
-        callback = function(event)
-          local bufnr = event.buf
-          local bufglobals = vim.b[bufnr]
-          local filename = vim.fn.expand("<afile>")
-          if filename:match("tests/") or filename:match("test/") or filename:match("tst/") then
-            bufglobals.is_test_file = true
-          end
-        end,
-      })
-
-      local bufferline_groups = require("bufferline.groups")
-      local overrides = {
-        options = {
-          style_preset = require("bufferline").style_preset.no_italic,
-          separator_style = "slant",
-          show_buffer_close_icons = false,
-          show_close_icon = false,
-          move_wraps_at_ends = true,
-          tab_size = 12,
-          groups = {
-            options = {
-              toggle_hidden_on_enter = true,
-            },
-            items = {
-              bufferline_groups.builtin.pinned:with({
-                icon = " ",
-                separator = {
-                  style = bufferline_groups.separator.pill,
-                },
-              }),
-              bufferline_groups.builtin.ungrouped:with({
-                name = " ",
-                separator = {
-                  style = bufferline_groups.separator.pill,
-                },
-              }),
-              {
-                name = " test",
-                ---@param buf bufferline.Buffer
-                matcher = function(buf)
-                  local is_test_file = vim.b[buf.id].is_test_file
-                  return type(is_test_file) ~= "nil" and is_test_file
-                end,
-              },
-              {
-                name = " docs",
-                ---@param buf bufferline.Buffer
-                matcher = function(buf)
-                  local is_text_file = vim.b[buf.id].is_text_file
-                  return type(is_text_file) ~= "nil" and is_text_file
-                end,
-              },
-              {
-                name = " misc",
-                ---@type vim.api.keyset.highlight
-                highlight = { underline = true },
-                ---@param buf bufferline.Buffer
-                matcher = function(buf)
-                  local is_relevant_file = vim.b[buf.id].is_relevant_file
-                  return type(is_relevant_file) ~= "nil" and not is_relevant_file
-                end,
-              },
-            },
-          },
-        },
-      }
-
-      opts = vim.tbl_deep_extend("force", opts, overrides)
-      return opts
-    end,
+    enabled = false,
   },
   {
     "nvim-lualine/lualine.nvim",
@@ -128,40 +33,32 @@ return {
         },
       }
 
-      if not vim.g.neovide then
-        -- WARN: Scary magic number usage
-        local pretty_path_element = table.remove(opts.sections.lualine_c, 4)
-        local filetype_icon_element = table.remove(opts.sections.lualine_c, 3)
-        local lualine_c_overrides = {
-          -- {
-          --   -- Insert mid section
-          --   function()
-          --     return "%="
-          --   end,
-          -- },
-          {
-            "buffers",
+      -- WARN: Scary magic number usage
+      local pretty_path_element = table.remove(opts.sections.lualine_c, 4)
+      local filetype_icon_element = table.remove(opts.sections.lualine_c, 3)
+      local lualine_c_overrides = {
+        {
+          "buffers",
 
-            max_length = function()
-              return vim.o.columns * 1 / 2
-            end,
+          max_length = function()
+            return vim.o.columns * 1 / 2
+          end,
 
-            buffers_color = {
-              -- Same values as the general color option can be used here.
-              active = "lualine_c_normal", -- Color for active buffer.
-              inactive = "lualine_c_inactive", -- Color for inactive buffer.
-            },
-
-            symbols = {
-              modified = " ●", -- Text to show when the buffer is modified
-              alternate_file = " ", -- Text to show to identify the alternate file
-              directory = "", -- Text to show when the buffer is a directory
-            },
-            separator = { right = "" },
+          buffers_color = {
+            -- Same values as the general color option can be used here.
+            active = "lualine_c_normal", -- Color for active buffer.
+            inactive = "lualine_c_inactive", -- Color for inactive buffer.
           },
-        }
-        opts.sections.lualine_c = vim.list_extend(opts.sections.lualine_c or {}, lualine_c_overrides)
-      end
+
+          symbols = {
+            modified = " ●", -- Text to show when the buffer is modified
+            alternate_file = " ", -- Text to show to identify the alternate file
+            directory = "", -- Text to show when the buffer is a directory
+          },
+          separator = { right = "" },
+        },
+      }
+      opts.sections.lualine_c = vim.list_extend(opts.sections.lualine_c or {}, lualine_c_overrides)
       local diagnostics_element = table.remove(opts.sections.lualine_c, 2)
 
       table.remove(opts.sections.lualine_x, 5) -- Remove diff

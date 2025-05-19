@@ -76,23 +76,39 @@ return {
 
   -- Other
   {
+    -- TODO: Just build the damn thing in a WS and consume
     url = "angaidan@git.amazon.com:pkg/NinjaHooks",
     branch = "mainline",
     cond = require("util").amazon.is_amazon(),
+    dependencies = {
+      {
+        url = "angaidan@git.amazon.com:pkg/VimBrazilConfig",
+        branch = "mainline",
+        cond = require("util").amazon.is_amazon(),
+        lazy = false,
+        config = function(plugin)
+          vim.filetype.add({
+            filename = {
+              ["Config"] = function()
+                vim.b.brazil_package_Config = 1
+                return "brazil-config"
+              end,
+            },
+          })
+
+          local nvim_conf_dir = "~/.config/nvim"
+          vim.opt.rtp:remove(nvim_conf_dir)
+          vim.opt.rtp:prepend(plugin.dir .. "/configuration/vim/amazon/brazil-config")
+          -- NOTE: Make sure ~/.config/nvim is always first in runtime path (for spell, etc)
+          vim.opt.rtp:prepend(nvim_conf_dir)
+        end,
+      },
+    },
     lazy = false,
     config = function(plugin)
-      vim.filetype.add({
-        filename = {
-          ["Config"] = function()
-            vim.b.brazil_package_Config = 1
-            return "brazil-config"
-          end,
-        },
-      })
-
       local nvim_conf_dir = "~/.config/nvim"
       vim.opt.rtp:remove(nvim_conf_dir)
-      vim.opt.rtp:prepend(plugin.dir .. "/configuration/vim/amazon/brazil-config")
+      vim.opt.rtp:prepend(plugin.dir)
       -- NOTE: Make sure ~/.config/nvim is always first in runtime path (for spell, etc)
       vim.opt.rtp:prepend(nvim_conf_dir)
     end,

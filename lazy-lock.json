@@ -2,6 +2,7 @@
   "LazyVim": { "branch": "main", "commit": "25abbf546d564dc484cf903804661ba12de45507" },
   "NinjaHooks": { "branch": "mainline", "commit": "aef61b3e10ae098af5501a8f3745ef69fd5c7094" },
   "SchemaStore.nvim": { "branch": "main", "commit": "386bdbf18abb6ca103495c5bdbab65e46f3c361d" },
+  "VimBrazilConfig": { "branch": "mainline", "commit": "397075fb5129c6776e38d8eab72bf76f63cbea76" },
   "VimIon": { "branch": "mainline", "commit": "b96c3608bac8d1ffc8ea376f9706a064e2e4a9c6" },
   "avante.nvim": { "branch": "main", "commit": "e98bb8d3bae102662c5ad4ada1ce63a9aacac4e0" },
   "blink.cmp": { "branch": "main", "commit": "022521a8910a5543b0251b21c9e1a1e989745796" },

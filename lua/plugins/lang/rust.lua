@@ -194,7 +194,6 @@ return {
                   minLines = 35,
                 },
                 -- closureCaptureHints = { enable = true }, -- TODO: make toggle-able
-                closureReturnTypeHints = { enable = "block" },
                 expressionAdjustmentHints = {
                   enable = true,
                   hideOutsideUnsafe = true,
@@ -225,7 +224,7 @@ return {
                 excludeImports = true,
               },
               rustfmt = {
-                extraArgs = "+nightly",
+                extraArgs = { "+nightly" },
               },
               workspace = {
                 symbol = {

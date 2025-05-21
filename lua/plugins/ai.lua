@@ -53,14 +53,16 @@ return {
     version = false, -- set this if you want to always pull the latest change
     opts = function(_, opts)
       local overrides = {
-        provider = "openai",
+        provider = "bedrock",
         openai = {
           -- TODO: Make toggle-able
           model = "o3-mini",
           max_tokens = 8192,
         },
         bedrock = {
-          model = "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+          -- TODO: Get rate limit increased for 3.7
+          -- model = "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+          model = "us.anthropic.claude-3-5-sonnet-20241022-v2:0",
           max_tokens = 16384,
         },
         deepseek = {
@@ -77,6 +79,16 @@ return {
           -- },
           width = 25,
         },
+        system_prompt = function()
+          local hub = require("mcphub").get_hub_instance()
+          return hub and hub:get_active_servers_prompt() or ""
+        end,
+        -- Using function prevents requiring mcphub before it's loaded
+        custom_tools = function()
+          return {
+            require("mcphub.extensions.avante").mcp_tool(),
+          }
+        end,
       }
 
       if require("util").amazon.is_amazon() then
@@ -112,6 +124,16 @@ return {
           file_types = { "markdown", "Avante" },
         },
         ft = { "markdown", "Avante" },
+      },
+      {
+        "ravitemer/mcphub.nvim",
+        cmd = "MCPHub",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+        },
+        config = function()
+          require("mcphub").setup()
+        end,
       },
     },
   },

@@ -46,7 +46,9 @@ return {
         -- Avante sets its own keymaps, but I still want to lazy load it to speed up startup
         "<leader>a",
         function()
-          require("avante")
+          vim.schedule(function()
+            vim.require("avante")
+          end)
         end,
       },
     },
@@ -63,12 +65,10 @@ return {
           -- TODO: Get rate limit increased for 3.7
           -- model = "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
           model = "us.anthropic.claude-3-5-sonnet-20241022-v2:0",
-          max_tokens = 16384,
         },
         deepseek = {
           __inherited_from = "bedrock",
           model = "us.deepseek.r1-v1:0",
-          max_tokens = 16384,
         },
         windows = {
           -- For use with edgy.nvim

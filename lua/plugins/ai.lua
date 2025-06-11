@@ -45,38 +45,41 @@ return {
       {
         -- Avante sets its own keymaps, but I still want to lazy load it to speed up startup
         "<leader>a",
-        function()
-          vim.schedule(function()
-            vim.require("avante")
-          end)
-        end,
+        function() end,
       },
     },
     version = false, -- set this if you want to always pull the latest change
     opts = function(_, opts)
       local overrides = {
         provider = "bedrock",
-        openai = {
-          -- TODO: Make toggle-able
-          model = "o3-mini",
-          max_tokens = 8192,
-        },
-        bedrock = {
-          -- TODO: Get rate limit increased for 3.7
-          -- model = "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
-          model = "us.anthropic.claude-3-5-sonnet-20241022-v2:0",
-        },
-        deepseek = {
-          __inherited_from = "bedrock",
-          model = "us.deepseek.r1-v1:0",
+        mode = "legacy", -- https://github.com/yetone/avante.nvim/issues/2100
+        providers = {
+          openai = {
+            -- TODO: Make toggle-able
+            model = "o3-mini",
+            extra_request_body = {
+              max_tokens = 8192,
+            },
+          },
+          bedrock = {
+            model = "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+            aws_profile = "bedrock",
+            aws_region = "us-west-2",
+            -- disable_tools = true,
+            extra_request_body = {
+              -- timeout = 10000, -- Timeout in milliseconds, increase this for reasoning models
+              -- max_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
+              -- disabled_tools = {
+              --   "web_search",
+              -- },
+            },
+          },
+          deepseek = {
+            __inherited_from = "bedrock",
+            model = "us.deepseek.r1-v1:0",
+          },
         },
         windows = {
-          -- For use with edgy.nvim
-          -- width = 100,
-          -- height = 100,
-          -- input = {
-          --   height = 100,
-          -- },
           width = 25,
         },
         system_prompt = function()
@@ -92,15 +95,7 @@ return {
       }
 
       if require("util").amazon.is_amazon() then
-        overrides = vim.tbl_deep_extend("force", overrides, {
-          provider = "bedrock",
-          cursor_applying_provider = "bedrock",
-          behaviour = {
-            enable_cursor_planning_mode = true,
-          },
-        })
-        overrides.behaviour.enable_cursor_planning_mode = true
-        require("util").amazon.set_bedrock_keys()
+        vim.schedule(require("util").amazon.set_bedrock_keys)
       end
 
       opts = vim.tbl_deep_extend("force", opts, overrides)
@@ -132,7 +127,13 @@ return {
           "nvim-lua/plenary.nvim",
         },
         config = function()
-          require("mcphub").setup()
+          require("mcphub").setup({
+            extensions = {
+              avante = {
+                make_slash_commands = true, -- make /slash commands from MCP server prompts
+              },
+            },
+          })
         end,
       },
     },

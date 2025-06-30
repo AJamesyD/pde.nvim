@@ -47,12 +47,28 @@ return {
         "<leader>a",
         function() end,
       },
+      {
+        -- Avante sets its own keymaps, but I still want to lazy load it to speed up startup
+        "<leader>aa",
+        "AvanteAsk",
+        desc = "avante: ask",
+      },
+    },
+    cmd = {
+      "AvanteAsk",
+      "AvanteChat",
+      "AvanteChatNew",
+      "AvanteEdit",
+      "AvanteToggle",
     },
     version = false, -- set this if you want to always pull the latest change
     opts = function(_, opts)
       local overrides = {
         provider = "bedrock",
         mode = "legacy", -- https://github.com/yetone/avante.nvim/issues/2100
+        disabled_tools = {
+          "web_search",
+        },
         providers = {
           openai = {
             -- TODO: Make toggle-able
@@ -69,9 +85,6 @@ return {
             extra_request_body = {
               -- timeout = 10000, -- Timeout in milliseconds, increase this for reasoning models
               -- max_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
-              -- disabled_tools = {
-              --   "web_search",
-              -- },
             },
           },
           deepseek = {

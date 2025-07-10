@@ -7,7 +7,7 @@ local g = vim.g
 local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 
 -- Override default LazyVim globals
-g.lazyvim_picker = "fzf"
+g.lazyvim_picker = "snacks"
 g.lazyvim_prettier_needs_config = true
 g.lazyvim_python_lsp = "basedpyright"
 g.trouble_lualine = false

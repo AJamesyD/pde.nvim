@@ -163,8 +163,8 @@ return {
       { "<leader>sc", false },
       { "<leader>sC", false },
       { "<leader>sH", false },
-      { "<leader>sM", false },
       { "<leader>sm", false },
+      { "<leader>sM", false },
       { "<leader>so", false },
       { "<leader>ss", false },
       { "<leader>sS", false },
@@ -197,6 +197,56 @@ return {
       opts = vim.tbl_deep_extend("force", opts, overrides)
       return opts
     end,
+  },
+  {
+    "folke/snacks.nvim",
+    -- stylua: ignore
+    keys = {
+      { "<leader>,", false },
+      { "<leader>/", false },
+      { "<leader>:", false },
+      { "<leader><space>", function() Snacks.picker.resume() end, desc = "Resume" },
+      -- find
+      { "<leader>fc", false },
+      { "<leader>fr", LazyVim.pick("oldfiles"), desc = "Recent (Root Dir)" },
+      { "<leader>fR", function() Snacks.picker.recent({ filter = { cwd = true }}) end, desc = "Recent (cwd)" },
+      -- git
+      { "<leader>gc", false },
+      { "<leader>gs", false },
+      -- search
+      { '<leader>s"', false },
+      { "<leader>sa", false },
+      { "<leader>sc", false },
+      { "<leader>sC", false },
+      { "<leader>sd", function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },
+      { "<leader>sD", function() Snacks.picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
+      { "<leader>sH", false },
+      { "<leader>sm", false },
+      { "<leader>sM", false },
+      { "<leader>so", false },
+      { "<leader>ss", false },
+      { "<leader>sS", false },
+    },
+    ---@type snacks.Config
+    opts = {
+      picker = {
+        layout = {
+          layout = {
+            width = 0.9,
+            height = 0.9,
+          },
+        },
+        layouts = {
+          select = {
+            layout = {
+              relative = "cursor",
+              min_width = 80,
+              max_width = 120,
+            },
+          },
+        },
+      },
+    },
   },
   {
     "nvim-telescope/telescope.nvim",

@@ -1,4 +1,4 @@
-if not require("util").amazon.is_amazon() then
+if not require("util").amazon.is_amazon_machine() then
   return {}
 end
 
@@ -7,7 +7,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = function(_, opts)
-      if require("util").amazon.is_amazon() then
+      if require("util").amazon.is_amazon_machine() then
         local lspconfig = require("lspconfig")
         local configs = require("lspconfig.configs")
         ---@type lspconfig.Config
@@ -79,12 +79,12 @@ return {
     -- TODO: Just build the damn thing in a WS and consume
     url = "angaidan@git.amazon.com:pkg/NinjaHooks",
     branch = "mainline",
-    cond = require("util").amazon.is_amazon(),
+    cond = require("util").amazon.is_amazon_machine(),
     dependencies = {
       {
         url = "angaidan@git.amazon.com:pkg/VimBrazilConfig",
         branch = "mainline",
-        cond = require("util").amazon.is_amazon(),
+        cond = require("util").amazon.is_amazon_machine(),
         lazy = false,
         config = function(plugin)
           vim.filetype.add({
@@ -116,7 +116,7 @@ return {
   {
     url = "angaidan@git.amazon.com:pkg/VimIon",
     branch = "mainline",
-    cond = require("util").amazon.is_amazon(),
+    cond = require("util").amazon.is_amazon_machine(),
     lazy = false,
   },
 }

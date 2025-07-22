@@ -23,7 +23,6 @@ del("n", "<leader>ub")
 
 -- lazygit
 -- TODO: Better git blame / <leader>gb
-del("n", "<leader>gB")
 
 -- highlights under cursor
 del("n", "<leader>ui")

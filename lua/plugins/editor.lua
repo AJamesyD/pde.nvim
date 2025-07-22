@@ -140,6 +140,7 @@ return {
       },
     },
   },
+
   -- Reconfigure LazyVim extras
   {
     "ibhagwan/fzf-lua",

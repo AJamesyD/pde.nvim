@@ -107,7 +107,7 @@ return {
         end,
       }
 
-      if require("util").amazon.is_amazon() then
+      if require("util").amazon.is_amazon_machine() then
         vim.schedule(require("util").amazon.set_bedrock_keys)
       end
 

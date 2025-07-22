@@ -44,7 +44,7 @@ M.amazon_root = function(filename, build_system)
   return vim.fs.dirname(root_file)
 end
 
-M.is_amazon = function()
+M.is_amazon_machine = function()
   return os.getenv("USER") == "angaidan"
 end
 

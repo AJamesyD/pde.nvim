@@ -123,7 +123,7 @@ autocmd({ "BufReadPost" }, {
   end,
 })
 
-if require("util").amazon.is_amazon() then
+if require("util").amazon.is_amazon_machine() then
   autocmd({ "FileType" }, {
     desc = "ion opts",
     pattern = "ion",

@@ -1,29 +1,3 @@
-require("snacks")
-  .toggle({
-    name = "Split/Join",
-    get = function()
-      return true
-    end,
-    set = function(_)
-      require("treesj").toggle()
-    end,
-    notify = false,
-  })
-  :map("<leader>m")
-
-require("snacks")
-  .toggle({
-    name = "Split/Join (Recursive)",
-    get = function()
-      return true
-    end,
-    set = function(_)
-      require("treesj").toggle({ split = { recursive = true } })
-    end,
-    notify = false,
-  })
-  :map("<leader>M")
-
 return {
   -- Reconfigure LazyVim defaults
   {
@@ -41,19 +15,6 @@ return {
   },
 
   -- Other
-  {
-    "Wansmer/treesj",
-    lazy = true,
-    opts = function(_, opts)
-      local overrides = {
-        use_default_keymaps = false,
-        max_join_length = 240,
-      }
-
-      opts = vim.tbl_deep_extend("force", opts, overrides)
-      return opts
-    end,
-  },
   {
     "NMAC427/guess-indent.nvim",
     config = true,

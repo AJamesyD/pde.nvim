@@ -22,4 +22,22 @@ return {
       end
     end,
   },
+
+  -- Other
+  {
+    "Wansmer/treesj",
+    opts = function(_, opts)
+      local tsj_utils = require("treesj.langs.utils")
+      local json = require("treesj.langs.json")
+
+      local overrides = {
+        langs = {
+          jsonl = tsj_utils.merge_preset(json, {}),
+        },
+      }
+
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+      return opts
+    end,
+  },
 }

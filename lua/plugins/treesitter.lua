@@ -1,3 +1,29 @@
+require("snacks")
+  .toggle({
+    name = "Split/Join",
+    get = function()
+      return true
+    end,
+    set = function(_)
+      require("treesj").toggle()
+    end,
+    notify = false,
+  })
+  :map("<leader>m")
+
+require("snacks")
+  .toggle({
+    name = "Split/Join (Recursive)",
+    get = function()
+      return true
+    end,
+    set = function(_)
+      require("treesj").toggle({ split = { recursive = true } })
+    end,
+    notify = false,
+  })
+  :map("<leader>M")
+
 return {
   -- Reconfigure LazyVim defaults
   {
@@ -174,5 +200,19 @@ return {
   {
     "m-demare/hlargs.nvim",
     config = true,
+  },
+  {
+    "Wansmer/treesj",
+    lazy = true,
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    opts = function(_, opts)
+      local overrides = {
+        use_default_keymaps = false,
+        max_join_length = 240,
+      }
+
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+      return opts
+    end,
   },
 }

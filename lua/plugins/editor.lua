@@ -230,6 +230,9 @@ return {
     },
     ---@type snacks.Config
     opts = {
+      gitbrowse = {
+        what = "permalink",
+      },
       picker = {
         layout = {
           layout = {

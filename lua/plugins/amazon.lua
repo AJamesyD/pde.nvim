@@ -2,6 +2,15 @@ if not require("util").amazon.is_amazon_machine() then
   return {}
 end
 
+vim.filetype.add({
+  filename = {
+    ["Config"] = function()
+      vim.b.brazil_package_Config = 1
+      return "brazil-config"
+    end,
+  },
+})
+
 return {
   -- Reconfigure LazyVim defaults
   {
@@ -115,34 +124,23 @@ return {
 
   -- Other
   {
-    -- TODO: Just build the damn thing in a WS and consume
     url = "angaidan@git.amazon.com:pkg/NinjaHooks",
     branch = "mainline",
     cond = require("util").amazon.is_amazon_machine(),
-    dependencies = {
-      {
-        url = "angaidan@git.amazon.com:pkg/VimBrazilConfig",
-        branch = "mainline",
-        cond = require("util").amazon.is_amazon_machine(),
-        lazy = false,
-        config = function(plugin)
-          vim.filetype.add({
-            filename = {
-              ["Config"] = function()
-                vim.b.brazil_package_Config = 1
-                return "brazil-config"
-              end,
-            },
-          })
-
-          local nvim_conf_dir = "~/.config/nvim"
-          vim.opt.rtp:remove(nvim_conf_dir)
-          vim.opt.rtp:prepend(plugin.dir .. "/configuration/vim/amazon/brazil-config")
-          -- NOTE: Make sure ~/.config/nvim is always first in runtime path (for spell, etc)
-          vim.opt.rtp:prepend(nvim_conf_dir)
-        end,
-      },
-    },
+    dependencies = {},
+    lazy = false,
+    config = function(plugin)
+      local nvim_conf_dir = "~/.config/nvim"
+      vim.opt.rtp:remove(nvim_conf_dir)
+      vim.opt.rtp:prepend(plugin.dir .. "/configuration/vim")
+      -- NOTE: Make sure ~/.config/nvim is always first in runtime path (for spell, etc)
+      vim.opt.rtp:prepend(nvim_conf_dir)
+    end,
+  },
+  {
+    url = "angaidan@git.amazon.com:pkg/VimBrazilConfig",
+    branch = "mainline",
+    cond = require("util").amazon.is_amazon_machine(),
     lazy = false,
     config = function(plugin)
       local nvim_conf_dir = "~/.config/nvim"

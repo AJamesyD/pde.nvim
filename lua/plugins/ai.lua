@@ -65,7 +65,7 @@ return {
     opts = function(_, opts)
       local overrides = {
         provider = "bedrock",
-        mode = "legacy", -- https://github.com/yetone/avante.nvim/issues/2100
+        -- mode = "legacy", -- https://github.com/yetone/avante.nvim/issues/2100
         disabled_tools = {
           "web_search",
         },
@@ -78,13 +78,12 @@ return {
             },
           },
           bedrock = {
-            model = "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+            model = "us.anthropic.claude-sonnet-4-20250514-v1:0",
             aws_profile = "bedrock",
             aws_region = "us-west-2",
-            -- disable_tools = true,
+            timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
             extra_request_body = {
-              -- timeout = 10000, -- Timeout in milliseconds, increase this for reasoning models
-              -- max_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
+              max_tokens = 40960, -- Increase this to include reasoning tokens (for reasoning models)
             },
           },
           deepseek = {

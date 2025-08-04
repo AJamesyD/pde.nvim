@@ -46,8 +46,10 @@ return {
     opts = {
       thousands_separator = ",",
       completion = {
-        cmp = { enabled = true },
-        crates = { enabled = true },
+        crates = {
+          enabled = true,
+          min_chars = 2,
+        },
       },
       popup = {
         border = "rounded",

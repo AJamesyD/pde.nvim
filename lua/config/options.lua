@@ -12,8 +12,14 @@ g.lazyvim_prettier_needs_config = true
 g.lazyvim_python_lsp = "basedpyright"
 g.trouble_lualine = false
 g.snacks_animate = false
+
 if g.neovide then
   g.snacks_animate = true
+end
+
+if vim.fn.executable("pbcopy") then
+  -- Fix Zellij over ssh issues when using https://carlosbecker.com/posts/pbcopy-pbpaste-open-ssh/
+  vim.g.clipboard = "pbcopy"
 end
 
 -- Plugin globals

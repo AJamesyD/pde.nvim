@@ -22,6 +22,11 @@ if vim.fn.executable("pbcopy") then
   vim.g.clipboard = "pbcopy"
 end
 
+if require("util").amazon.is_amazon_machine() then
+  -- XXX: For some reason, basedpyright doesn't work with Bemol generated config files
+  g.lazyvim_python_lsp = "pyright"
+end
+
 -- Plugin globals
 if vim.fn.exists("$SSH_CLIENT") ~= 0 then
   -- markdown-preview.nvim requires "LocalForward 8999 [127.0.0.1]:8999"

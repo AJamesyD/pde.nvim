@@ -13,7 +13,21 @@ return {
               disableTaggedHints = false,
               analysis = {
                 autoImportCompletions = true,
-                exclude = { "cdk.out" },
+                autoSearchPaths = true,
+                typeCheckingMode = "basic",
+              },
+            },
+          },
+        },
+        pyright = {
+          settings = {
+            basedpyright = {
+              disableLanguageServices = false,
+              disableOrganizeImports = true,
+              disableTaggedHints = false,
+              analysis = {
+                autoImportCompletions = true,
+                autoSearchPaths = true,
                 typeCheckingMode = "standard",
               },
             },

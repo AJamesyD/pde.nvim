@@ -86,16 +86,6 @@ autocmd({ "BufWinEnter" }, {
   end,
 })
 
-autocmd({ "FileType" }, {
-  desc = "KDL opts",
-  pattern = "kdl",
-  callback = function()
-    vim.opt_local.commentstring = "// %s"
-    vim.opt_local.shiftwidth = 4
-    vim.opt_local.tabstop = 4
-  end,
-})
-
 autocmd({ "BufReadPost" }, {
   desc = "Disable spell if treesitter inactive",
   callback = function(event)
@@ -137,21 +127,6 @@ if require("util").amazon.is_amazon_machine() then
 
       if is_brazil_proj or is_peru_proj then
         bufglobals.autoformat = false
-      end
-    end,
-  })
-
-  autocmd({ "FileType" }, {
-    desc = "sh opts",
-    pattern = "sh",
-    callback = function(event)
-      local bufnr = event.buf
-      local filepath = vim.api.nvim_buf_get_name(bufnr)
-
-      local is_brazil_proj = MyUtils.amazon.brazil_root(filepath)
-
-      if is_brazil_proj then
-        vim.opt_local.expandtab = false
       end
     end,
   })

@@ -65,7 +65,7 @@ return {
     opts = function(_, opts)
       local overrides = {
         provider = "bedrock",
-        -- mode = "legacy", -- https://github.com/yetone/avante.nvim/issues/2100
+        mode = "legacy", -- https://github.com/yetone/avante.nvim/issues/2100
         disabled_tools = {
           "web_search",
         },

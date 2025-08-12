@@ -103,24 +103,6 @@ M.bemol = function()
     end,
   }
   overseer.register_template(bemol_ongoing_task_def)
-
-  ---@type overseer.TemplateDefinition
-  local bemol_task_def = {
-    name = "Bemol LSP Setup",
-    strategy = {
-      "orchestrator",
-      tasks = {
-        "bemol",
-        "bemol watch",
-      },
-    },
-  }
-  local bemol_task = overseer.new_task(bemol_task_def)
-
-  -- HACK: Delay bemol, otherwise it fails
-  vim.defer_fn(function()
-    bemol_task:start()
-  end, 500)
 end
 
 M.set_bedrock_keys = function()

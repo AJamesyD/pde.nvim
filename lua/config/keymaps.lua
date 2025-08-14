@@ -65,6 +65,12 @@ map({ "n", "v" }, "c", '"_c', { desc = "which_key_ignore" })
 map({ "n" }, "x", '"_x', { desc = "which_key_ignore" })
 map({ "x" }, "p", '"_p', { desc = "which_key_ignore" })
 
+-- Misc
+-- https://github.com/shell-pool/shpool/issues/71#issuecomment-2632396805
+map({ "n", "v", "i", "t" }, "<C-a><C-q>", function()
+  vim.cmd("!shpool detach")
+end)
+
 -- toggle options. Overrides of LazyVim default keymaps must go in this file (why?)
 require("snacks")
   .toggle({

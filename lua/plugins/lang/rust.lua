@@ -240,6 +240,12 @@ return {
         },
       }
 
+      local toolbox_ra_path = vim.fn.expand("~") .. "/.toolbox/bin/rust-analyzer"
+      if vim.fn.executable(toolbox_ra_path) then
+        vim.notify("Using toolbox-vended rust-analyzer")
+        overrides.server.default_settings["rust-analyzer"].server = { path = toolbox_ra_path }
+      end
+
       opts = vim.tbl_deep_extend("force", opts, overrides)
       return opts
     end,

@@ -241,7 +241,7 @@ return {
       }
 
       local toolbox_ra_path = vim.fn.expand("~") .. "/.toolbox/bin/rust-analyzer"
-      if vim.fn.executable(toolbox_ra_path) then
+      if vim.fn.executable(toolbox_ra_path) ~= 0 then
         vim.notify("Using toolbox-vended rust-analyzer")
         overrides.server.default_settings["rust-analyzer"].server = { path = toolbox_ra_path }
       end

@@ -55,6 +55,7 @@ return {
   -- Reconfigure LazyVim extras
   {
     "stevearc/overseer.nvim",
+    enabled = false,
     optional = true,
     ---@param opts overseer.Config
     opts = function(_, opts)

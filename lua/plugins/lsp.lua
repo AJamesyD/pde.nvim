@@ -95,4 +95,11 @@ return {
       return opts
     end,
   },
+  {
+    "oribarilan/lensline.nvim",
+    branch = "release/1.x",
+    event = "LspAttach",
+    opts = {},
+    config = true,
+  },
 }

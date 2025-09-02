@@ -70,7 +70,6 @@ M.bemol = function()
 
   local ok, overseer = pcall(require, "overseer")
   if not ok then
-    vim.notify("overseer.nvim not installed. Must run bemol manually.", vim.log.levels.WARN)
     return
   end
 

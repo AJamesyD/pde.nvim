@@ -41,6 +41,7 @@ return {
   {
     "yetone/avante.nvim",
     lazy = true,
+    enabled = false,
     keys = {
       {
         -- Avante sets its own keymaps, but I still want to lazy load it to speed up startup
@@ -127,10 +128,10 @@ return {
       {
         -- Make sure to set this up properly if you have lazy=true
         "MeanderingProgrammer/render-markdown.nvim",
+        ft = { "markdown", "Avante" },
         opts = {
           file_types = { "markdown", "Avante" },
         },
-        ft = { "markdown", "Avante" },
       },
       {
         "ravitemer/mcphub.nvim",
@@ -148,6 +149,84 @@ return {
             },
           })
         end,
+      },
+    },
+  },
+  {
+    "ravitemer/mcphub.nvim",
+    optional = true,
+    lazy = true,
+    build = "npm install -g mcp-hub@latest", -- Installs `mcp-hub` node binary globally
+    cmd = "MCPHub",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    config = function()
+      require("mcphub").setup({
+        extensions = {
+          avante = {
+            make_slash_commands = true, -- make /slash commands from MCP server prompts
+          },
+        },
+      })
+    end,
+  },
+  {
+    "olimorris/codecompanion.nvim",
+    -- lazy = true,
+    build = "npm install -g @zed-industries/claude-code-acp",
+    cmd = {
+      "CodeCompanion",
+      "CodeCompanionChat",
+      "CodeCompanionCmd",
+      "CodeCompanionActions",
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      {
+        "MeanderingProgrammer/render-markdown.nvim",
+        ft = { "markdown", "codecompanion" },
+        opts = {
+          file_types = { "markdown", "codecompanion" },
+        },
+      },
+      "ravitemer/mcphub.nvim",
+    },
+    opts = {
+      adapters = {
+        acp = {
+          claude_code = function()
+            return require("codecompanion.adapters").extend("claude_code", {
+              env = {
+                -- TODO: Fetch programmatically
+                CLAUDE_CODE_OAUTH_TOKEN = "",
+              },
+            })
+          end,
+        },
+      },
+      extensions = {
+        mcphub = {
+          callback = "mcphub.extensions.codecompanion",
+          opts = {
+            make_vars = true,
+            make_slash_commands = true,
+            show_result_in_chat = true,
+          },
+        },
+      },
+      strategies = {
+        -- Change the default chat adapter and model
+        chat = {
+          adapter = "claude_code",
+        },
+        inline = {
+          adapter = "claude_code",
+        },
+        cmd = {
+          adapter = "claude_code",
+        },
       },
     },
   },

@@ -181,6 +181,19 @@ return {
       "CodeCompanionCmd",
       "CodeCompanionActions",
     },
+    keys = {
+      {
+        "<leader>aa",
+        function()
+          require("codecompanion").toggle({
+            window_opts = {
+              width = MyUtils.min_sidebar_size(40, vim.o.columns, 0.3),
+            },
+          })
+        end,
+        "Toggle AI Chat",
+      },
+    },
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
@@ -194,13 +207,24 @@ return {
       "ravitemer/mcphub.nvim",
     },
     opts = {
+      display = {
+        chat = {
+          window = {
+            width = 0.35,
+            opts = {
+              number = false,
+              relativenumber = false,
+            },
+          },
+        },
+      },
       adapters = {
         acp = {
           claude_code = function()
             return require("codecompanion.adapters").extend("claude_code", {
               env = {
                 -- TODO: Fetch programmatically
-                CLAUDE_CODE_OAUTH_TOKEN = "",
+                CLAUDE_CODE_OAUTH_TOKEN = 'cmd: bw get password "Claude API Key"',
               },
             })
           end,

@@ -6,7 +6,7 @@ return {
       { "cathaysia/tree-sitter-asciidoc" },
     },
     opts = function(_, opts)
-      local ts_parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+      local ts_parser_configs = require("nvim-treesitter.parsers")
 
       ---@diagnostic disable-next-line: inject-field
       ts_parser_configs.asciidoc = {

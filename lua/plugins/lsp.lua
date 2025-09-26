@@ -19,16 +19,7 @@ return {
     },
   },
   {
-    "williamboman/mason.nvim",
-    dependencies = {
-      "Zeioth/mason-extra-cmds",
-      cmd = "MasonUpdateAll",
-      build = ":MasonUpdateAll",
-      config = true,
-    },
-    cmd = {
-      "MasonUpdateAll", -- this cmd is provided by mason-extra-cmds
-    },
+    "mason-org/mason.nvim",
     ---@type MasonSettings
     opts = {
       PATH = "append",

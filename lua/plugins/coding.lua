@@ -283,7 +283,7 @@ return {
 
   -- Reconfigure LazyVim extras
   {
-    "echasnovski/mini.surround",
+    "nvim-mini/mini.surround",
     optional = true,
     opts = {
       mappings = {

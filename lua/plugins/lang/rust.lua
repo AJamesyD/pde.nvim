@@ -171,6 +171,7 @@ return {
                   ".git",
                   ".github",
                   ".gitlab",
+                  ".jj",
                   ".venv",
                   "bin",
                   "build",

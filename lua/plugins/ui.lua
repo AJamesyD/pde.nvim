@@ -233,6 +233,10 @@ return {
         -- Reconfigure neo-tree defaults
         if type(config) == "table" and config.ft == "neo-tree" then
           config.pinned = false
+        elseif type(config) == "table" and config.ft == "snacks_terminal" then
+          config.size.width = function()
+            return MyUtils.min_sidebar_size(10, vim.o.columns, 0.30)
+          end
         end
       end
 

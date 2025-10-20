@@ -174,6 +174,7 @@ return {
   {
     "olimorris/codecompanion.nvim",
     -- lazy = true,
+    enabled = false,
     build = "npm install -g @zed-industries/claude-code-acp",
     cmd = {
       "CodeCompanion",
@@ -253,5 +254,15 @@ return {
         },
       },
     },
+  },
+  {
+    "coder/claudecode.nvim",
+    optional = true,
+    opts = {
+      terminal = {
+        split_side = "left", -- flipped to right by current edgy.nvim config
+      },
+    },
+    config = true,
   },
 }

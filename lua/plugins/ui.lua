@@ -428,19 +428,20 @@ return {
       {
         "neovim/nvim-lspconfig",
         opts = function(_, opts)
-          local keys = require("lazyvim.plugins.lsp.keymaps").get()
-          keys[#keys + 1] = {
-            "K",
-            function()
-              local winid = require("ufo").peekFoldedLinesUnderCursor()
-              if not winid then
-                require("noice.lsp").hover()
-              end
-            end,
-            desc = "Hover",
-          }
+          opts.servers["*"].keys = vim.list_extend(opts.servers["*"].keys or {}, {
+            {
+              "K",
+              function()
+                local winid = require("ufo").peekFoldedLinesUnderCursor()
+                if not winid then
+                  require("noice.lsp").hover()
+                end
+              end,
+              desc = "Hover",
+            },
+          })
 
-          local overrides = {
+          local server_star_overrides = {
             capabilities = {
               textDocument = {
                 foldingRange = {
@@ -451,7 +452,7 @@ return {
             },
           }
 
-          opts = vim.tbl_deep_extend("force", opts, overrides)
+          opts.servers["*"] = vim.tbl_deep_extend("force", opts.servers["*"], server_star_overrides)
           return opts
         end,
       },

@@ -85,27 +85,6 @@ return {
           },
         },
       },
-      setup = {
-        pylsp = function()
-          ---@param client vim.lsp.Client
-          LazyVim.lsp.on_attach(function(client, _)
-            if client.name == "pylsp" then
-              -- only enable code actions
-              client.server_capabilities.codeActionProvider = true
-              client.server_capabilities.definitionProvider = false
-              client.server_capabilities.documentFormattingProvider = false
-              client.server_capabilities.documentHighlightProvider = false
-              client.server_capabilities.documentRangeFormattingProvider = false
-              client.server_capabilities.documentSymbolProvider = false
-              client.server_capabilities.foldingRangeProvider = false
-              client.server_capabilities.hoverProvider = false
-              client.server_capabilities.referencesProvider = false
-              client.server_capabilities.renameProvider = false
-              client.server_capabilities.renameProvider = false
-            end
-          end)
-        end,
-      },
     },
   },
 }

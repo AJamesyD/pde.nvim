@@ -268,7 +268,6 @@ return {
         { path = "mason.nvim", words = { "mason" } },
         { path = "nvim-cmp-lsp-rs", words = { "rust" } },
         { path = "nvim-treesitter", words = { "TS", "treesitter" } },
-        { path = "overseer.nvim", words = { "overseer" } },
         { path = "rustaceanvim", words = { "rust" } },
         { path = "snacks.nvim", words = { "snacks" } },
         { path = "telescope.nvim", words = { "telescope" } },

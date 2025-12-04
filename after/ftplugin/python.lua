@@ -2,7 +2,7 @@ local bufnr = vim.api.nvim_get_current_buf()
 vim.keymap.set("n", "<leader>cD", function()
   local client = vim.lsp.get_clients({
     bufnr = bufnr,
-    name = "basedpyright",
+    name = "pyright",
   })[1]
   local settings = client.config.settings or {}
 

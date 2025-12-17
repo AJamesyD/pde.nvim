@@ -265,6 +265,7 @@ return {
         { path = "conform.nvim", words = { "conform" } },
         { path = "edgy.nvim", words = { "edgy" } },
         { path = "grapple.nvim", words = { "grapple" } },
+        { path = "leetcode.nvim", words = { "leetcode" } },
         { path = "mason.nvim", words = { "mason" } },
         { path = "nvim-cmp-lsp-rs", words = { "rust" } },
         { path = "nvim-treesitter", words = { "TS", "treesitter" } },

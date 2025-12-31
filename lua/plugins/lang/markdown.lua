@@ -86,5 +86,6 @@ return {
         img_folder = "Files/Images",
       },
     },
+    config = true,
   },
 }

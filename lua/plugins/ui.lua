@@ -222,7 +222,7 @@ return {
           },
         },
         animate = {
-          enabled = vim.g.neovide or false,
+          enabled = vim.g.snacks_animate,
         },
         exit_when_last = true,
         close_when_all_hidden = true,
@@ -563,6 +563,9 @@ return {
     "nvim-zh/colorful-winsep.nvim",
     event = { "WinLeave" },
     opts = {
+      animate = {
+        enabled = vim.g.snacks_animate,
+      },
       -- highlight for Window separator
       hi = {
         bg = "#16161E",

@@ -6,16 +6,23 @@ return {
       { "AJamesyD/tree-sitter-jsonl" },
     },
     opts = function(_, opts)
-      local ts_parser_configs = require("nvim-treesitter.parsers")
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "TSUpdate",
+        callback = function()
+          local ts_parser_configs = require("nvim-treesitter.parsers")
 
-      ---@diagnostic disable-next-line: inject-field
-      ts_parser_configs.jsonl = {
-        install_info = {
-          url = "https://github.com/AJamesyD/tree-sitter-jsonl",
-          files = { "src/parser.c" },
-          branch = "mainline",
-        },
-      }
+          ---@diagnostic disable-next-line: inject-field
+          ts_parser_configs.jsonl = {
+            tier = 1, -- "stable"
+            install_info = {
+              url = "https://github.com/AJamesyD/tree-sitter-jsonl",
+              revision = "ca9788e608163af027f750698f4fe685b46774b8",
+              files = { "src/parser.c" },
+              branch = "mainline",
+            },
+          }
+        end,
+      })
 
       if type(opts.ensure_installed) == "table" then
         vim.list_extend(opts.ensure_installed, { "jsonl" })

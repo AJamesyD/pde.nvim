@@ -80,7 +80,7 @@
   "todo-comments.nvim": { "branch": "main", "commit": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668" },
   "tokyonight.nvim": { "branch": "main", "commit": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd" },
   "tree-sitter-asciidoc": { "branch": "master", "commit": "276ae6b766830e9d9de9106713d94a6913279bc2" },
-  "tree-sitter-jsonl": { "branch": "mainline", "commit": "ca9788e608163af027f750698f4fe685b46774b8" },
+  "tree-sitter-jsonl": { "branch": "mainline", "commit": "c9f660e68c16c0e4d8f4423b02a5b56339f38678" },
   "treesj": { "branch": "main", "commit": "186084dee5e9c8eec40f6e39481c723dd567cb05" },
   "trouble.nvim": { "branch": "main", "commit": "bd67efe408d4816e25e8491cc5ad4088e708a69a" },
   "ts-comments.nvim": { "branch": "main", "commit": "123a9fb12e7229342f807ec9e6de478b1102b041" },

@@ -40,13 +40,25 @@ return {
             "avante_mentions",
             "avante_files",
           },
-          default = { "lsp", "path", "snippets", "buffer" },
+          default = function(ctx)
+            local success, node = pcall(vim.treesitter.get_node)
+            if success and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
+              return { "buffer" }
+            else
+              return { "lsp", "path", "snippets" }
+            end
+          end,
         },
 
         keymap = {
           preset = "enter",
           ["<S-Tab>"] = { "select_prev", "fallback" },
           ["<Tab>"] = { "select_next", "fallback" },
+          ["<C-space>"] = {
+            function(cmp)
+              cmp.show({ providers = { "lsp" } })
+            end,
+          },
         },
       }
 

@@ -79,6 +79,11 @@ return {
         false,
       },
       {
+        "<C-space>",
+        mode = { "n", "x", "o" },
+        false,
+      },
+      {
         "S",
         mode = { "n", "x", "o" },
         function()

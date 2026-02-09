@@ -39,12 +39,23 @@ return {
         },
       })
 
+      -- XXX: For some reason, Treesitter causes Neovim to hang when opening these filetypes
+      local disabled_fts = {
+        "text",
+        "brazil-config",
+      }
+
       ---@type TSConfig
       ---@diagnostic disable-next-line: missing-fields
       local overrides = {
         auto_install = true,
         highlight = {
           enable = true,
+          disable = disabled_fts,
+        },
+        indent = {
+          enable = true,
+          disable = disabled_fts,
         },
         textobjects = {
           select = {

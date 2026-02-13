@@ -61,6 +61,7 @@ return {
   },
   {
     "folke/flash.nvim",
+    enabled = false,
     opts = {
       search = {
         multi_window = false,

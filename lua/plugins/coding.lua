@@ -4,7 +4,6 @@ return {
     "saghen/blink.cmp",
     optional = true,
     dependencies = {
-      { "jmbuhr/otter.nvim" },
       {
         "saghen/blink.compat",
         optional = false,
@@ -35,7 +34,6 @@ return {
           -- adding any nvim-cmp sources here will enable them
           -- with blink.compat
           compat = {
-            "otter",
             "avante_commands",
             "avante_mentions",
             "avante_files",
@@ -74,7 +72,6 @@ return {
       { "f3fora/cmp-spell" },
       { "ryo33/nvim-cmp-rust" },
       { "zjp-CN/nvim-cmp-lsp-rs" },
-      { "jmbuhr/otter.nvim" },
       { "hrsh7th/cmp-path", enabled = false },
     },
     ---@param opts cmp.ConfigSchema
@@ -143,7 +140,6 @@ return {
         -- group_index = 1
         { name = "lazydev" },
         { name = "nvim_lsp" },
-        { name = "otter" },
         { name = "async_path" },
         {
           name = "spell",
@@ -235,7 +231,6 @@ return {
             item.dup = ({
               crates = 1,
               nvim_lsp = 1,
-              otter = 1,
               snippets = 1,
             })[entry.source.name] or nil
             return item

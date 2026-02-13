@@ -13,10 +13,4 @@ return {
       },
     },
   },
-
-  -- Other
-  {
-    "NMAC427/guess-indent.nvim",
-    config = true,
-  },
 }

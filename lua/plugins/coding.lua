@@ -115,9 +115,10 @@ return {
   -- Other
   {
     "willothy/flatten.nvim",
-    config = true,
-    -- TODO: find a way to load when launching LazyGit
+    -- TODO: find a way to only load when launching LazyGit
+    enabled = false,
     lazy = false,
+    config = true,
     priority = 1001,
   },
 }

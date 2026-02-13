@@ -2,6 +2,19 @@ vim.diagnostic.config({
   float = { border = "rounded" },
 })
 
+require("snacks")
+  .toggle({
+    name = "Lensline",
+    get = function()
+      return require("lensline").is_enabled()
+    end,
+    set = function(_)
+      require("lensline").toggle_view()
+    end,
+    notify = true,
+  })
+  :map("<leader>ul")
+
 return {
   -- Reconfigure LazyVim defaults
   {
@@ -33,7 +46,16 @@ return {
   -- Other
   {
     "oribarilan/lensline.nvim",
-    branch = "release/1.x",
+    cmd = {
+      "LenslineEnable",
+      "LenslineDisable",
+      "LenslineToggleEngine",
+      "LenslineToggle",
+      "LenslineShow",
+      "LenslineHide",
+      "LenslineToggleView",
+    },
+    branch = "release/2.x",
     event = "LspAttach",
     opts = {},
     config = true,

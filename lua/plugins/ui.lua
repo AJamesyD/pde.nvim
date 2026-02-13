@@ -258,10 +258,6 @@ return {
 
   -- Other
   {
-    "tiagovla/scope.nvim",
-    config = true,
-  },
-  {
     "m4xshen/smartcolumn.nvim",
     event = "LazyFile",
     opts = {

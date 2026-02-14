@@ -1,3 +1,22 @@
+---@param item snacks.picker.finder.Item
+---@param filter snacks.picker.Filter
+---@return boolean
+local function snacks_file_filter(item, filter)
+  -- Hide dotfiles except those in allowed_dotfiles
+  local allowed_dotfiles = {
+    ".cargo",
+    ".config",
+    ".claude",
+    ".kiro",
+  }
+  for part in (item.file or ""):gmatch("[^/]+") do
+    if part:sub(1, 1) == "." and not vim.tbl_contains(allowed_dotfiles, part) then
+      return false
+    end
+  end
+  return true
+end
+
 return {
   -- Reconfigure LazyVim defaults
   {
@@ -240,6 +259,16 @@ return {
         what = "permalink",
       },
       picker = {
+        sources = {
+          files = {
+            hidden = true,
+            filter = { filter = snacks_file_filter },
+          },
+          grep = {
+            hidden = true,
+            filter = { filter = snacks_file_filter },
+          },
+        },
         layout = {
           layout = {
             width = 0.9,

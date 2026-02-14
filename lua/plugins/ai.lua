@@ -114,6 +114,7 @@ return {
               },
             })
           end,
+          kiro = "kiro",
         },
       },
       interactions = {

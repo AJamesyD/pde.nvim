@@ -1,3 +1,6 @@
+-- Ignore builtin colorschemes
+vim.opt.wildignore:append(vim.env.VIMRUNTIME .. "/colors/*")
+
 return {
   -- Reconfigure LazyVim defaults
   {

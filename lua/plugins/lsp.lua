@@ -6,12 +6,12 @@ require("snacks")
   .toggle({
     name = "Lensline",
     get = function()
-      return require("lensline").is_enabled()
+      return require("lensline").is_visible()
     end,
     set = function(_)
       require("lensline").toggle_view()
     end,
-    notify = true,
+    notify = false,
   })
   :map("<leader>ul")
 
@@ -56,7 +56,7 @@ return {
       "LenslineToggleView",
     },
     branch = "release/2.x",
-    event = "LspAttach",
+    event = { "LspAttach", "BufWritePost" },
     opts = {},
     config = true,
   },

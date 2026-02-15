@@ -106,7 +106,9 @@ return {
                 clientInfo = { name = "CodeCompanion.nvim", version = "1.0.0" },
               },
               handlers = {
-                setup = function() return true end,
+                setup = function()
+                  return true
+                end,
                 form_messages = function(self, messages, capabilities)
                   return helpers.form_messages(self, messages, capabilities)
                 end,
@@ -168,120 +170,6 @@ return {
     },
   },
   {
-    "yetone/avante.nvim",
-    lazy = true,
-    enabled = false,
-    keys = {
-      {
-        -- Avante sets its own keymaps, but I still want to lazy load it to speed up startup
-        "<leader>a",
-        function() end,
-      },
-      {
-        -- Avante sets its own keymaps, but I still want to lazy load it to speed up startup
-        "<leader>aa",
-        "AvanteAsk",
-        desc = "avante: ask",
-      },
-    },
-    cmd = {
-      "AvanteAsk",
-      "AvanteChat",
-      "AvanteChatNew",
-      "AvanteEdit",
-      "AvanteToggle",
-    },
-    version = false, -- set this if you want to always pull the latest change
-    opts = function(_, opts)
-      local overrides = {
-        provider = "bedrock",
-        mode = "legacy", -- https://github.com/yetone/avante.nvim/issues/2100
-        disabled_tools = {
-          "web_search",
-        },
-        providers = {
-          openai = {
-            -- TODO: Make toggle-able
-            model = "o3-mini",
-            extra_request_body = {
-              max_tokens = 8192,
-            },
-          },
-          bedrock = {
-            model = "us.anthropic.claude-sonnet-4-20250514-v1:0",
-            aws_profile = "bedrock",
-            aws_region = "us-west-2",
-            timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
-            extra_request_body = {
-              max_tokens = 40960, -- Increase this to include reasoning tokens (for reasoning models)
-            },
-          },
-          deepseek = {
-            __inherited_from = "bedrock",
-            model = "us.deepseek.r1-v1:0",
-          },
-        },
-        windows = {
-          width = 25,
-        },
-        system_prompt = function()
-          local hub = require("mcphub").get_hub_instance()
-          return hub and hub:get_active_servers_prompt() or ""
-        end,
-        -- Using function prevents requiring mcphub before it's loaded
-        custom_tools = function()
-          return {
-            require("mcphub.extensions.avante").mcp_tool(),
-          }
-        end,
-      }
-
-      if require("util").amazon.is_amazon_machine() then
-        vim.schedule(require("util").amazon.set_bedrock_keys)
-      end
-
-      opts = vim.tbl_deep_extend("force", opts, overrides)
-      return opts
-    end,
-    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-    build = "make",
-    -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "stevearc/dressing.nvim",
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      --- The below dependencies are optional,
-      -- "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-      -- "zbirenbaum/copilot.lua", -- for providers='copilot'
-      {
-        -- Make sure to set this up properly if you have lazy=true
-        "MeanderingProgrammer/render-markdown.nvim",
-        ft = { "markdown", "Avante" },
-        opts = {
-          file_types = { "markdown", "Avante" },
-        },
-      },
-      {
-        "ravitemer/mcphub.nvim",
-        build = "npm install -g mcp-hub@latest", -- Installs `mcp-hub` node binary globally
-        cmd = "MCPHub",
-        dependencies = {
-          "nvim-lua/plenary.nvim",
-        },
-        config = function()
-          require("mcphub").setup({
-            extensions = {
-              avante = {
-                make_slash_commands = true, -- make /slash commands from MCP server prompts
-              },
-            },
-          })
-        end,
-      },
-    },
-  },
-  {
     "ravitemer/mcphub.nvim",
     optional = true,
     lazy = true,
@@ -289,18 +177,6 @@ return {
     cmd = "MCPHub",
     dependencies = {
       "nvim-lua/plenary.nvim",
-    },
-    config = function()
-      require("mcphub").setup()
-    end,
-  },
-  {
-    "coder/claudecode.nvim",
-    optional = true,
-    opts = {
-      terminal = {
-        split_side = "left", -- flipped to right by current edgy.nvim config
-      },
     },
     config = true,
   },

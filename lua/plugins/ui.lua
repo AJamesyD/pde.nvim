@@ -402,8 +402,6 @@ return {
   },
   {
     "tzachar/highlight-undo.nvim",
-    -- TODO: Remove either when I move to nvim 0.11 or when plugin fixes this
-    commit = "c87a6ec1ded241ef223269077cbd5f97a6f0d5bf",
     keys = {
       {
         "u",

@@ -415,6 +415,145 @@ return {
     opts = {},
   },
   {
+    "kevinhwang91/nvim-ufo",
+    event = "LazyFile",
+    dependencies = {
+      "kevinhwang91/promise-async",
+      {
+        "neovim/nvim-lspconfig",
+        opts = function(_, opts)
+          opts.servers["*"].keys = vim.list_extend(opts.servers["*"].keys or {}, {
+            {
+              "K",
+              function()
+                local winid = require("ufo").peekFoldedLinesUnderCursor()
+                if not winid then
+                  require("noice.lsp").hover()
+                end
+              end,
+              desc = "Hover",
+            },
+          })
+
+          local server_star_overrides = {
+            capabilities = {
+              textDocument = {
+                foldingRange = {
+                  dynamicRegistration = false,
+                  lineFoldingOnly = true,
+                },
+              },
+            },
+          }
+
+          opts.servers["*"] = vim.tbl_deep_extend("force", opts.servers["*"], server_star_overrides)
+          return opts
+        end,
+      },
+    },
+    keys = {
+      {
+        "zR",
+        function()
+          require("ufo").openAllFolds()
+        end,
+      },
+      {
+        "zM",
+        function()
+          require("ufo").closeAllFolds()
+        end,
+      },
+      {
+        "zr",
+        function()
+          require("ufo").openFoldsExceptKinds()
+        end,
+      },
+    },
+    opts = function(_, opts)
+      local handler = function(virtText, lnum, endLnum, width, truncate)
+        local newVirtText = {}
+        local suffix = (" 󰁂 %d "):format(endLnum - lnum)
+        local sufWidth = vim.fn.strdisplaywidth(suffix)
+        local targetWidth = width - sufWidth
+        local curWidth = 0
+        for _, chunk in ipairs(virtText) do
+          local chunkText = chunk[1]
+          local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+          if targetWidth > curWidth + chunkWidth then
+            table.insert(newVirtText, chunk)
+          else
+            chunkText = truncate(chunkText, targetWidth - curWidth)
+            local hlGroup = chunk[2]
+            table.insert(newVirtText, { chunkText, hlGroup })
+            chunkWidth = vim.fn.strdisplaywidth(chunkText)
+            -- str width returned from truncate() may less than 2nd argument, need padding
+            if curWidth + chunkWidth < targetWidth then
+              suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
+            end
+            break
+          end
+          curWidth = curWidth + chunkWidth
+        end
+        table.insert(newVirtText, { suffix, "MoreMsg" })
+        return newVirtText
+      end
+
+      local overrides = {
+        provider_selector = function(_, filetype, buftype)
+          local function handleFallbackException(bufnr, err, providerName)
+            if type(err) == "string" and err:match("UfoFallbackException") then
+              return require("ufo").getFolds(bufnr, providerName)
+            else
+              return require("promise").reject(err)
+            end
+          end
+
+          return (filetype == "" or buftype == "nofile") and "indent" -- only use indent until a file is opened
+            or function(bufnr)
+              return require("ufo")
+                .getFolds(bufnr, "lsp")
+                :catch(function(err)
+                  return handleFallbackException(bufnr, err, "treesitter")
+                end)
+                :catch(function(err)
+                  return handleFallbackException(bufnr, err, "indent")
+                end)
+            end
+        end,
+        close_fold_kinds_for_ft = {
+          default = { "imports" },
+        },
+        fold_virt_text_handler = handler,
+        preview = {
+          mappings = {
+            scrollU = "<C-u>",
+            scrollD = "<C-d>",
+            jumpTop = "[",
+            jumpBot = "]",
+          },
+        },
+      }
+
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+      return opts
+    end,
+    init = function()
+      -- Required
+      vim.opt.foldenable = true
+      vim.opt.foldcolumn = "auto:1" -- '0' is not bad
+      vim.opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+      vim.opt.foldlevelstart = 99
+
+      -- Optional
+      vim.opt.foldminlines = 20
+    end,
+    config = function(_, opts)
+      require("ufo").setup(opts)
+    end,
+  },
+  {
     "nvim-zh/colorful-winsep.nvim",
     event = { "WinLeave" },
     opts = {

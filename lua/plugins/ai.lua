@@ -155,6 +155,7 @@ return {
             add_mcp_prefix_to_tool_names = false, -- Add mcp__ prefix (e.g `@mcp__github`, `@mcp__neovim__list_issues`)
             show_result_in_chat = true, -- Show tool results directly in chat buffer
             format_tool = nil, -- function(tool_name:string, tool: CodeCompanion.Agent.Tool) : string Function to format tool names to show in the chat buffer
+            format_tool = nil, -- function(tool_name:string, tool: CodeCompanion.Agent.Tool) : string Function to format tool names to show in the chat buffer
             -- MCP Resources
             make_vars = true, -- Convert MCP resources to #variables for prompts
             -- MCP Prompts

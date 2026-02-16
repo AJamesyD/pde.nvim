@@ -7,7 +7,7 @@ return {
       "MunifTanjim/nui.nvim",
     },
     opts = {
-      lang = "rust",
+      lang = "python",
       injector = {
         ["rust"] = {
           before = { "#[allow(dead_code)]", "fn main(){}", "#[allow(dead_code)]", "struct Solution;" },

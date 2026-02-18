@@ -1,25 +1,123 @@
-;; extends
+; Full replacement of upstream — `;; extends` is intentionally omitted because
+; the upstream `[(line_comment) (block_comment)] @injection.content` injects
+; doc comments as "comment", conflicting with our markdown injection below.
+
+; === Doc comments → markdown ===
+; Inject the `doc_comment` child (content after `///` or `//!`) as markdown.
+; `injection.combined` merges all matches into one document so the markdown
+; parser can see multi-line structures like fenced code blocks.
+(line_comment
+  (doc_comment) @injection.content
+  (#set! injection.language "markdown")
+  (#set! injection.combined))
+
+; === Non-doc comments → comment (preserves TODO/FIXME highlighting) ===
+((line_comment) @injection.content
+  (#not-match? @injection.content "^//[/!]")
+  (#set! injection.language "comment"))
 
 ((block_comment) @injection.content
   (#set! injection.language "comment"))
 
-((line_comment) @injection.content
-  (#set! injection.language "comment"))
-
-((block_comment) @injection.language
-  . ; this is to make sure only adjacent comments are accounted for the injections
-  [
-    (raw_string_literal
-      (string_content) @injection.content)
+; === Upstream: macro invocations ===
+(macro_invocation
+  macro: [
+    (scoped_identifier
+      name: (_) @_macro_name)
+    (identifier) @_macro_name
   ]
-  (#gsub! @injection.language "/%*%s*([%w%p]+)%s*%*/" "%1")
+  (token_tree) @injection.content
+  (#not-any-of? @_macro_name "slint" "html" "json" "xml")
+  (#set! injection.language "rust")
+  (#set! injection.include-children))
+
+(macro_invocation
+  macro: [
+    (scoped_identifier
+      name: (_) @injection.language)
+    (identifier) @injection.language
+  ]
+  (token_tree) @injection.content
+  (#any-of? @injection.language "slint" "html" "json" "xml")
+  (#offset! @injection.content 0 1 0 -1)
+  (#set! injection.include-children))
+
+; === Upstream: macro definitions ===
+(macro_definition
+  (macro_rule
+    left: (token_tree_pattern) @injection.content
+    (#set! injection.language "rust")))
+
+(macro_definition
+  (macro_rule
+    right: (token_tree) @injection.content
+    (#set! injection.language "rust")))
+
+; === Upstream: Regex ===
+(call_expression
+  function: (scoped_identifier
+    path: (identifier) @_regex
+    (#any-of? @_regex "Regex" "RegexBuilder")
+    name: (identifier) @_new
+    (#eq? @_new "new"))
+  arguments: (arguments
+    (raw_string_literal
+      (string_content) @injection.content))
+  (#set! injection.language "regex"))
+
+(call_expression
+  function: (scoped_identifier
+    path: (scoped_identifier
+      (identifier) @_regex
+      (#any-of? @_regex "Regex" "RegexBuilder") .)
+    name: (identifier) @_new
+    (#eq? @_new "new"))
+  arguments: (arguments
+    (raw_string_literal
+      (string_content) @injection.content))
+  (#set! injection.language "regex"))
+
+(call_expression
+  function: (scoped_identifier
+    path: (identifier) @_regex
+    (#any-of? @_regex "RegexSet" "RegexSetBuilder")
+    name: (identifier) @_new
+    (#eq? @_new "new"))
+  arguments: (arguments
+    (array_expression
+      (raw_string_literal
+        (string_content) @injection.content)))
+  (#set! injection.language "regex"))
+
+(call_expression
+  function: (scoped_identifier
+    path: (scoped_identifier
+      (identifier) @_regex
+      (#any-of? @_regex "RegexSet" "RegexSetBuilder") .)
+    name: (identifier) @_new
+    (#eq? @_new "new"))
+  arguments: (arguments
+    (array_expression
+      (raw_string_literal
+        (string_content) @injection.content)))
+  (#set! injection.language "regex"))
+
+; === Upstream: re2c ===
+((block_comment) @injection.content
+  (#match? @injection.content "/\\*!([a-zA-Z]+:)?re2c")
+  (#set! injection.language "re2c"))
+
+; === Custom: language-tagged raw string literals ===
+((line_comment) @injection.language
+  .
+  [(raw_string_literal
+    (string_content) @injection.content)]
+  (#gsub! @injection.language "//%s*([%w%p]+)%s*" "%1")
   (#set! injection.combined))
 
-((line_comment) @injection.language
-  . ; this is to make sure only adjacent comments are accounted for the injections
-  [
-    (raw_string_literal
-      (string_content) @injection.content)
-  ]
-  (#gsub! @injection.language "//%s*([%w%p]+)%s*" "%1")
+((block_comment) @injection.language
+  .
+  [(raw_string_literal
+    (string_content) @injection.content)]
+  (#gsub! @injection.language "/%*%s*([%w%p]+)%s*%*/" "%1")
   (#set! injection.combined))

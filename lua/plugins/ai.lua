@@ -1,3 +1,26 @@
+require("snacks")
+  .toggle({
+    name = "CodeCompanion",
+    get = function()
+      for _, win in ipairs(vim.api.nvim_list_wins()) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        if vim.bo[buf].filetype == "codecompanion" then
+          return true
+        end
+      end
+      return false
+    end,
+    set = function(_)
+      require("codecompanion").toggle({
+        window_opts = {
+          width = MyUtils.min_sidebar_size(35, vim.o.columns, 0.3),
+        },
+      })
+    end,
+    notify = false,
+  })
+  :map("<leader>aa")
+
 return {
   -- Reconfigure LazyVim extras
   -- TODO: Re-enable when https://github.com/folke/edgy.nvim/issues/113 resolved
@@ -56,19 +79,6 @@ return {
       "CodeCompanionChat",
       "CodeCompanionCmd",
       "CodeCompanionActions",
-    },
-    keys = {
-      {
-        "<leader>aa",
-        function()
-          require("codecompanion").toggle({
-            window_opts = {
-              width = MyUtils.min_sidebar_size(40, vim.o.columns, 0.3),
-            },
-          })
-        end,
-        "Toggle AI Chat",
-      },
     },
     opts = {
       display = {
@@ -164,9 +174,9 @@ return {
         },
       },
       strategies = {
-        chat = { adapter = "symposium" },
-        inline = { adapter = "symposium" },
-        cmd = { adapter = "symposium" },
+        chat = { adapter = "kiro" },
+        inline = { adapter = "kiro" },
+        cmd = { adapter = "kiro" },
       },
     },
   },

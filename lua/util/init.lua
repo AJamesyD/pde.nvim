@@ -1,22 +1,4 @@
 -- Many of the following utils are ~~plagiarized from~~ inspired by https://github.com/nvim-telescope/telescope.nvim
-local Process = require("lazy.manage.process")
-
----@param separator string
----@return table
-function string:split(separator)
-  local outResults = {}
-  local theStart = 1
-  local theSplitStart, theSplitEnd = string.find(self, separator, theStart)
-
-  while theSplitStart do
-    table.insert(outResults, string.sub(self, theStart, theSplitStart - 1))
-    theStart = theSplitEnd + 1
-    theSplitStart, theSplitEnd = string.find(self, separator, theStart)
-  end
-
-  table.insert(outResults, string.sub(self, theStart))
-  return outResults
-end
 
 local M = {}
 ---@class reload_lsp_config_opts
@@ -106,27 +88,20 @@ function M.is_relevant_file(full_file_name, bufnr)
   -- E.g. Cargo.toml in a multi-package workspace
   vim.list_extend(find_command, { "--full-path", "--base-directory", root, full_file_name })
 
-  local out, exit_code = Process.exec(find_command)
-  if exit_code ~= 0 then
-    vim.notify("fd command failed. Output: " .. table.concat(out, "\n"), vim.log.levels.ERROR)
+  local result = vim.system(find_command, { text = true }):wait()
+  if result.code ~= 0 then
+    vim.notify("fd command failed: " .. (result.stderr or ""), vim.log.levels.ERROR)
     vim.b[bufnr].is_relevant_file = true
     return true
   end
 
-  if #out <= 1 then
+  local found = vim.trim(result.stdout or "")
+  if found == "" then
     vim.b[bufnr].is_relevant_file = false
     return false
-  elseif #out == 2 then
-    -- Includes newline
-    vim.b[bufnr].is_relevant_file = true
-    return true
-  elseif #out > 2 then
-    -- This can happen when opening a dir in NetRW
-    vim.b[bufnr].is_relevant_file = true
-    return true
   end
-  vim.b[bufnr].is_relevant_file = false
-  return false
+  vim.b[bufnr].is_relevant_file = true
+  return true
 end
 
 ---@param mode string|string[]

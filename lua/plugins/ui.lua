@@ -33,9 +33,25 @@ return {
         },
       }
 
-      -- WARN: Scary magic number usage
-      local pretty_path_element = table.remove(opts.sections.lualine_c, 4)
-      local filetype_icon_element = table.remove(opts.sections.lualine_c, 3)
+      local function find_and_remove(section, predicate)
+        for i, component in ipairs(section) do
+          if predicate(component) then
+            return table.remove(section, i)
+          end
+        end
+      end
+
+      -- Remove components we want to relocate or discard
+      find_and_remove(opts.sections.lualine_c, function(c)
+        return type(c) == "table" and c[1] and type(c[1]) == "table"
+      end) -- pretty_path (table wrapping a LazyVim.lualine function result)
+      find_and_remove(opts.sections.lualine_c, function(c)
+        return type(c) == "table" and c.icon_only == true
+      end) -- filetype icon
+      local diagnostics_element = find_and_remove(opts.sections.lualine_c, function(c)
+        return type(c) == "table" and c[1] == "diagnostics"
+      end)
+
       local lualine_c_overrides = {
         {
           "buffers",
@@ -59,9 +75,10 @@ return {
         },
       }
       opts.sections.lualine_c = vim.list_extend(opts.sections.lualine_c or {}, lualine_c_overrides)
-      local diagnostics_element = table.remove(opts.sections.lualine_c, 2)
 
-      table.remove(opts.sections.lualine_x, 5) -- Remove diff
+      find_and_remove(opts.sections.lualine_x, function(c)
+        return type(c) == "table" and c[1] == "diff"
+      end)
       table.insert(opts.sections.lualine_x, diagnostics_element)
 
       opts.sections.lualine_y = {
@@ -229,8 +246,21 @@ return {
       }
       opts = vim.tbl_deep_extend("force", opts, overrides)
 
+      -- Move specific items between left/right rather than swapping everything.
+      -- This avoids breaking if other plugins add items to opts.left/right after us.
+      local function move_items(from, to, predicate)
+        local i = 1
+        while i <= #from do
+          if predicate(from[i]) then
+            table.insert(to, table.remove(from, i))
+          else
+            i = i + 1
+          end
+        end
+      end
+
+      -- Move neo-tree and terminals from left → right
       for _, config in ipairs(opts.left) do
-        -- Reconfigure neo-tree defaults
         if type(config) == "table" and config.ft == "neo-tree" then
           config.pinned = false
         elseif type(config) == "table" and config.ft == "snacks_terminal" then
@@ -239,19 +269,22 @@ return {
           end
         end
       end
+      move_items(opts.left, opts.right, function(c)
+        return type(c) == "table" and (c.ft == "neo-tree" or c.ft == "snacks_terminal" or c.ft == "DiffviewFiles")
+      end)
 
-      local temp_right = opts.right
-      for _, config in ipairs(temp_right) do
-        -- Reconfigure grug-far defaults
+      -- Move grug-far from right → left
+      for _, config in ipairs(opts.right) do
         if type(config) == "table" and config.ft == "grug-far" then
           config.size.width = function()
             return MyUtils.min_sidebar_size(10, vim.o.columns, 0.25)
           end
         end
       end
+      move_items(opts.right, opts.left, function(c)
+        return type(c) == "table" and c.ft == "grug-far"
+      end)
 
-      opts.right = opts.left
-      opts.left = temp_right
       return opts
     end,
   },

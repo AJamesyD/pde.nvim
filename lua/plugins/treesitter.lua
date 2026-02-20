@@ -1,28 +1,6 @@
-require("snacks")
-  .toggle({
-    name = "Split/Join",
-    get = function()
-      return true
-    end,
-    set = function(_)
-      require("treesj").toggle()
-    end,
-    notify = false,
-  })
-  :map("<leader>m")
-
-require("snacks")
-  .toggle({
-    name = "Split/Join (Recursive)",
-    get = function()
-      return true
-    end,
-    set = function(_)
-      require("treesj").toggle({ split = { recursive = true } })
-    end,
-    notify = false,
-  })
-  :map("<leader>M")
+local map = vim.keymap.set
+map("n", "<leader>m", function() require("treesj").toggle() end, { desc = "Split/Join" })
+map("n", "<leader>M", function() require("treesj").toggle({ split = { recursive = true } }) end, { desc = "Split/Join (Recursive)" })
 
 return {
   -- Reconfigure LazyVim defaults
@@ -210,6 +188,7 @@ return {
   },
   {
     "m-demare/hlargs.nvim",
+    event = "LazyFile",
     config = true,
   },
   {

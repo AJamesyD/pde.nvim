@@ -94,9 +94,11 @@ return {
             client.capabilities = vim.tbl_deep_extend("force", client.capabilities or {}, capability_overrides)
             local map = MyUtils.map
 
-            map("n", "<leader>dr", function()
-              vim.cmd.RustLsp("debuggables")
-            end, { desc = "Rust Debuggables", buffer = bufnr })
+            if LazyVim.has("nvim-dap") then
+              map("n", "<leader>dr", function()
+                vim.cmd.RustLsp("debuggables")
+              end, { desc = "Rust Debuggables", buffer = bufnr })
+            end
 
             -- Move lines
             map("i", "<A-j>", function()

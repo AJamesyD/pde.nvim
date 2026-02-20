@@ -53,10 +53,6 @@ map("n", "<C-f>", "<C-f>zz", { desc = "which_key_ignore" })
 map("n", "<C-o>", "<C-o>zz", { desc = "which_key_ignore" })
 map("n", "<C-i>", "<C-i>zz", { desc = "which_key_ignore" })
 
--- Move lines up/down (default is A-j/A-k)
-map("v", "J", ":m '>+1<cr>gv=gv", { desc = "Move Down" })
-map("v", "K", ":m '<-2<cr>gv=gv", { desc = "Move Up" })
-
 -- cut/copy/paste
 map({ "n", "v" }, "<C-y>", '"+y', { desc = "Yank to clip" })
 map({ "n", "v" }, "<C-p>", '"+p', { desc = "Paste from clip" })

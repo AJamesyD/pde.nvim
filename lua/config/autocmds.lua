@@ -68,7 +68,6 @@ autocmd({ "BufWinEnter" }, {
     autocmd({ "BufWinLeave" }, {
       desc = "Unlist irrelevant buffer",
       buffer = bufnr,
-      group = augroup("irrelevant_file"),
       callback = function()
         if vim.bo.modified then
           local choice = vim.fn.confirm(("Save changes to %q?"):format(vim.fn.bufname(bufnr)), "&Yes\n&No\n&Cancel")

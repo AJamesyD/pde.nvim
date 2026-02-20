@@ -252,6 +252,8 @@ return {
       { "<leader>so", false },
       { "<leader>ss", false },
       { "<leader>sS", false },
+      { "z=", function() Snacks.picker.spelling() end, desc = "Spelling Suggestions" },
+      { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
     },
     ---@type snacks.Config
     opts = {
@@ -286,6 +288,73 @@ return {
         },
       },
     },
+  },
+  {
+    "ThePrimeagen/git-worktree.nvim",
+    keys = {
+      {
+        "<leader>gwc",
+        function()
+          vim.ui.input({ prompt = "Branch name: " }, function(branch)
+            if not branch or branch == "" then return end
+            vim.ui.input({ prompt = "Worktree path (default: ../<branch>): ", default = "../" .. branch }, function(path)
+              if not path or path == "" then return end
+              require("git-worktree").create_worktree(path, branch)
+            end)
+          end)
+        end,
+        desc = "New Worktree",
+      },
+      {
+        "<leader>gws",
+        function()
+          local result = vim.system({ "git", "worktree", "list", "--porcelain" }, { text = true }):wait()
+          if result.code ~= 0 then
+            vim.notify("Failed to list worktrees", vim.log.levels.ERROR)
+            return
+          end
+          local worktrees = {}
+          local current = {}
+          for line in result.stdout:gmatch("[^\n]+") do
+            if line:match("^worktree ") then
+              current = { path = line:match("^worktree (.+)") }
+            elseif line:match("^branch ") then
+              current.branch = line:match("^branch refs/heads/(.+)")
+              table.insert(worktrees, current)
+            elseif line == "" and current.path and not current.branch then
+              current.branch = "(detached)"
+              table.insert(worktrees, current)
+            end
+          end
+          vim.ui.select(worktrees, {
+            prompt = "Switch Worktree",
+            format_item = function(item)
+              return (item.branch or "(detached)") .. " → " .. item.path
+            end,
+          }, function(choice)
+            if choice then
+              require("git-worktree").switch_worktree(choice.path)
+            end
+          end)
+        end,
+        desc = "List Worktrees",
+      },
+    },
+    opts = function(_, opts)
+      opts.update_on_change_command = "edit ."
+
+      local worktree = require("git-worktree")
+      worktree.on_tree_change(function(op, metadata)
+        if op == worktree.Operations.Switch then
+          local new_path = metadata.path
+          local root_files = { "pyproject.toml", "requirements.txt" }
+          local venv = require("lspconfig.util").root_pattern(unpack(root_files))(new_path)
+          if venv ~= "" then
+            require("venv-selector").retrieve_from_cache()
+          end
+        end
+      end)
+    end,
   },
   {
     "nvim-telescope/telescope.nvim",

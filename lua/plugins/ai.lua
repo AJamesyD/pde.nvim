@@ -143,6 +143,7 @@ return {
               })
             end,
             kiro = "kiro",
+            opencode = "opencode",
           },
         },
         interactions = {

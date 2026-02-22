@@ -3,13 +3,21 @@
 ; doc comments as "comment", conflicting with our markdown injection below.
 
 ; === Doc comments → markdown ===
-; Inject the `doc_comment` child (content after `///` or `//!`) as markdown.
-; `injection.combined` merges all matches into one document so the markdown
-; parser can see multi-line structures like fenced code blocks.
+; Inner doc comments (//!) use `injection.combined` so multi-line markdown
+; structures (fenced code blocks, lists) parse correctly — these are typically
+; contiguous at the top of a file.
+; Outer doc comments (///) are NOT combined to prevent markdown highlights
+; from bleeding into Rust code between scattered doc comment blocks.
 (line_comment
+  (inner_doc_comment_marker)
   (doc_comment) @injection.content
   (#set! injection.language "markdown")
   (#set! injection.combined))
+
+(line_comment
+  (outer_doc_comment_marker)
+  (doc_comment) @injection.content
+  (#set! injection.language "markdown"))
 
 ; === Non-doc comments → comment (preserves TODO/FIXME highlighting) ===
 ((line_comment) @injection.content

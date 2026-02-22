@@ -3,11 +3,33 @@
 ; doc comments as "comment", conflicting with our markdown injection below.
 
 ; === Doc comments → markdown ===
+;
 ; Inner doc comments (//!) use `injection.combined` so multi-line markdown
 ; structures (fenced code blocks, lists) parse correctly — these are typically
-; contiguous at the top of a file.
-; Outer doc comments (///) are NOT combined to prevent markdown highlights
-; from bleeding into Rust code between scattered doc comment blocks.
+; contiguous at the top of a file/module.
+;
+; Outer doc comments (///) are NOT combined. When /// comments are scattered
+; across many items with large stretches of Rust code between them,
+; `injection.combined` causes the markdown parser to produce block-level nodes
+; whose ranges span across the gaps, bleeding markdown highlights into Rust code.
+;
+; Trade-off: multi-line markdown in /// comments (e.g. fenced code blocks
+; spanning multiple /// lines) won't render as markdown. This is acceptable
+; because /// blocks are usually short prose, while //! blocks at file/module
+; scope are where fenced code examples live.
+;
+; NOTE on nested injections inside combined doc comments:
+; Do NOT add injection rules in queries/markdown/injections.scm that create
+; sub-injections (e.g. defaulting untagged code fences to Rust). With
+; `injection.combined`, the markdown parser's child nodes (like
+; `code_fence_content`) get contiguous ranges that span the full line range,
+; but the actual injection content is only the doc_comment fragments. Nested
+; sub-parsers see raw buffer content including //! prefixes, causing parse
+; errors. This is tracked upstream:
+;   - https://github.com/neovim/neovim/issues/21309
+;   - https://github.com/neovim/neovim/pull/32549 (fix, merged into main)
+; The fix clips combined injection ranges for child parsers but is NOT in
+; nvim 0.11.x. Revisit once on a version that includes this fix.
 (line_comment
   (inner_doc_comment_marker)
   (doc_comment) @injection.content

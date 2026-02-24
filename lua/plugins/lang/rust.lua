@@ -262,9 +262,12 @@ return {
       buffers = {
         preambles = {
           rust = {
-            "#![allow(unused_imports, dead_code, unused_variables)]",
+            "#![allow(unused, dead_code)]",
             "use std::collections::*;",
             "use std::io::{self, Read, Write, BufRead};",
+            "use std::path::{Path, PathBuf};",
+            "use std::fmt;",
+            "use std::fs;",
           },
         },
       },

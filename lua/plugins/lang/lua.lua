@@ -29,7 +29,7 @@ return {
       buffers = {
         preambles = {
           lua = {
-            "---@diagnostic disable: undefined-global, unused-local",
+            "---@diagnostic disable",
           },
         },
       },

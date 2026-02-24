@@ -7,7 +7,7 @@ return {
       buffers = {
         preambles = {
           javascript = {
-            "/* eslint-disable no-unused-vars */",
+            "/* eslint-disable */",
           },
         },
       },

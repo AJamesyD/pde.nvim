@@ -96,11 +96,14 @@ return {
       buffers = {
         preambles = {
           python = {
+            "# pyright: reportMissingImports=false, reportMissingModuleSource=false",
             "from __future__ import annotations",
             "from typing import *",
-            "import os, sys, json, re",
+            "import os, sys, json, re, math",
+            "import itertools, functools, datetime",
             "from pathlib import Path",
-            "from collections import defaultdict, Counter",
+            "from collections import defaultdict, Counter, OrderedDict",
+            "from dataclasses import dataclass, field",
           },
         },
         ignore_pattern = { python = "^(%s*[%%!].*)" },

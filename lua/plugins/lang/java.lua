@@ -34,4 +34,19 @@ return {
       return opts
     end,
   },
+  {
+    "jmbuhr/otter.nvim",
+    optional = true,
+    opts = {
+      buffers = {
+        preambles = {
+          java = {
+            "import java.util.*;",
+            "import java.io.*;",
+            "import java.util.stream.*;",
+          },
+        },
+      },
+    },
+  },
 }

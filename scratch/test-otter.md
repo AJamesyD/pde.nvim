@@ -45,6 +45,25 @@ greet() {
 greet "world"
 ```
 
+## Upstream Tests
+
+otter.nvim ships its own test suite under `tests/` (plenary-based).
+Run from the plugin root (`~/.local/share/nvim/lazy/otter.nvim`):
+
+```bash
+./tests/run                        # all specs
+./tests/run tests/core/extraction_spec.lua  # just extraction
+```
+
+Spec files in `tests/core/`:
+
+- `extraction_spec.lua` — code chunk extraction across filetypes (md, qmd, org, norg, nix, rs, ts, lua), indentation preservation, HTML embedded JS/CSS, otter buffer sync
+- `lsp_spec.lua` — LSP position translation (main ↔ otter), leading offset, completion/hover range adjustment, blink.cmp integration
+- `otter_spec.lua` — module loading, public API surface (`activate`, `deactivate`, `sync_raft`, `export`), keeper internals, config merging, helper functions
+- `init_spec.lua` — test environment sanity check
+
+Example fixtures live in `tests/examples/` (`.md`, `.qmd`, `.org`, `.norg`, `.nix`, `.rs`, `.ts`, `.lua`).
+
 ## Verification Checklist
 
 - [ ] `:LspInfo` shows `otter-ls` attached

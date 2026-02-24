@@ -87,4 +87,22 @@ return {
       },
     },
   },
+  {
+    "jmbuhr/otter.nvim",
+    optional = true,
+    opts = {
+      buffers = {
+        preambles = {
+          python = {
+            "from __future__ import annotations",
+            "from typing import *",
+            "import os, sys, json, re",
+            "from pathlib import Path",
+            "from collections import defaultdict, Counter",
+          },
+        },
+        ignore_pattern = { python = "^(%s*[%%!].*)" },
+      },
+    },
+  },
 }

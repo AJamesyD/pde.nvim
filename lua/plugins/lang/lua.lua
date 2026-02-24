@@ -20,4 +20,17 @@ return {
       },
     },
   },
+  {
+    "jmbuhr/otter.nvim",
+    optional = true,
+    opts = {
+      buffers = {
+        preambles = {
+          lua = {
+            "---@diagnostic disable: undefined-global, unused-local",
+          },
+        },
+      },
+    },
+  },
 }

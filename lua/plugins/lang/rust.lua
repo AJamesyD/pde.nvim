@@ -253,4 +253,19 @@ return {
       return opts
     end,
   },
+  {
+    "jmbuhr/otter.nvim",
+    optional = true,
+    opts = {
+      buffers = {
+        preambles = {
+          rust = {
+            "#![allow(unused_imports, dead_code, unused_variables)]",
+            "use std::collections::*;",
+            "use std::io::{self, Read, Write, BufRead};",
+          },
+        },
+      },
+    },
+  },
 }

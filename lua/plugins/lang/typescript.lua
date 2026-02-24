@@ -1,4 +1,5 @@
 return {
+  -- Other
   {
     "jmbuhr/otter.nvim",
     optional = true,
@@ -16,3 +17,4 @@ return {
     },
   },
 }
+

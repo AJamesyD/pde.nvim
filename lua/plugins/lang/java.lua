@@ -34,6 +34,8 @@ return {
       return opts
     end,
   },
+
+  -- Other
   {
     "jmbuhr/otter.nvim",
     optional = true,

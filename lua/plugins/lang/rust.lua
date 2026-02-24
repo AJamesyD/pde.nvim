@@ -210,7 +210,7 @@ return {
               },
               lens = {
                 enable = true,
-                debug = { enable = false }, -- TODO: find better way to integrate with nvim-dap
+                debug = { enable = true },
                 implementations = { enable = true },
                 -- All references default to false.
                 -- TODO: make toggle-able
@@ -220,7 +220,7 @@ return {
                   -- method = { enable = true },
                   -- trait = { enable = true },
                 },
-                run = { enable = false }, -- TODO: find better way to integrate with neotest
+                run = { enable = true },
               },
               lru = {
                 capacity = 512,

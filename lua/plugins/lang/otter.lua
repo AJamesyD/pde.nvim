@@ -12,6 +12,14 @@ return {
     ft = otter_fts,
     opts = {
       handle_leading_whitespace = true,
+      buffers = {
+        -- shellcheck requires a shebang on line 1, but otter's virtual
+        -- buffers have empty lines before the code block content.
+        -- Preamble places a shebang at line 1; ignore_pattern strips
+        -- the duplicate from the code block itself.
+        preambles = { bash = { "#!/usr/bin/env bash" } },
+        ignore_pattern = { bash = "^#!" },
+      },
     },
     config = function(_, opts)
       local otter = require("otter")

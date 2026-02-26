@@ -33,6 +33,15 @@ return {
         },
       }
 
+      opts.sections.lualine_b = {
+        {
+          "branch",
+          fmt = function(name)
+            return require("util").format_branch(name)
+          end,
+        },
+      }
+
       local function find_and_remove(section, predicate)
         for i, component in ipairs(section) do
           if predicate(component) then

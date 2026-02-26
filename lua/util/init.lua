@@ -134,6 +134,50 @@ M.min_sidebar_size = function(min_size, max_size, fraction_of_max)
   return math.max(math.floor(max_size * fraction_of_max), min_size)
 end
 
+--- Shorten a git branch name by stripping noise and keeping the most useful signal.
+--- Pure string logic — no vim dependencies, so it's testable outside neovim.
+---@param name string raw branch name
+---@param max_len? integer hard cap (default 30). 0 = no cap.
+---@return string
+M.format_branch = function(name, max_len)
+  max_len = max_len or 30
+  local result = name
+  
+  -- Strip username prefix (2+ slashes)
+  local slash_count = 0
+  for _ in result:gmatch("/") do
+    slash_count = slash_count + 1
+  end
+  if slash_count >= 2 then
+    result = result:match("^[^/]+/(.+)$") or result
+  end
+  
+  -- Strip conventional prefixes
+  local prefixes = {"feature/", "feat/", "bugfix/", "fix/", "hotfix/", "release/"}
+  for _, prefix in ipairs(prefixes) do
+    if result:sub(1, #prefix) == prefix then
+      result = result:sub(#prefix + 1)
+      break
+    end
+  end
+  
+  -- Extract ticket if present
+  local ticket = result:match("^([A-Z]+%-[0-9]+)")
+  if ticket then
+    local after_ticket = result:sub(#ticket + 1)
+    if after_ticket:match("^[-_]") then
+      result = ticket
+    end
+  end
+  
+  -- Hard cap
+  if max_len > 0 and #result > max_len then
+    return result:sub(1, max_len - 1) .. "…"
+  end
+  
+  return result
+end
+
 M.amazon = require("util.amazon")
 
 return M

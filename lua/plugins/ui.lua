@@ -43,7 +43,7 @@ return {
 
       -- Remove components we want to relocate or discard
       find_and_remove(opts.sections.lualine_c, function(c)
-        return type(c) == "table" and c[1] and type(c[1]) == "table"
+        return type(c) == "table" and c[1] and type(c[1]) == "function" and not c.cond
       end) -- pretty_path (table wrapping a LazyVim.lualine function result)
       find_and_remove(opts.sections.lualine_c, function(c)
         return type(c) == "table" and c.icon_only == true

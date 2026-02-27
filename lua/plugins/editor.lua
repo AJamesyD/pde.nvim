@@ -296,11 +296,18 @@ return {
         "<leader>gwc",
         function()
           vim.ui.input({ prompt = "Branch name: " }, function(branch)
-            if not branch or branch == "" then return end
-            vim.ui.input({ prompt = "Worktree path (default: ../<branch>): ", default = "../" .. branch }, function(path)
-              if not path or path == "" then return end
-              require("git-worktree").create_worktree(path, branch)
-            end)
+            if not branch or branch == "" then
+              return
+            end
+            vim.ui.input(
+              { prompt = "Worktree path (default: ../<branch>): ", default = "../" .. branch },
+              function(path)
+                if not path or path == "" then
+                  return
+                end
+                require("git-worktree").create_worktree(path, branch)
+              end
+            )
           end)
         end,
         desc = "New Worktree",
@@ -502,6 +509,44 @@ return {
         size = { height = 0.4 },
       })
     end,
+  },
+  {
+    "hedyhli/outline.nvim",
+    opts = {
+      outline_window = {
+        position = "right",
+      },
+      outline_items = {
+        show_symbol_details = false,
+      },
+      symbols = {
+        filter = {
+          default = {
+            "Class",
+            "Constructor",
+            "Enum",
+            "Function",
+            "Interface",
+            "Method",
+            "Module",
+            "Namespace",
+            "Struct",
+          },
+          rust = {
+            "Class",
+            "Constructor",
+            "Enum",
+            "Function",
+            "Interface",
+            "Method",
+            "Module",
+            "Namespace",
+            "Object",
+            "Struct",
+          },
+        },
+      },
+    },
   },
 
   -- Other

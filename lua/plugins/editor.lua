@@ -784,7 +784,7 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     cmd = "Grapple",
     keys = function()
-      local keys = {
+      local keys =  {
         {
           "<leader>H",
           function()
@@ -797,6 +797,8 @@ return {
           "<cmd>Grapple toggle_tags<cr>",
           desc = "Grapple open tags window",
         },
+        { "]h", "<cmd>Grapple cycle_tags next<cr>", desc = "Next Grapple Tag" },
+        { "[h", "<cmd>Grapple cycle_tags prev<cr>", desc = "Prev Grapple Tag" },
       }
 
       for i = 1, 4 do

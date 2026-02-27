@@ -65,26 +65,6 @@ return {
       end)
 
       local lualine_c_overrides = {
-        {
-          "buffers",
-
-          max_length = function()
-            return vim.o.columns * 1 / 2
-          end,
-
-          buffers_color = {
-            -- Same values as the general color option can be used here.
-            active = "lualine_c_normal", -- Color for active buffer.
-            inactive = "lualine_c_inactive", -- Color for inactive buffer.
-          },
-
-          symbols = {
-            modified = " ●", -- Text to show when the buffer is modified
-            alternate_file = " ", -- Text to show to identify the alternate file
-            directory = "", -- Text to show when the buffer is a directory
-          },
-          separator = { right = "" },
-        },
         { "%=", separator = "" },
         {
           function()

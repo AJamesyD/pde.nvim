@@ -228,7 +228,6 @@ return {
     "folke/snacks.nvim",
     -- stylua: ignore
     keys = {
-      { "<leader>,", false },
       { "<leader>/", false },
       { "<leader>:", false },
       { "<leader><space>", function() Snacks.picker.resume() end, desc = "Resume" },

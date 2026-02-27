@@ -187,6 +187,58 @@ M.format_branch = function(name, max_len)
   return result
 end
 
+---Shorten aerial breadcrumbs by dropping leftmost ancestors.
+---Uses statusline highlight codes to preserve per-kind coloring.
+---@param symbols table[]? from aerial.get_location()
+---@param max_len? integer Default: 40% of columns
+M.format_aerial = function(symbols, max_len)
+  if not symbols or #symbols == 0 then
+    return ""
+  end
+  max_len = max_len or math.floor(vim.o.columns * 0.4)
+
+  local sep = " › "
+  local sep_w = vim.api.nvim_strwidth(sep)
+  local elide = "… › "
+  local elide_w = vim.api.nvim_strwidth(elide)
+
+  local parts = {}
+  for _, s in ipairs(symbols) do
+    local icon = s.icon or ""
+    local text = icon ~= "" and (icon .. " " .. s.name) or s.name
+    local hl = s.kind and ("%#Aerial" .. s.kind .. "Icon#" .. icon .. " %#Aerial" .. s.kind .. "#" .. s.name) or text
+    table.insert(parts, { w = vim.api.nvim_strwidth(text), hl = hl })
+  end
+
+  local function width(from)
+    local w = from > 1 and elide_w or 0
+    for i = from, #parts do
+      if i > from then
+        w = w + sep_w
+      end
+      w = w + parts[i].w
+    end
+    return w
+  end
+
+  local start = 1
+  while start < #parts and width(start) > max_len do
+    start = start + 1
+  end
+
+  local out = {}
+  if start > 1 then
+    out[1] = elide
+  end
+  for i = start, #parts do
+    if i > start then
+      table.insert(out, "%#NonText#" .. sep)
+    end
+    table.insert(out, parts[i].hl)
+  end
+  return table.concat(out)
+end
+
 M.amazon = require("util.amazon")
 
 return M

@@ -87,15 +87,16 @@ return {
         },
         { "%=", separator = "" },
         {
-          "aerial",
-          sep = " ",
-          sep_icon = "",
-          depth = 5,
-          colored = true,
+          function()
+            local ok, aerial = pcall(require, "aerial")
+            if not ok then return "" end
+            return require("util").format_aerial(aerial.get_location(true))
+          end,
+          separator = "",
         },
         { "%=", separator = "" },
       }
-      opts.sections.lualine_c = vim.list_extend(opts.sections.lualine_c or {}, lualine_c_overrides)
+      opts.sections.lualine_c = lualine_c_overrides
 
       find_and_remove(opts.sections.lualine_x, function(c)
         return type(c) == "table" and c[1] == "diff"

@@ -5,6 +5,7 @@ local autocmd = vim.api.nvim_create_autocmd
 local function augroup(name)
   return vim.api.nvim_create_augroup(name, { clear = true })
 end
+local util = require("util")
 
 -- HACK: Below used to force autocmd types to come into scope.
 -- TODO: Modify lazydev.nvim to do this automatically
@@ -60,7 +61,7 @@ autocmd({ "BufWinEnter" }, {
 
     bufglobals.is_relevant_file = false
 
-    if MyUtils.is_relevant_file(bufname, bufnr) then
+    if util.is_relevant_file(bufname, bufnr) then
       bufglobals.is_relevant_file = true
       return
     end
@@ -112,7 +113,7 @@ autocmd({ "BufReadPost" }, {
   end,
 })
 
-if require("util").amazon.is_amazon_machine() then
+if util.amazon.is_amazon_machine() then
   autocmd({ "FileType" }, {
     desc = "ion opts",
     pattern = "ion",
@@ -121,8 +122,8 @@ if require("util").amazon.is_amazon_machine() then
       local bufglobals = vim.b[bufnr]
       local filepath = vim.api.nvim_buf_get_name(bufnr)
 
-      local is_brazil_proj = MyUtils.amazon.brazil_root(filepath)
-      local is_peru_proj = MyUtils.amazon.peru_root(filepath)
+      local is_brazil_proj = util.amazon.brazil_root(filepath)
+      local is_peru_proj = util.amazon.peru_root(filepath)
 
       if is_brazil_proj or is_peru_proj then
         bufglobals.autoformat = false
@@ -136,15 +137,15 @@ if require("util").amazon.is_amazon_machine() then
       local bufnr = event.buf
       local filepath = vim.api.nvim_buf_get_name(bufnr)
 
-      local is_brazil_proj = MyUtils.amazon.brazil_root(filepath)
+      local is_brazil_proj = util.amazon.brazil_root(filepath)
 
       if is_brazil_proj then
         -- Often want to disable autoformatting in Brazil projects
         vim.g.autoformat = false
       end
 
-      if MyUtils.amazon.is_bemol_proj(bufnr) then
-        MyUtils.amazon.bemol()
+      if util.amazon.is_bemol_proj(bufnr) then
+        util.amazon.bemol()
       end
     end,
   })

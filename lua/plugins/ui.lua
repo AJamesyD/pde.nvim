@@ -1,3 +1,5 @@
+local util = require("util")
+
 return {
   -- Reconfigure LazyVim defaults
   {
@@ -234,12 +236,12 @@ return {
         options = {
           left = {
             size = function()
-              return MyUtils.min_sidebar_size(30, vim.o.columns, 0.1)
+              return util.min_sidebar_size(30, vim.o.columns, 0.1)
             end,
           },
           right = {
             size = function()
-              return MyUtils.min_sidebar_size(30, vim.o.columns, 0.1)
+              return util.min_sidebar_size(30, vim.o.columns, 0.1)
             end,
           },
         },
@@ -270,7 +272,7 @@ return {
           config.pinned = false
         elseif type(config) == "table" and config.ft == "snacks_terminal" then
           config.size.width = function()
-            return MyUtils.min_sidebar_size(10, vim.o.columns, 0.30)
+            return util.min_sidebar_size(10, vim.o.columns, 0.30)
           end
         end
       end
@@ -282,7 +284,7 @@ return {
       for _, config in ipairs(opts.right) do
         if type(config) == "table" and config.ft == "grug-far" then
           config.size.width = function()
-            return MyUtils.min_sidebar_size(10, vim.o.columns, 0.25)
+            return util.min_sidebar_size(10, vim.o.columns, 0.25)
           end
         end
       end

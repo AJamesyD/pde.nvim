@@ -1,4 +1,6 @@
-if not require("util").amazon.is_amazon_machine() then
+local util = require("util")
+
+if not util.amazon.is_amazon_machine() then
   return {}
 end
 
@@ -25,7 +27,7 @@ return {
             cmd = { "barium" },
             filetypes = { "brazil-config" },
             root_dir = function(fname)
-              local primary = MyUtils.amazon.brazil_root(fname)
+              local primary = util.amazon.brazil_root(fname)
               local fallback = vim.fs.dirname(vim.fs.find(".git", { path = fname, upward = true })[1])
               return primary or fallback
             end,

@@ -94,7 +94,7 @@ return {
               },
             }
             client.capabilities = vim.tbl_deep_extend("force", client.capabilities or {}, capability_overrides)
-            local map = MyUtils.map
+            local map = require("util").map
 
             if LazyVim.has("nvim-dap") then
               map("n", "<leader>dr", function()

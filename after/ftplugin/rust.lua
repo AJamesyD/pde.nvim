@@ -1,3 +1,5 @@
+local util = require("util")
+
 -- Clear LSP semantic token highlights for comments so tree-sitter
 -- injections (markdown → toml/rust/etc.) can show through in doc comments.
 -- rust-analyzer applies these at priority 125-127, overriding injections (~102).
@@ -116,7 +118,7 @@ vim.keymap.set("n", "<leader>cD", function()
     bufnr = bufnr,
     name = "rust-analyzer",
   }
-  MyUtils.reload_lsp_setting({
+  util.reload_lsp_setting({
     client_filter = client_filter,
     settings_updater = settings_updater,
     restart_cmd = "RustAnalyzer reloadSettings",

@@ -7,7 +7,7 @@
     "lazyvim.plugins.extras.coding.neogen",
     "lazyvim.plugins.extras.editor.dial",
     "lazyvim.plugins.extras.editor.mini-move",
-    "lazyvim.plugins.extras.editor.outline",
+    "lazyvim.plugins.extras.editor.aerial",
     "lazyvim.plugins.extras.formatting.prettier",
     "lazyvim.plugins.extras.lang.git",
     "lazyvim.plugins.extras.lang.json",

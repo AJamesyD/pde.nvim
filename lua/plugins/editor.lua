@@ -559,6 +559,44 @@ return {
     end,
   },
 
+  {
+    "stevearc/aerial.nvim",
+    optional = true,
+    opts = function(_, opts)
+      -- Filetype map: prefer treesitter for Lua because lua_ls emits
+      -- tables as Object/Array with unhelpful [1], [2] names.
+      -- Treesitter parses Lua grammar directly for better symbols.
+      opts.backends = {
+        _ = { "lsp", "treesitter" },
+        lua = { "treesitter", "lsp" },
+      }
+
+      local default_filter = {
+        "Class",       -- class declarations
+        "Constructor", -- class constructors
+        "Enum",        -- enumeration types
+        "Function",    -- standalone callables
+        "Interface",   -- type contracts (TS interfaces, Rust traits)
+        "Method",      -- attached callables
+        "Module",      -- module boundaries
+        "Namespace",   -- namespace groupings
+        "Struct",      -- struct declarations (Rust)
+      }
+
+      local overrides = {
+        filter_kind = {
+          -- Structural symbols only — types, callables, and module boundaries.
+          -- See outline.nvim config above for full exclusion rationale.
+          _ = default_filter,
+          -- Rust impl blocks emit Object; macro_rules!/proc macros emit Macro
+          rust = vim.list_extend({ "Macro", "Object" }, default_filter),
+        },
+      }
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+      return opts
+    end,
+  },
+
   -- Other
   {
     "linux-cultist/venv-selector.nvim",

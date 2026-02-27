@@ -140,10 +140,10 @@ end
 ---@param max_len? integer hard cap (default 30). 0 = no cap.
 ---@return string
 M.format_branch = function(name, max_len)
-  max_len = max_len or 30
+  max_len = max_len or math.floor(vim.o.columns * 0.25)
   local result = name
 
-  -- Strip username prefix (2+ slashes)
+  -- Always strip username prefix (2+ slashes)
   local slash_count = 0
   for _ in result:gmatch("/") do
     slash_count = slash_count + 1
@@ -152,19 +152,21 @@ M.format_branch = function(name, max_len)
     result = result:match("^[^/]+/(.+)$") or result
   end
 
-  -- Strip conventional prefixes
-  local prefixes = {
-    "feature/",
-    "feat/",
-    "bugfix/",
-    "fix/",
-    "hotfix/",
-    "release/",
-  }
-  for _, prefix in ipairs(prefixes) do
-    if result:sub(1, #prefix) == prefix then
-      result = result:sub(#prefix + 1)
-      break
+  -- Strip conventional prefixes only when the name is too long
+  if #result > max_len then
+    local prefixes = {
+      "feature/",
+      "feat/",
+      "bugfix/",
+      "fix/",
+      "hotfix/",
+      "release/",
+    }
+    for _, prefix in ipairs(prefixes) do
+      if result:sub(1, #prefix) == prefix then
+        result = result:sub(#prefix + 1)
+        break
+      end
     end
   end
 

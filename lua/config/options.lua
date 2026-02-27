@@ -48,11 +48,6 @@ if g.neovide then
   g.neovide_padding_right = 0
   g.neovide_padding_left = 0
 
-  -- g.neovide_window_blurred = true;
-  -- g:neovide_transparency = 0.8
-  -- g.neovide_floating_blur_amount_x = 2.0
-  -- g.neovide_floating_blur_amount_y = 2.0
-
   g.neovide_cursor_smooth_blink = true
   g.neovide_cursor_vfx_mode = "railgun"
 

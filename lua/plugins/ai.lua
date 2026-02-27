@@ -1,3 +1,5 @@
+local util = require("util")
+
 require("snacks")
   .toggle({
     name = "CodeCompanion",
@@ -13,7 +15,7 @@ require("snacks")
     set = function(_)
       require("codecompanion").toggle({
         window_opts = {
-          width = MyUtils.min_sidebar_size(35, vim.o.columns, 0.3),
+          width = util.min_sidebar_size(35, vim.o.columns, 0.3),
         },
       })
     end,
@@ -22,44 +24,6 @@ require("snacks")
   :map("<leader>aa")
 
 return {
-  -- Reconfigure LazyVim extras
-  -- TODO: Re-enable when https://github.com/folke/edgy.nvim/issues/113 resolved
-  -- {
-  --   "folke/edgy.nvim",
-  --   optional = true,
-  --   opts = function(_, opts)
-  --     -- Will get swapped to right by other edgy conf
-  --     ---@type Edgy.View.Opts[]
-  --     local left_overrides = {
-  --       {
-  --         title = "Avante",
-  --         ft = "Avante",
-  --         size = {
-  --           width = MyUtils.min_sidebar_size(40, vim.o.columns, 0.20),
-  --         },
-  --       },
-  --       {
-  --         title = "Avante Selected Files",
-  --         ft = "AvanteSelectedFiles",
-  --         size = {
-  --           height = 3,
-  --         },
-  --       },
-  --       {
-  --         title = "Avante Input",
-  --         ft = "AvanteInput",
-  --         size = {
-  --           height = MyUtils.min_sidebar_size(10, vim.o.lines, 0.10),
-  --         },
-  --       },
-  --     }
-  --
-  --     opts.left = opts.left or {}
-  --     opts.left = vim.list_extend(left_overrides, opts.left or {})
-  --     return opts
-  --   end,
-  -- },
-
   -- Other
   {
     "olimorris/codecompanion.nvim",

@@ -1,6 +1,12 @@
 -- Many of the following utils are ~~plagiarized from~~ inspired by https://github.com/nvim-telescope/telescope.nvim
 
 local M = {}
+
+-- Statusline responsive breakpoints (vim.o.columns thresholds)
+M.WIDTH_AERIAL = 120 -- hide aerial breadcrumbs
+M.WIDTH_BRANCH = 100 -- hide branch
+M.WIDTH_PROGRESS = 80 -- hide progress/location
+
 ---@class reload_lsp_config_opts
 --- Search criteria for active lsp
 ---@field client_filter vim.lsp.get_clients.Filter
@@ -140,10 +146,10 @@ end
 ---@param max_len? integer hard cap (default 30). 0 = no cap.
 ---@return string
 M.format_branch = function(name, max_len)
-  max_len = max_len or math.floor(vim.o.columns * 0.25)
+  max_len = max_len or math.floor(vim.o.columns * 0.15)
   local result = name
 
-  -- Always strip username prefix (2+ slashes)
+  -- Strip username prefix (2+ slashes)
   local slash_count = 0
   for _ in result:gmatch("/") do
     slash_count = slash_count + 1
@@ -152,15 +158,12 @@ M.format_branch = function(name, max_len)
     result = result:match("^[^/]+/(.+)$") or result
   end
 
-  -- Strip conventional prefixes only when the name is too long
+  -- Strip conventional prefixes only when over max_len
   if #result > max_len then
     local prefixes = {
-      "feature/",
-      "feat/",
-      "bugfix/",
-      "fix/",
-      "hotfix/",
-      "release/",
+      "feature/", "feat/", "bugfix/", "fix/", "hotfix/",
+      "release/", "chore/", "docs/", "refactor/",
+      "ci/", "test/", "perf/", "build/", "style/",
     }
     for _, prefix in ipairs(prefixes) do
       if result:sub(1, #prefix) == prefix then
@@ -170,7 +173,7 @@ M.format_branch = function(name, max_len)
     end
   end
 
-  -- Extract ticket if present
+  -- Extract ticket if present, drop description after it
   local ticket = result:match("^([A-Z]+%-[0-9]+)")
   if ticket then
     local after_ticket = result:sub(#ticket + 1)

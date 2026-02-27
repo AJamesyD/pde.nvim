@@ -39,6 +39,7 @@ return {
           fmt = function(name)
             return require("util").format_branch(name)
           end,
+          cond = function() return vim.o.columns >= require("util").WIDTH_BRANCH end,
         },
       }
 
@@ -51,9 +52,9 @@ return {
       end
 
       -- Remove components we want to relocate or discard
-      find_and_remove(opts.sections.lualine_c, function(c)
+      local pretty_path = find_and_remove(opts.sections.lualine_c, function(c)
         return type(c) == "table" and c[1] and type(c[1]) == "function" and not c.cond
-      end) -- pretty_path (table wrapping a LazyVim.lualine function result)
+      end) -- pretty_path (relocated below, before centered aerial)
       find_and_remove(opts.sections.lualine_c, function(c)
         return type(c) == "table" and c.icon_only == true
       end) -- filetype icon
@@ -65,6 +66,7 @@ return {
       end)
 
       local lualine_c_overrides = {
+        pretty_path,
         { "%=", separator = "" },
         {
           function()
@@ -72,6 +74,7 @@ return {
             if not ok then return "" end
             return require("util").format_aerial(aerial.get_location(true))
           end,
+          cond = function() return vim.o.columns >= require("util").WIDTH_AERIAL end,
           separator = "",
         },
         { "%=", separator = "" },
@@ -87,7 +90,7 @@ return {
         {
           "progress",
           cond = function()
-            return vim.fn.line("$") > 500
+            return vim.o.columns >= require("util").WIDTH_PROGRESS and vim.fn.line("$") > 500
           end,
           draw_empty = true,
           padding = { left = 1, right = 1 },
@@ -95,7 +98,7 @@ return {
         {
           "location",
           cond = function()
-            return vim.o.colorcolumn ~= ""
+            return vim.o.columns >= require("util").WIDTH_PROGRESS and vim.o.colorcolumn ~= ""
           end,
           draw_empty = true,
           padding = { left = 1, right = 1 },

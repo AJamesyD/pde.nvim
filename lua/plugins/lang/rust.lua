@@ -83,6 +83,8 @@ return {
         server = {
           standalone = false,
           on_attach = function(client, bufnr)
+            -- NOTE: Redundant with ufo's servers["*"] foldingRange capability (ui.lua).
+            -- Kept so rust-analyzer retains folding if ufo is ever removed.
             local capability_overrides = {
               textDocument = {
                 foldingRange = {

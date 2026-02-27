@@ -586,6 +586,7 @@ return {
       }
 
       local overrides = {
+        highlight_on_hover = true,
         filter_kind = {
           -- Structural symbols only — types, callables, and module boundaries.
           -- See outline.nvim config above for full exclusion rationale.

@@ -548,8 +548,10 @@ return {
             -- to avoid hiding the entire structure. Excludes only literal values
             -- and control flow (lua_ls emits for/if as Package).
             lua = { "String", "Number", "Boolean", "Package", exclude = true },
-            -- Rust impl blocks emit Object; macro_rules!/proc macros emit Macro
-            rust = vim.list_extend({ "Macro", "Object" }, default_symbols),
+            rust = vim.list_extend({
+              "Macro",  -- macro_rules!/proc macros
+              "Object", -- impl blocks
+            }, default_symbols),
           },
         },
       }
@@ -588,8 +590,10 @@ return {
           -- Structural symbols only — types, callables, and module boundaries.
           -- See outline.nvim config above for full exclusion rationale.
           _ = default_filter,
-          -- Rust impl blocks emit Object; macro_rules!/proc macros emit Macro
-          rust = vim.list_extend({ "Macro", "Object" }, default_filter),
+          rust = vim.list_extend({
+            "Macro",  -- macro_rules!/proc macros
+            "Object", -- impl blocks
+          }, default_filter),
         },
       }
       opts = vim.tbl_deep_extend("force", opts, overrides)

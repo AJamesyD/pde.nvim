@@ -512,41 +512,51 @@ return {
   },
   {
     "hedyhli/outline.nvim",
-    opts = {
-      outline_window = {
-        position = "right",
-      },
-      outline_items = {
-        show_symbol_details = false,
-      },
-      symbols = {
-        filter = {
-          default = {
-            "Class",
-            "Constructor",
-            "Enum",
-            "Function",
-            "Interface",
-            "Method",
-            "Module",
-            "Namespace",
-            "Struct",
-          },
-          rust = {
-            "Class",
-            "Constructor",
-            "Enum",
-            "Function",
-            "Interface",
-            "Method",
-            "Module",
-            "Namespace",
-            "Object",
-            "Struct",
+    optional = true,
+    opts = function(_, opts)
+      local default_symbols = {
+        "Class",       -- class declarations (includes lua_ls ---@class)
+        "Constructor", -- class constructors (mainly TS; Python __init__ emits as Method)
+        "Enum",        -- enumeration types (includes lua_ls ---@enum)
+        "Function",    -- standalone callables
+        "Interface",   -- type contracts (TS interfaces, Rust traits)
+        "Method",      -- attached callables (class/struct/impl methods)
+        "Module",      -- module boundaries
+        "Namespace",   -- namespace groupings
+        "Struct",      -- struct declarations (Rust)
+        "TypeAlias",   -- type aliases (Rust/TS `type`, lua_ls ---@alias)
+      }
+
+      local overrides = {
+        outline_window = {
+          position = "right",
+        },
+        outline_items = {
+          show_symbol_details = false,
+        },
+        symbols = {
+          filter = {
+            -- Structural symbols only — types, callables, and module boundaries.
+            -- Excludes:
+            --   Too granular: Property, Field, Variable, Constant, Parameter, EnumMember
+            --   Literal values: String, Number, Boolean, Array, Key, Null
+            --   Rarely emitted / niche: Event, Operator, TypeParameter, StaticMethod
+            --   Framework-specific (JSX): Component, Fragment
+            --   Redundant: File (outline is per-buffer), Package (rarely emitted)
+            default = default_symbols,
+            -- lua_ls emits tables as Object/Array; use exclusion filter instead
+            -- to avoid hiding the entire structure. Excludes only literal values
+            -- and control flow (lua_ls emits for/if as Package).
+            lua = { "String", "Number", "Boolean", "Package", exclude = true },
+            -- Rust impl blocks emit Object; macro_rules!/proc macros emit Macro
+            rust = vim.list_extend({ "Macro", "Object" }, default_symbols),
           },
         },
-      },
-    },
+      }
+
+      opts = vim.tbl_deep_extend("force", opts, overrides)
+      return opts
+    end,
   },
 
   -- Other

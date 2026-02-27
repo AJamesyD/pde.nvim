@@ -780,38 +780,55 @@ return {
   },
   {
     "cbochs/grapple.nvim",
-    ---@type grapple.settings
     event = { "BufReadPost", "BufNewFile" },
     cmd = "Grapple",
-    keys = function()
-      local keys =  {
-        {
-          "<leader>H",
-          function()
-            require("grapple").toggle()
-          end,
-          desc = "Grapple toggle tag",
-        },
-        {
-          "<leader>h",
-          "<cmd>Grapple toggle_tags<cr>",
-          desc = "Grapple open tags window",
-        },
-        { "]h", "<cmd>Grapple cycle_tags next<cr>", desc = "Next Grapple Tag" },
-        { "[h", "<cmd>Grapple cycle_tags prev<cr>", desc = "Prev Grapple Tag" },
-      }
+    keys = {
+      { "<leader>H", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle tag" },
+      { "<leader>h", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple open tags window" },
+      { "]h", "<cmd>Grapple cycle_tags next<cr>", desc = "Next Grapple Tag" },
+      { "[h", "<cmd>Grapple cycle_tags prev<cr>", desc = "Prev Grapple Tag" },
+    },
+    config = function(_, opts)
+      require("grapple").setup(opts)
 
-      for i = 1, 4 do
-        table.insert(keys, {
-          "<leader>" .. i,
-          "<cmd>Grapple select index=" .. i .. "<cr>",
-          desc = "Grapple to File " .. i,
-        })
+      -- Dynamically register <leader>1-9 based on actual tag count.
+      -- GrappleUpdate fires after tag/untag/toggle/select/cycle_tags.
+      -- GrappleScopeChanged fires on scope switches (e.g. branch change).
+      local function sync_keymaps()
+        local count = #(require("grapple").tags() or {})
+        for i = 1, 9 do
+          if i <= count then
+            vim.keymap.set("n", "<leader>" .. i, "<cmd>Grapple select index=" .. i .. "<cr>", {
+              desc = "Grapple → " .. i,
+            })
+          else
+            pcall(vim.keymap.del, "n", "<leader>" .. i)
+          end
+        end
       end
-      return keys
+
+      local group = vim.api.nvim_create_augroup("grapple_sync_keymaps", { clear = true })
+      vim.api.nvim_create_autocmd("User", {
+        group = group,
+        pattern = { "GrappleUpdate", "GrappleScopeChanged" },
+        callback = sync_keymaps,
+      })
+      -- Re-sync on BufEnter: grapple may load before any file buffer exists
+      -- (e.g. via statusline component), so the initial tags() call can't
+      -- resolve the scope. This also handles implicit scope changes when
+      -- navigating between projects.
+      vim.api.nvim_create_autocmd("BufEnter", {
+        group = group,
+        callback = function()
+          if vim.bo.buftype == "" then sync_keymaps() end
+        end,
+      })
     end,
+    ---@type grapple.settings
     opts = {
-      -- Model after vim.g.root_spec, i.e. { "lsp", {".git", "lua"}, "cwd" }
+      -- Default: lsp → git → cwd. We insert git_branch so tags are
+      -- per-branch when LSP root isn't available, with git root as a
+      -- secondary fallback (covers detached HEAD where git_branch fails).
       scope = "lsp",
       default_scopes = {
         lsp = {

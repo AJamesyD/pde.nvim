@@ -142,7 +142,7 @@ end
 M.format_branch = function(name, max_len)
   max_len = max_len or 30
   local result = name
-  
+
   -- Strip username prefix (2+ slashes)
   local slash_count = 0
   for _ in result:gmatch("/") do
@@ -151,16 +151,23 @@ M.format_branch = function(name, max_len)
   if slash_count >= 2 then
     result = result:match("^[^/]+/(.+)$") or result
   end
-  
+
   -- Strip conventional prefixes
-  local prefixes = {"feature/", "feat/", "bugfix/", "fix/", "hotfix/", "release/"}
+  local prefixes = {
+    "feature/",
+    "feat/",
+    "bugfix/",
+    "fix/",
+    "hotfix/",
+    "release/",
+  }
   for _, prefix in ipairs(prefixes) do
     if result:sub(1, #prefix) == prefix then
       result = result:sub(#prefix + 1)
       break
     end
   end
-  
+
   -- Extract ticket if present
   local ticket = result:match("^([A-Z]+%-[0-9]+)")
   if ticket then
@@ -169,12 +176,12 @@ M.format_branch = function(name, max_len)
       result = ticket
     end
   end
-  
+
   -- Hard cap
   if max_len > 0 and #result > max_len then
     return result:sub(1, max_len - 1) .. "…"
   end
-  
+
   return result
 end
 

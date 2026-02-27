@@ -57,6 +57,9 @@ return {
       find_and_remove(opts.sections.lualine_c, function(c)
         return type(c) == "table" and c.icon_only == true
       end) -- filetype icon
+      find_and_remove(opts.sections.lualine_c, function(c)
+        return type(c) == "table" and c[1] == "aerial"
+      end) -- aerial breadcrumbs (relocated below, centered)
       local diagnostics_element = find_and_remove(opts.sections.lualine_c, function(c)
         return type(c) == "table" and c[1] == "diagnostics"
       end)
@@ -82,6 +85,15 @@ return {
           },
           separator = { right = "" },
         },
+        { "%=", separator = "" },
+        {
+          "aerial",
+          sep = " ",
+          sep_icon = "",
+          depth = 5,
+          colored = true,
+        },
+        { "%=", separator = "" },
       }
       opts.sections.lualine_c = vim.list_extend(opts.sections.lualine_c or {}, lualine_c_overrides)
 

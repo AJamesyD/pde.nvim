@@ -14,6 +14,9 @@ return {
           globalstatus = true,
           component_separators = { left = "", right = "" },
           section_separators = { left = "", right = "" },
+          disabled_filetypes = {
+            winbar = vim.list_extend(vim.deepcopy(util.SPECIAL_FILETYPES), { "help", "qf" }),
+          },
         },
       }
 
@@ -41,7 +44,9 @@ return {
           fmt = function(name)
             return require("util").format_branch(name)
           end,
-          cond = function() return vim.o.columns >= require("util").WIDTH_BRANCH end,
+          cond = function()
+            return vim.o.columns >= require("util").WIDTH_BRANCH
+          end,
         },
       }
 
@@ -53,40 +58,63 @@ return {
         end
       end
 
-      -- Remove components we want to relocate or discard
-      local pretty_path = find_and_remove(opts.sections.lualine_c, function(c)
+      -- Remove LazyVim's default lualine_c components; path and aerial move to winbar.
+      find_and_remove(opts.sections.lualine_c, function(c)
         return type(c) == "table" and c[1] and type(c[1]) == "function" and not c.cond
-      end) -- pretty_path (relocated below, before centered aerial)
+      end)
       find_and_remove(opts.sections.lualine_c, function(c)
         return type(c) == "table" and c.icon_only == true
-      end) -- filetype icon
+      end)
       find_and_remove(opts.sections.lualine_c, function(c)
         return type(c) == "table" and c[1] == "aerial"
-      end) -- aerial breadcrumbs (relocated below, centered)
+      end)
       local diagnostics_element = find_and_remove(opts.sections.lualine_c, function(c)
         return type(c) == "table" and c[1] == "diagnostics"
       end)
 
-      local lualine_c_overrides = {
-        pretty_path,
-        { "%=", separator = "" },
-        {
-          function()
-            local ok, aerial = pcall(require, "aerial")
-            if not ok then return "" end
-            return require("util").format_aerial(aerial.get_location(true))
-          end,
-          cond = function() return vim.o.columns >= require("util").WIDTH_AERIAL end,
-          separator = "",
-        },
-        { "%=", separator = "" },
+      opts.sections.lualine_c = { diagnostics_element }
+
+      -- Winbar: dropbar-style path › aerial breadcrumbs.
+      -- separator="" and padding=0 prevent lualine from inserting gaps between
+      -- the path and breadcrumbs, keeping them visually continuous.
+      local winbar_path = {
+        function()
+          return require("util").format_winbar_path()
+        end,
+        separator = "",
+        padding = { left = 2 },
       }
-      opts.sections.lualine_c = lualine_c_overrides
+      opts.winbar = {
+        lualine_c = {
+          winbar_path,
+          {
+            function()
+              local ok, aerial = pcall(require, "aerial")
+              if not ok then
+                return ""
+              end
+              local result = require("util").format_aerial(aerial.get_location(true))
+              if result == "" then
+                return ""
+              end
+              -- %#NonText# sets the highlight group; %* resets to default
+              return " %#NonText#›%* " .. result
+            end,
+            cond = function()
+              return vim.o.columns >= require("util").WIDTH_AERIAL
+            end,
+            separator = "",
+            padding = 0,
+          },
+        },
+      }
+      opts.inactive_winbar = {
+        lualine_c = { winbar_path },
+      }
 
       find_and_remove(opts.sections.lualine_x, function(c)
         return type(c) == "table" and c[1] == "diff"
       end)
-      table.insert(opts.sections.lualine_x, diagnostics_element)
 
       opts.sections.lualine_y = {
         {

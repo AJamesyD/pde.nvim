@@ -273,6 +273,38 @@ M.format_aerial = function(symbols, max_len)
   return table.concat(out)
 end
 
+--- Build a dropbar-style path for the winbar: dir › dir › 󰈙 file.lua ●
+--- Uses vim statusline highlight escapes: %#Group# sets highlight, %* resets.
+---@return string
+M.format_winbar_path = function()
+  if vim.bo.buftype ~= "" then
+    return ""
+  end -- skip special buffers (terminal, help, etc.)
+  local path = vim.fn.expand("%:~:.")
+  if path == "" or path == "." then
+    return ""
+  end
+
+  local sep = " %#NonText#›%* "
+  local segments = vim.split(path, "/")
+
+  local ok, devicons = pcall(require, "nvim-web-devicons")
+  if ok and #segments > 0 then
+    local icon, hl = devicons.get_icon(vim.fn.expand("%:t"), vim.fn.expand("%:e"), { default = true })
+    if icon then
+      segments[#segments] = "%#" .. (hl or "Normal") .. "#" .. icon .. "%* " .. segments[#segments]
+    end
+  end
+
+  if vim.bo.modified then
+    segments[#segments] = segments[#segments] .. " %#DiagnosticWarn#●%*"
+  elseif vim.bo.readonly then
+    segments[#segments] = segments[#segments] .. " %#DiagnosticError#󰌾%*"
+  end
+
+  return table.concat(segments, sep)
+end
+
 M.amazon = require("util.amazon")
 
 return M

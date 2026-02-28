@@ -141,6 +141,7 @@ return {
 
       local extensions_overrides = {
         "mason",
+        "nvim-dap-ui",
         "quickfix",
         "trouble",
       }

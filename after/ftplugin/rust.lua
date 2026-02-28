@@ -19,19 +19,28 @@ local code_ns = vim.api.nvim_create_namespace("rustdoc_code_blocks")
 local function update_code_blocks()
   vim.api.nvim_buf_clear_namespace(0, code_ns, 0, -1)
   local ok, parser = pcall(vim.treesitter.get_parser, 0)
-  if not ok or not parser then return end
+  if not ok or not parser then
+    return
+  end
   parser:parse(true)
   local md = parser:children().markdown
-  if not md then return end
+  if not md then
+    return
+  end
   md:parse(true)
-  local query = vim.treesitter.query.parse("markdown", [[
+  local query = vim.treesitter.query.parse(
+    "markdown",
+    [[
     (fenced_code_block
       (info_string (language) @lang)?
       (code_fence_content) @content)
-  ]])
+  ]]
+  )
   for _, tree in ipairs(md:trees()) do
     for id, node, _, _ in query:iter_captures(tree:root(), 0) do
-      if query.captures[id] ~= "content" then goto next_capture end
+      if query.captures[id] ~= "content" then
+        goto next_capture
+      end
       local sr, _, er = node:range()
       -- Check if this block is ```rust (broken inner parser needs override)
       local is_rust = false
@@ -47,16 +56,22 @@ local function update_code_blocks()
       for row = sr, er - 1 do
         local line = vim.api.nvim_buf_get_lines(0, row, row + 1, false)[1] or ""
         local content = line:match("^%s*///(.*)") or line:match("^%s*//!(.*)")
-        if not content then goto next_row end
+        if not content then
+          goto next_row
+        end
         if content:match("^%s*# ") or content:match("^%s*#$") then
           vim.api.nvim_buf_set_extmark(0, code_ns, row, 0, {
-            end_row = row, end_col = #line,
-            hl_group = "@comment", priority = 200,
+            end_row = row,
+            end_col = #line,
+            hl_group = "@comment",
+            priority = 200,
           })
         elseif is_rust then
           vim.api.nvim_buf_set_extmark(0, code_ns, row, #line - #content, {
-            end_row = row, end_col = #line,
-            hl_group = "@markup.raw.block.markdown", priority = 103,
+            end_row = row,
+            end_col = #line,
+            hl_group = "@markup.raw.block.markdown",
+            priority = 103,
           })
         end
         ::next_row::
@@ -68,7 +83,8 @@ end
 
 vim.defer_fn(update_code_blocks, 100)
 vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
-  buffer = 0, callback = update_code_blocks,
+  buffer = 0,
+  callback = update_code_blocks,
 })
 
 local bufnr = vim.api.nvim_get_current_buf()

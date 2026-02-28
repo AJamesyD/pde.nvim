@@ -514,16 +514,26 @@ return {
     optional = true,
     opts = function(_, opts)
       local default_symbols = {
-        "Class",       -- class declarations (includes lua_ls ---@class)
-        "Constructor", -- class constructors (mainly TS; Python __init__ emits as Method)
-        "Enum",        -- enumeration types (includes lua_ls ---@enum)
-        "Function",    -- standalone callables
-        "Interface",   -- type contracts (TS interfaces, Rust traits)
-        "Method",      -- attached callables (class/struct/impl methods)
-        "Module",      -- module boundaries
-        "Namespace",   -- namespace groupings
-        "Struct",      -- struct declarations (Rust)
-        "TypeAlias",   -- type aliases (Rust/TS `type`, lua_ls ---@alias)
+        -- class declarations (includes lua_ls ---@class)
+        "Class",
+        -- class constructors (mainly TS; Python __init__ emits as Method)
+        "Constructor",
+        -- enumeration types (includes lua_ls ---@enum)
+        "Enum",
+        -- standalone callables
+        "Function",
+        -- type contracts (TS interfaces, Rust traits)
+        "Interface",
+        -- attached callables (class/struct/impl methods)
+        "Method",
+        -- module boundaries
+        "Module",
+        -- namespace groupings
+        "Namespace",
+        -- struct declarations (Rust)
+        "Struct",
+        -- type aliases (Rust/TS `type`, lua_ls ---@alias)
+        "TypeAlias",
       }
 
       local overrides = {
@@ -548,8 +558,10 @@ return {
             -- and control flow (lua_ls emits for/if as Package).
             lua = { "String", "Number", "Boolean", "Package", exclude = true },
             rust = vim.list_extend({
-              "Macro",  -- macro_rules!/proc macros
-              "Object", -- impl blocks
+              -- macro_rules!/proc macros
+              "Macro",
+              -- impl blocks
+              "Object",
             }, default_symbols),
           },
         },
@@ -573,15 +585,24 @@ return {
       }
 
       local default_filter = {
-        "Class",       -- class declarations
-        "Constructor", -- class constructors
-        "Enum",        -- enumeration types
-        "Function",    -- standalone callables
-        "Interface",   -- type contracts (TS interfaces, Rust traits)
-        "Method",      -- attached callables
-        "Module",      -- module boundaries
-        "Namespace",   -- namespace groupings
-        "Struct",      -- struct declarations (Rust)
+        -- class declarations
+        "Class",
+        -- class constructors
+        "Constructor",
+        -- enumeration types
+        "Enum",
+        -- standalone callables
+        "Function",
+        -- type contracts (TS interfaces, Rust traits)
+        "Interface",
+        -- attached callables
+        "Method",
+        -- module boundaries
+        "Module",
+        -- namespace groupings
+        "Namespace",
+        -- struct declarations (Rust)
+        "Struct",
       }
 
       local overrides = {
@@ -591,8 +612,10 @@ return {
           -- See outline.nvim config above for full exclusion rationale.
           _ = default_filter,
           rust = vim.list_extend({
-            "Macro",  -- macro_rules!/proc macros
-            "Object", -- impl blocks
+            -- macro_rules!/proc macros
+            "Macro",
+            -- impl blocks
+            "Object",
           }, default_filter),
         },
       }
@@ -820,7 +843,9 @@ return {
       vim.api.nvim_create_autocmd("BufEnter", {
         group = group,
         callback = function()
-          if vim.bo.buftype == "" then sync_keymaps() end
+          if vim.bo.buftype == "" then
+            sync_keymaps()
+          end
         end,
       })
     end,

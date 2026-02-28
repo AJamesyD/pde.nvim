@@ -48,10 +48,11 @@ return {
       vim.api.nvim_create_autocmd({ "LspAttach", "BufWritePost", "DirChanged", "BufEnter" }, {
         callback = vim.schedule_wrap(function()
           local config = require("codecompanion.config")
-          if not config.interactions then return end
+          if not config.interactions then
+            return
+          end
           local root = LazyVim.root()
-          local adapter = vim.fn.filereadable(root .. "/Cargo.toml") == 1
-            and "symposium" or "kiro"
+          local adapter = vim.fn.filereadable(root .. "/Cargo.toml") == 1 and "symposium" or "kiro"
           for _, interaction in pairs(config.interactions) do
             if type(interaction) == "table" and interaction.adapter then
               interaction.adapter = adapter

@@ -1,6 +1,10 @@
 local map = vim.keymap.set
-map("n", "<leader>m", function() require("treesj").toggle() end, { desc = "Split/Join" })
-map("n", "<leader>M", function() require("treesj").toggle({ split = { recursive = true } }) end, { desc = "Split/Join (Recursive)" })
+map("n", "<leader>m", function()
+  require("treesj").toggle()
+end, { desc = "Split/Join" })
+map("n", "<leader>M", function()
+  require("treesj").toggle({ split = { recursive = true } })
+end, { desc = "Split/Join (Recursive)" })
 
 return {
   -- Reconfigure LazyVim defaults
@@ -103,6 +107,16 @@ return {
       return opts
     end,
   },
+  {
+    "neovim/nvim-lspconfig",
+    ---@class PluginLspOpts
+    opts = {
+      servers = {
+        ts_query_ls = {},
+      },
+    },
+  },
+
   -- Other
   {
     "chrisgrieser/nvim-various-textobjs",

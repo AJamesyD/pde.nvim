@@ -7,6 +7,26 @@ M.WIDTH_AERIAL = 120 -- hide aerial breadcrumbs
 M.WIDTH_BRANCH = 100 -- hide branch
 M.WIDTH_PROGRESS = 80 -- hide progress/location
 
+-- Filetypes for UI chrome / non-editor buffers. Used by multiple plugins
+-- (lualine winbar, smartcolumn, colorful-winsep) to skip decoration.
+M.SPECIAL_FILETYPES = {
+  "DiffviewFiles",
+  "TelescopePrompt",
+  "TelescopeResults",
+  "trouble",
+  "alpha",
+  "dashboard",
+  "lazy",
+  "mason",
+  "neo-tree",
+  "notify",
+  "snacks_dashboard",
+  "snacks_notif",
+  "snacks_terminal",
+  "snacks_win",
+  "toggleterm",
+}
+
 ---@class reload_lsp_config_opts
 --- Search criteria for active lsp
 ---@field client_filter vim.lsp.get_clients.Filter
@@ -143,7 +163,7 @@ end
 --- Shorten a git branch name by stripping noise and keeping the most useful signal.
 --- Pure string logic — no vim dependencies, so it's testable outside neovim.
 ---@param name string raw branch name
----@param max_len? integer hard cap (default 30). 0 = no cap.
+---@param max_len? integer hard cap (default 15% of columns). 0 = no cap.
 ---@return string
 M.format_branch = function(name, max_len)
   max_len = max_len or math.floor(vim.o.columns * 0.15)
@@ -161,9 +181,20 @@ M.format_branch = function(name, max_len)
   -- Strip conventional prefixes only when over max_len
   if #result > max_len then
     local prefixes = {
-      "feature/", "feat/", "bugfix/", "fix/", "hotfix/",
-      "release/", "chore/", "docs/", "refactor/",
-      "ci/", "test/", "perf/", "build/", "style/",
+      "feature/",
+      "feat/",
+      "bugfix/",
+      "fix/",
+      "hotfix/",
+      "release/",
+      "chore/",
+      "docs/",
+      "refactor/",
+      "ci/",
+      "test/",
+      "perf/",
+      "build/",
+      "style/",
     }
     for _, prefix in ipairs(prefixes) do
       if result:sub(1, #prefix) == prefix then

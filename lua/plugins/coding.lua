@@ -8,7 +8,7 @@ return {
         "saghen/blink.compat",
         optional = false,
       },
-      { dir = "~/Code/blink-cmp-rust.nvim", opts = {} },
+      { "AJamesyD/blink-cmp-rust.nvim", opts = {} },
     },
     ---@param opts blink.cmp.Config
     opts = function(_, opts)

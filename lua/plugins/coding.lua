@@ -4,14 +4,16 @@ return {
     "saghen/blink.cmp",
     optional = true,
     dependencies = {
-      -- TODO: Possibly integrate https://github.com/zjp-CN/nvim-cmp-lsp-rs?
       {
         "saghen/blink.compat",
         optional = false,
       },
+      { dir = "~/Code/blink-cmp-rust.nvim", opts = {} },
     },
     ---@param opts blink.cmp.Config
     opts = function(_, opts)
+      local ok, rust_cmp = pcall(require, "blink-cmp-rust")
+
       ---@type blink.cmp.Config
       ---@diagnostic disable-next-line: missing-fields
       local overrides = {
@@ -60,6 +62,38 @@ return {
           },
         },
       }
+
+      -- Wire blink-cmp-rust if available
+      if ok then
+        local existing_transform = opts.sources
+          and opts.sources.providers
+          and opts.sources.providers.lsp
+          and opts.sources.providers.lsp.transform_items
+
+        overrides.sources.providers = {
+          lsp = {
+            transform_items = function(ctx, items)
+              if existing_transform then
+                items = existing_transform(ctx, items)
+              end
+              return rust_cmp.transform_items(ctx, items)
+            end,
+          },
+        }
+
+        local default_sorts = opts.fuzzy and opts.fuzzy.sorts
+        overrides.fuzzy = {
+          sorts = function()
+            local base = type(default_sorts) == "function" and default_sorts()
+              or default_sorts
+              or { "score", "sort_text" }
+            if vim.bo.filetype == "rust" then
+              return vim.list_extend({ rust_cmp.compare }, base)
+            end
+            return base
+          end,
+        }
+      end
 
       opts = vim.tbl_deep_extend("force", opts, overrides)
       return opts

@@ -5,6 +5,7 @@
   "VimBrazilConfig": { "branch": "mainline", "commit": "ff53c097d534778fa9b0d990632bac19edca1668" },
   "VimIon": { "branch": "mainline", "commit": "b96c3608bac8d1ffc8ea376f9706a064e2e4a9c6" },
   "aerial.nvim": { "branch": "master", "commit": "645d108a5242ec7b378cbe643eb6d04d4223f034" },
+  "blink-cmp-rust.nvim": { "branch": "mainline", "commit": "1264f26006543e5b01d19fee280e394e5ca4e697" },
   "blink.cmp": { "branch": "main", "commit": "4b18c32adef2898f95cdef6192cbd5796c1a332d" },
   "blink.compat": { "branch": "main", "commit": "2ed6d9a28b07fa6f3bface818470605f8896408c" },
   "bufferline.nvim": { "branch": "main", "commit": "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3" },

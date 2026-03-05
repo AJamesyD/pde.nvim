@@ -140,3 +140,15 @@ vim.keymap.set("n", "<leader>cD", function()
     restart_cmd = "RustAnalyzer reloadSettings",
   })
 end, { desc = "Cycle Diagnostic Level", buffer = bufnr })
+
+require("snacks")
+  .toggle({
+    name = "Rust Completion Sorting",
+    get = function()
+      return require("blink-cmp-rust").is_enabled()
+    end,
+    set = function(state)
+      require("blink-cmp-rust").enable(state)
+    end,
+  })
+  :map("<leader>ur")

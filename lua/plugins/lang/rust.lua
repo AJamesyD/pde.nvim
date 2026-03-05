@@ -145,25 +145,18 @@ return {
               },
               -- TODO: conditionally disable for big projects
               -- use bacon or flycheck instead
-              checkOnSave = true,
               check = {
                 command = "clippy",
                 extraArgs = {
                   "--no-deps",
                 },
-                features = "all",
               },
               completion = {
                 fullFunctionSignatures = { enable = true },
-                postfix = { enable = false }, -- TODO: eventually try using these
               },
               diagnostics = {
-                enable = true,
                 experimental = {
                   enable = true,
-                },
-                disabled = {
-                  "unresolved-proc-macro",
                 },
                 styleLints = { enable = true },
               },
@@ -172,7 +165,6 @@ return {
                   ".cargo",
                   ".config",
                   ".direnv",
-                  ".git",
                   ".github",
                   ".gitlab",
                   ".jj",
@@ -180,7 +172,6 @@ return {
                   "bin",
                   "build",
                   "node_modules",
-                  "target",
                   "venv",
                 },
               },
@@ -197,12 +188,11 @@ return {
               },
               inlayHints = {
                 closingBraceHints = {
-                  enable = true,
                   minLines = 35,
                 },
                 -- closureCaptureHints = { enable = true }, -- TODO: make toggle-able
                 expressionAdjustmentHints = {
-                  enable = true,
+                  enable = "always",
                   hideOutsideUnsafe = true,
                 },
                 genericParameterHints = {
@@ -211,9 +201,8 @@ return {
                 },
               },
               lens = {
-                enable = true,
-                debug = { enable = true },
-                implementations = { enable = true },
+                run = { enable = false },
+                debug = { enable = false },
                 -- All references default to false.
                 -- TODO: make toggle-able
                 references = {
@@ -222,7 +211,6 @@ return {
                   -- method = { enable = true },
                   -- trait = { enable = true },
                 },
-                run = { enable = true },
               },
               lru = {
                 capacity = 512,
@@ -248,7 +236,7 @@ return {
       local toolbox_ra_path = vim.fn.expand("~") .. "/.toolbox/bin/rust-analyzer"
       if vim.fn.executable(toolbox_ra_path) ~= 0 then
         vim.notify("Using toolbox-vended rust-analyzer")
-        overrides.server.default_settings["rust-analyzer"].server = { path = toolbox_ra_path }
+        overrides.server.cmd = { toolbox_ra_path }
       end
 
       opts = vim.tbl_deep_extend("force", opts, overrides)

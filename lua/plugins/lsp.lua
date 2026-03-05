@@ -58,6 +58,9 @@ return {
     branch = "release/2.x",
     event = { "LspAttach", "BufWritePost" },
     opts = {},
-    config = true,
+    config = function(_, opts)
+      require("lensline").setup(opts)
+      require("lensline").hide()
+    end,
   },
 }

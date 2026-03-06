@@ -41,6 +41,7 @@ return {
             "avante_mentions",
             "avante_files",
           },
+          ---@diagnostic disable-next-line: redundant-parameter, unused-local
           default = function(ctx)
             local success, node = pcall(vim.treesitter.get_node)
             if success and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
@@ -83,6 +84,7 @@ return {
 
         local default_sorts = opts.fuzzy and opts.fuzzy.sorts
         overrides.fuzzy = {
+          ---@diagnostic disable-next-line: assign-type-mismatch
           sorts = function()
             local base = type(default_sorts) == "function" and default_sorts()
               or default_sorts

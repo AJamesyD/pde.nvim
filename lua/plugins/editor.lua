@@ -237,7 +237,6 @@ return {
       { "<leader>fR", function() Snacks.picker.recent({ filter = { cwd = true }}) end, desc = "Recent (cwd)" },
       -- git
       { "<leader>gc", false },
-      { "<leader>gs", false },
       -- search
       { '<leader>s"', false },
       { "<leader>sa", false },

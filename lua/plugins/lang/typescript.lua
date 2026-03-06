@@ -7,14 +7,8 @@ return {
       buffers = {
         preambles = {
           typescript = {
+            "// @ts-nocheck",
             "/* eslint-disable */",
-            "export {};",
-            "declare const console: Console;",
-            "declare const process: NodeJS.Process;",
-            "declare const setTimeout: typeof globalThis.setTimeout;",
-            "declare const fetch: typeof globalThis.fetch;",
-            "declare const URL: typeof globalThis.URL;",
-            "declare const Buffer: typeof globalThis.Buffer;",
           },
         },
       },

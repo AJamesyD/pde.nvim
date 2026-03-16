@@ -1,30 +1,19 @@
 local bufnr = vim.api.nvim_get_current_buf()
+local lsp_name = "basedpyright"
+local modes = { [0] = "off", "basic", "standard", "strict", "all" }
+
 vim.keymap.set("n", "<leader>cD", function()
-  local client = vim.lsp.get_clients({
-    bufnr = bufnr,
-    name = "pyright",
-  })[1]
-  local settings = client.config.settings or {}
-
-  vim.g.pyright_level = (vim.g.pyright_level + 1) % 5
-  local type_checking_mode = ""
-  if vim.g.pyright_level == 0 then
-    type_checking_mode = "off"
-  elseif vim.g.pyright_level == 1 then
-    type_checking_mode = "basic"
-  elseif vim.g.pyright_level == 2 then
-    type_checking_mode = "standard"
-  elseif vim.g.pyright_level == 3 then
-    type_checking_mode = "strict"
-  elseif vim.g.pyright_level == 4 then
-    type_checking_mode = "all"
+  local client = vim.lsp.get_clients({ bufnr = bufnr, name = lsp_name })[1]
+  if not client then
+    vim.notify("No " .. lsp_name .. " client attached", vim.log.levels.WARN)
+    return
   end
-  settings.basedpyright.analysis.typeCheckingMode = type_checking_mode
-  vim.notify("pyright typeCheckingMode: " .. type_checking_mode)
 
-  client.config.settings = settings
-  client.notify("workspace/didChangeConfiguration", {
-    settings = settings,
-  })
+  vim.g.pyright_level = ((vim.g.pyright_level or 1) + 1) % #modes
+  local mode = modes[vim.g.pyright_level]
+
+  client.config.settings.basedpyright.analysis.typeCheckingMode = mode
+  vim.notify(lsp_name .. " typeCheckingMode: " .. mode)
+  client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
   vim.cmd("LspRestart")
 end, { desc = "Cycle Diagnostic Level", buffer = bufnr })

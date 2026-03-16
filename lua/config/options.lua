@@ -22,10 +22,8 @@ if vim.fn.executable("pbcopy") then
   vim.g.clipboard = "pbcopy"
 end
 
-if require("util").amazon.is_amazon_machine() then
-  -- XXX: For some reason, basedpyright doesn't work with Bemol generated config files
-  g.lazyvim_python_lsp = "pyright"
-end
+-- NOTE: basedpyright + bemol now works via the pythonPath bridge in plugins/lang/python.lua
+-- See: Cladam-settings, Nzimmerl dotfiles for prior art on this pattern
 
 -- Plugin globals
 if vim.fn.exists("$SSH_CLIENT") ~= 0 then

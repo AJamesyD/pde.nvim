@@ -1,3 +1,23 @@
+-- ty (Astral) experiment: replacing basedpyright with ty
+--
+-- ty is Astral's Rust-based type checker (beta, March 2026). ~80x faster incremental
+-- checks than pyright, but 53% typing conformance vs pyright's 98%.
+-- See: https://docs.astral.sh/ty/editors/neovim/
+--
+-- ty + ruff split:
+--   ty:   type checking, completions, hover, goto-def, rename, inlay hints, find refs
+--   ruff: formatting, linting, organize imports (ty has no formatter)
+--
+-- bemol: generates ty.toml natively (opt-in via language-servers = ['ty'] in .bemol config)
+--   No pythonPath bridge needed unlike basedpyright.
+--   See: bemol source src/bemol/lang/python.py (_write_ty_settings)
+--
+-- Known issues:
+--   - :edit removes diagnostics until next change (ty#3010)
+--   - Some setups need explicit cmd (ty#2616)
+--
+-- Prior art: EcglasNvim, SabebDotfiles, Butryan_dotfiles (code.amazon.com)
+
 return {
   -- Reconfigure LazyVim defaults
   {
@@ -5,82 +25,17 @@ return {
     ---@class PluginLspOpts
     opts = {
       servers = {
-        basedpyright = {
+        -- Disable basedpyright/pyright (LazyVim python extra enables one of these)
+        basedpyright = { enabled = false },
+        pyright = { enabled = false },
+
+        ty = {
+          cmd = { "ty", "server" }, -- explicit cmd avoids ty#2616
           settings = {
-            basedpyright = {
-              disableLanguageServices = false,
-              disableOrganizeImports = true,
-              disableTaggedHints = false,
-              analysis = {
-                autoImportCompletions = true,
-                autoSearchPaths = true,
-                typeCheckingMode = "basic",
-              },
-            },
-          },
-        },
-        pyright = {
-          settings = {
-            basedpyright = {
-              disableLanguageServices = false,
-              disableOrganizeImports = true,
-              disableTaggedHints = false,
-              analysis = {
-                autoImportCompletions = true,
-                autoSearchPaths = true,
-                typeCheckingMode = "standard",
-              },
-            },
-          },
-        },
-        pylsp = {
-          settings = {
-            pylsp = {
-              configurationSources = { "flake8" },
-              plugins = {
-                autopep8 = {
-                  enabled = false,
-                },
-                flake8 = {
-                  enabled = false,
-                },
-                jedi_completion = {
-                  enabled = false,
-                },
-                jedi_definition = {
-                  enabled = false,
-                },
-                jedi_hover = {
-                  enabled = false,
-                },
-                jedi_references = {
-                  enabled = false,
-                },
-                jedi_signature_help = {
-                  enabled = false,
-                },
-                jedi_symbols = {
-                  enabled = false,
-                },
-                mccabe = {
-                  enabled = false,
-                },
-                pycodestyle = {
-                  enabled = false,
-                },
-                pyflakes = {
-                  enabled = false,
-                },
-                rope_completion = {
-                  enabled = false,
-                },
-                rope_autoimport = {
-                  enabled = false,
-                },
-                yapf = {
-                  enabled = false,
-                },
-              },
+            ty = {
+              showSyntaxErrors = false, -- ruff handles syntax errors
+              diagnosticMode = "openFilesOnly",
+              completions = { autoImport = true },
             },
           },
         },
@@ -96,7 +51,9 @@ return {
       buffers = {
         preambles = {
           python = {
-            "# pyright: reportMissingImports=false, reportMissingModuleSource=false",
+            -- ty uses `# ty: ignore` not `# pyright: ignore`, but respects
+            -- `# type: ignore` (PEP 484). Use the standard form for otter.
+            "# type: ignore",
             "from __future__ import annotations",
             "from typing import *",
             "import os, sys, json, re, math",

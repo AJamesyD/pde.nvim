@@ -9,6 +9,9 @@ local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 -- Override default LazyVim globals
 g.lazyvim_picker = "snacks"
 g.lazyvim_prettier_needs_config = true
+-- NOTE: ty experiment branch. basedpyright/pyright disabled in plugins/lang/python.lua,
+-- ty added there instead. This global is unused but kept so the LazyVim extra doesn't
+-- pull in pyright as a default.
 g.lazyvim_python_lsp = "basedpyright"
 g.trouble_lualine = false
 g.snacks_animate = false
@@ -22,10 +25,9 @@ if vim.fn.executable("pbcopy") then
   vim.g.clipboard = "pbcopy"
 end
 
-if require("util").amazon.is_amazon_machine() then
-  -- XXX: For some reason, basedpyright doesn't work with Bemol generated config files
-  g.lazyvim_python_lsp = "pyright"
-end
+-- NOTE: basedpyright + bemol now works via the pythonPath bridge in plugins/lang/python.lua
+-- See: Cladam-settings, Nzimmerl dotfiles for prior art on this pattern
+-- (ty experiment: this block is removed; ty uses bemol-generated ty.toml natively)
 
 -- Plugin globals
 if vim.fn.exists("$SSH_CLIENT") ~= 0 then

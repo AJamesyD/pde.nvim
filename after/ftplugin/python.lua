@@ -1,30 +1,24 @@
+-- ty diagnostic mode cycling
+-- ty has no typeCheckingMode (unlike basedpyright). The closest equivalent is
+-- diagnosticMode: "off" / "openFilesOnly" / "workspace"
+-- See: https://docs.astral.sh/ty/reference/editor-settings/
+
 local bufnr = vim.api.nvim_get_current_buf()
+local modes = { "off", "openFilesOnly", "workspace" }
+
 vim.keymap.set("n", "<leader>cD", function()
-  local client = vim.lsp.get_clients({
-    bufnr = bufnr,
-    name = "pyright",
-  })[1]
-  local settings = client.config.settings or {}
-
-  vim.g.pyright_level = (vim.g.pyright_level + 1) % 5
-  local type_checking_mode = ""
-  if vim.g.pyright_level == 0 then
-    type_checking_mode = "off"
-  elseif vim.g.pyright_level == 1 then
-    type_checking_mode = "basic"
-  elseif vim.g.pyright_level == 2 then
-    type_checking_mode = "standard"
-  elseif vim.g.pyright_level == 3 then
-    type_checking_mode = "strict"
-  elseif vim.g.pyright_level == 4 then
-    type_checking_mode = "all"
+  local client = vim.lsp.get_clients({ bufnr = bufnr, name = "ty" })[1]
+  if not client then
+    vim.notify("No ty client attached", vim.log.levels.WARN)
+    return
   end
-  settings.basedpyright.analysis.typeCheckingMode = type_checking_mode
-  vim.notify("pyright typeCheckingMode: " .. type_checking_mode)
 
-  client.config.settings = settings
-  client.notify("workspace/didChangeConfiguration", {
-    settings = settings,
+  vim.g.ty_diag_level = ((vim.g.ty_diag_level or 1) % #modes) + 1
+  local mode = modes[vim.g.ty_diag_level]
+
+  client.config.settings = vim.tbl_deep_extend("force", client.config.settings or {}, {
+    ty = { diagnosticMode = mode },
   })
-  vim.cmd("LspRestart")
-end, { desc = "Cycle Diagnostic Level", buffer = bufnr })
+  vim.notify("ty diagnosticMode: " .. mode)
+  client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+end, { desc = "Cycle Diagnostic Mode", buffer = bufnr })

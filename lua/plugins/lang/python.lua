@@ -60,6 +60,13 @@ return {
                 autoImportCompletions = true,
                 autoSearchPaths = true,
                 typeCheckingMode = "basic",
+                -- Suppress diagnostics that overlap with ruff or are
+                -- too noisy for third-party code without type stubs.
+                diagnosticSeverityOverrides = {
+                  reportMissingTypeStubs = false,
+                  reportUnusedImport = false, -- ruff F401
+                  reportUnusedVariable = false, -- ruff F841
+                },
               },
             },
           },

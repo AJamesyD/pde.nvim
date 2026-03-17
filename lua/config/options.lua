@@ -71,6 +71,16 @@ opt.spell = true
 opt.spelloptions = "camel"
 opt.spelllang = "en_us"
 
+-- Diff: match git's histogram algorithm, raise linematch budget
+opt.diffopt = {
+  "internal",
+  "filler",
+  "closeoff",
+  "linematch:60",
+  "algorithm:histogram",
+  "indent-heuristic",
+}
+
 -- Override default LazyVim options
 opt.autowrite = false
 opt.clipboard = ""

@@ -170,71 +170,13 @@ return {
     },
   },
 
-  -- Reconfigure LazyVim extras
-  {
-    "ibhagwan/fzf-lua",
-    optional = true,
-    keys = {
-      { "<leader>,", false },
-      { "<leader>/", false },
-      { "<leader>:", false },
-      { "<leader><space>", "<cmd>FzfLua resume<cr>", desc = "Resume Search" },
-      -- find
-      { "<leader>fc", false },
-      { "<leader>fr", LazyVim.pick("oldfiles"), desc = "Recent (Root Dir)" },
-      { "<leader>fR", LazyVim.pick("oldfiles", { cwd = vim.uv.cwd() }), desc = "Recent (cwd)" },
-      -- git
-      { "<leader>gc", false },
-      { "<leader>gs", false },
-      -- search
-      { '<leader>s"', false },
-      { "<leader>sa", false },
-      { "<leader>sb", false },
-      { "<leader>sc", false },
-      { "<leader>sC", false },
-      { "<leader>sH", false },
-      { "<leader>sm", false },
-      { "<leader>sM", false },
-      { "<leader>so", false },
-      { "<leader>ss", false },
-      { "<leader>sS", false },
-      -- undo
-      -- TODO: undo keymaps
-      -- spell
-      { "<leader>ss", "<cmd>FzfLua spell_suggest<cr>", desc = "Spelling Suggestions" },
-      { "z=", "<CMD>Telescope spell_suggest<CR>", desc = "Spelling Suggestions" },
-    },
-    opts = function(_, opts)
-      local overrides = {
-        keymap = {
-          fzf = {
-            -- use cltr-q to select all items and convert to quickfix list
-            ["ctrl-q"] = "select-all+accept",
-          },
-        },
-        oldfiles = {
-          cwd_only = true,
-          include_current_session = true,
-        },
-        winopts = {
-          height = 0.9,
-          width = 0.9,
-          row = 0.50,
-          col = 0.50,
-        },
-      }
-
-      opts = vim.tbl_deep_extend("force", opts, overrides)
-      return opts
-    end,
-  },
   {
     "folke/snacks.nvim",
     -- stylua: ignore
     keys = {
       { "<leader>/", false },
       { "<leader>:", false },
-      { "<leader><space>", function() Snacks.picker.resume() end, desc = "Resume" },
+      { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find" },
       -- find
       { "<leader>fc", false },
       { "<leader>fr", LazyVim.pick("oldfiles"), desc = "Recent (Root Dir)" },

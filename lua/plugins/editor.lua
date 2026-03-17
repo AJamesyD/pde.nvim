@@ -746,6 +746,7 @@ return {
       -- per-branch when LSP root isn't available, with git root as a
       -- secondary fallback (covers detached HEAD where git_branch fails).
       scope = "lsp",
+      quick_select = "asdfghjkl",
       default_scopes = {
         lsp = {
           fallback = "git_branch",

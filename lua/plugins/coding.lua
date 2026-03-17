@@ -9,6 +9,7 @@ return {
         optional = false,
       },
       { "AJamesyD/blink-cmp-rust.nvim", dev = true, opts = {} },
+      { "xzbdmw/colorful-menu.nvim", opts = {} },
     },
     ---@param opts blink.cmp.Config
     opts = function(_, opts)
@@ -24,6 +25,25 @@ return {
 
         completion = {
           keyword = { range = "full" },
+          menu = {
+            draw = {
+              -- colorful-menu.nvim provides per-LSP syntax highlighting for completion
+              -- items by reconstructing labels into synthetic code snippets before parsing.
+              -- This replaces blink's built-in treesitter highlighting (set by LazyVim).
+              treesitter = {},
+              columns = { { "kind_icon" }, { "label", gap = 1 } },
+              components = {
+                label = {
+                  text = function(ctx)
+                    return require("colorful-menu").blink_components_text(ctx)
+                  end,
+                  highlight = function(ctx)
+                    return require("colorful-menu").blink_components_highlight(ctx)
+                  end,
+                },
+              },
+            },
+          },
         },
 
         sources = {

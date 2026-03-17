@@ -27,6 +27,30 @@ M.SPECIAL_FILETYPES = {
   "toggleterm",
 }
 
+-- Structural LSP symbol kinds for outline/aerial filters.
+-- Types, callables, and module boundaries only.
+-- Excludes: too granular (Property, Field, Variable, Constant, Parameter, EnumMember),
+-- literal values (String, Number, Boolean, Array, Key, Null),
+-- niche (Event, Operator, TypeParameter, StaticMethod),
+-- framework-specific (Component, Fragment),
+-- redundant (File, Package).
+M.OUTLINE_SYMBOLS = {
+  "Class",
+  "Constructor",
+  "Enum",
+  "Function",
+  "Interface",
+  "Method",
+  "Module",
+  "Namespace",
+  "Struct",
+}
+-- Rust adds macro and impl block symbols to the base set.
+M.OUTLINE_SYMBOLS_RUST = vim.list_extend({
+  "Macro",
+  "Object",
+}, vim.deepcopy(M.OUTLINE_SYMBOLS))
+
 ---@class reload_lsp_config_opts
 --- Search criteria for active lsp
 ---@field client_filter vim.lsp.get_clients.Filter

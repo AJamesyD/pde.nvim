@@ -516,28 +516,7 @@ return {
     "hedyhli/outline.nvim",
     optional = true,
     opts = function(_, opts)
-      local default_symbols = {
-        -- class declarations (includes lua_ls ---@class)
-        "Class",
-        -- class constructors (mainly TS; Python __init__ emits as Method)
-        "Constructor",
-        -- enumeration types (includes lua_ls ---@enum)
-        "Enum",
-        -- standalone callables
-        "Function",
-        -- type contracts (TS interfaces, Rust traits)
-        "Interface",
-        -- attached callables (class/struct/impl methods)
-        "Method",
-        -- module boundaries
-        "Module",
-        -- namespace groupings
-        "Namespace",
-        -- struct declarations (Rust)
-        "Struct",
-        -- type aliases (Rust/TS `type`, lua_ls ---@alias)
-        "TypeAlias",
-      }
+      local util = require("util")
 
       local overrides = {
         outline_window = {
@@ -548,24 +527,12 @@ return {
         },
         symbols = {
           filter = {
-            -- Structural symbols only — types, callables, and module boundaries.
-            -- Excludes:
-            --   Too granular: Property, Field, Variable, Constant, Parameter, EnumMember
-            --   Literal values: String, Number, Boolean, Array, Key, Null
-            --   Rarely emitted / niche: Event, Operator, TypeParameter, StaticMethod
-            --   Framework-specific (JSX): Component, Fragment
-            --   Redundant: File (outline is per-buffer), Package (rarely emitted)
-            default = default_symbols,
+            default = util.OUTLINE_SYMBOLS,
             -- lua_ls emits tables as Object/Array; use exclusion filter instead
             -- to avoid hiding the entire structure. Excludes only literal values
             -- and control flow (lua_ls emits for/if as Package).
             lua = { "String", "Number", "Boolean", "Package", exclude = true },
-            rust = vim.list_extend({
-              -- macro_rules!/proc macros
-              "Macro",
-              -- impl blocks
-              "Object",
-            }, default_symbols),
+            rust = util.OUTLINE_SYMBOLS_RUST,
           },
         },
       }
@@ -579,6 +546,8 @@ return {
     "stevearc/aerial.nvim",
     optional = true,
     opts = function(_, opts)
+      local util = require("util")
+
       -- Filetype map: prefer treesitter for Lua because lua_ls emits
       -- tables as Object/Array with unhelpful [1], [2] names.
       -- Treesitter parses Lua grammar directly for better symbols.
@@ -587,39 +556,11 @@ return {
         lua = { "treesitter", "lsp" },
       }
 
-      local default_filter = {
-        -- class declarations
-        "Class",
-        -- class constructors
-        "Constructor",
-        -- enumeration types
-        "Enum",
-        -- standalone callables
-        "Function",
-        -- type contracts (TS interfaces, Rust traits)
-        "Interface",
-        -- attached callables
-        "Method",
-        -- module boundaries
-        "Module",
-        -- namespace groupings
-        "Namespace",
-        -- struct declarations (Rust)
-        "Struct",
-      }
-
       local overrides = {
         highlight_on_hover = true,
         filter_kind = {
-          -- Structural symbols only — types, callables, and module boundaries.
-          -- See outline.nvim config above for full exclusion rationale.
-          _ = default_filter,
-          rust = vim.list_extend({
-            -- macro_rules!/proc macros
-            "Macro",
-            -- impl blocks
-            "Object",
-          }, default_filter),
+          _ = util.OUTLINE_SYMBOLS,
+          rust = util.OUTLINE_SYMBOLS_RUST,
         },
       }
       opts = vim.tbl_deep_extend("force", opts, overrides)

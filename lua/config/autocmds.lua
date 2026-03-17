@@ -133,9 +133,24 @@ if util.amazon.is_amazon_machine() then
         vim.b[bufnr].autoformat = false
       end
 
+      -- Load workspace folders from pre-existing .bemol/ws_root_folders.
+      -- If bemol hasn't been run yet, this is a no-op.
+      -- After running bemol externally, use :BemolRefresh to pick up folders.
       if util.amazon.is_bemol_proj(bufnr) then
-        util.amazon.bemol()
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
+        if client then
+          local root_dir = util.amazon.amazon_root(filepath)
+          util.amazon.load_bemol_workspace_folders(client, root_dir)
+        end
       end
     end,
   })
+
+  vim.api.nvim_create_user_command("Bemol", function()
+    util.amazon.bemol_run()
+  end, { desc = "Run bemol and refresh LSP workspace folders" })
+
+  vim.api.nvim_create_user_command("BemolRefresh", function()
+    util.amazon.bemol_refresh()
+  end, { desc = "Re-read bemol workspace folders for all LSP clients" })
 end

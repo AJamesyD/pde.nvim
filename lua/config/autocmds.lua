@@ -112,10 +112,9 @@ if util.amazon.is_amazon_machine() then
       local bufglobals = vim.b[bufnr]
       local filepath = vim.api.nvim_buf_get_name(bufnr)
 
-      local is_brazil_proj = util.amazon.brazil_root(filepath)
-      local is_peru_proj = util.amazon.peru_root(filepath)
+      local is_amazon_proj = util.amazon.amazon_root(filepath)
 
-      if is_brazil_proj or is_peru_proj then
+      if is_amazon_proj then
         bufglobals.autoformat = false
       end
     end,
@@ -127,7 +126,7 @@ if util.amazon.is_amazon_machine() then
       local bufnr = event.buf
       local filepath = vim.api.nvim_buf_get_name(bufnr)
 
-      local is_brazil_proj = util.amazon.brazil_root(filepath)
+      local is_brazil_proj = util.amazon.amazon_root(filepath, "brazil")
 
       if is_brazil_proj then
         -- Often want to disable autoformatting in Brazil projects

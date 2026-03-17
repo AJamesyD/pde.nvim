@@ -15,18 +15,6 @@ local PERU_BEMOL_SUPPORTED_FTS = {
 
 local M = {}
 
-M.brazil_root = function(filename)
-  local root_file = vim.fs.find(function(name, _)
-    return name:match("^Config$")
-  end, { path = filename, type = "file", upward = true })[1]
-  return vim.fs.dirname(root_file)
-end
-M.peru_root = function(filename)
-  local root_file = vim.fs.find(function(name, _)
-    return name:match("^brazil%.ion$")
-  end, { path = filename, type = "file", upward = true })[1]
-  return vim.fs.dirname(root_file)
-end
 ---@param filename string
 ---@param build_system? "brazil"|"peru"
 --- Build system. Defaults to both Brazil and Peru
@@ -56,8 +44,8 @@ M.is_bemol_proj = function(bufnr)
   local filepath = vim.api.nvim_buf_get_name(bufnr)
   local filetype = vim.bo[bufnr].filetype
 
-  local is_brazil_broj = M.brazil_root(filepath) and vim.tbl_contains(BRAZIL_BEMOL_SUPPORTED_FTS, filetype)
-  local is_peru_proj = M.peru_root(filepath) and vim.tbl_contains(PERU_BEMOL_SUPPORTED_FTS, filetype)
+  local is_brazil_broj = M.amazon_root(filepath, "brazil") and vim.tbl_contains(BRAZIL_BEMOL_SUPPORTED_FTS, filetype)
+  local is_peru_proj = M.amazon_root(filepath, "peru") and vim.tbl_contains(PERU_BEMOL_SUPPORTED_FTS, filetype)
 
   return is_brazil_broj or is_peru_proj
 end
@@ -102,32 +90,6 @@ M.bemol = function()
     end,
   }
   overseer.register_template(bemol_ongoing_task_def)
-end
-
-M.set_bedrock_keys = function()
-  local profile = "bedrock"
-  local credentials = vim
-    .system({ "aws", "configure", "export-credentials", "--profile", profile }, { text = true })
-    :wait()
-  if credentials.code ~= 0 then
-    vim.notify(vim.trim(credentials.stderr), vim.log.levels.ERROR)
-    return
-  end
-  local cred_data = vim.json.decode(credentials.stdout)
-  local region = vim.system({ "aws", "configure", "get", "region", "--profile", profile }, { text = true }):wait()
-  if region.code ~= 0 then
-    vim.notify(vim.trim(region.stderr), vim.log.levels.ERROR)
-    return
-  end
-  local region_text = vim.trim(region.stdout)
-  local bedrock_keys = table.concat({
-    cred_data.AccessKeyId,
-    cred_data.SecretAccessKey,
-    region_text,
-    cred_data.SessionToken,
-  }, ",")
-  vim.env.BEDROCK_KEYS = bedrock_keys
-  vim.notify(string.format("BEDROCK_KEYS set for profile %s in region %s", profile, region_text), vim.log.levels.INFO)
 end
 
 return M

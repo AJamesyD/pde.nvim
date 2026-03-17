@@ -27,7 +27,7 @@ return {
             cmd = { "barium" },
             filetypes = { "brazil-config" },
             root_dir = function(fname)
-              local primary = util.amazon.brazil_root(fname)
+              local primary = util.amazon.amazon_root(fname, "brazil")
               local fallback = vim.fs.dirname(vim.fs.find(".git", { path = fname, upward = true })[1])
               return primary or fallback
             end,

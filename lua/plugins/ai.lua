@@ -74,11 +74,7 @@ return {
           },
         },
         adapters = {
-          http = {
-            opts = { show_presets = false },
-          },
           acp = {
-            opts = { show_presets = false },
             symposium = function()
               local helpers = require("codecompanion.adapters.acp.helpers")
               return require("codecompanion.adapters.acp").new({
@@ -111,14 +107,8 @@ return {
                 },
               })
             end,
-            kiro = function()
-              return require("codecompanion.adapters").extend("kiro", {
-                commands = {
-                  default = { "kiro-cli", "acp", "--agent", "nvim" },
-                },
-              })
-            end,
-            claude_code = "claude_code",
+            kiro = "kiro",
+            opencode = "opencode",
           },
         },
         interactions = {

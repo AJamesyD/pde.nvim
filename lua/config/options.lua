@@ -9,6 +9,8 @@ local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 -- Override default LazyVim globals
 g.lazyvim_picker = "snacks"
 g.lazyvim_prettier_needs_config = true
+-- Pin to "basedpyright" so the LazyVim python extra doesn't fall back to pyright.
+-- The actual LSP choice is controlled by python_type_checker below.
 g.lazyvim_python_lsp = "basedpyright"
 g.trouble_lualine = false
 g.snacks_animate = false
@@ -22,8 +24,12 @@ if vim.fn.executable("pbcopy") then
   vim.g.clipboard = "pbcopy"
 end
 
--- NOTE: basedpyright + bemol now works via the pythonPath bridge in plugins/lang/python.lua
--- See: Cladam-settings, Nzimmerl dotfiles for prior art on this pattern
+-- Python type checker: "ty" (default) or "basedpyright"
+-- ty: fast incremental checks (~7-112x faster), lower conformance (beta, 0.0.x)
+-- basedpyright: high conformance, bemol pythonPath bridge for venv resolution
+-- See plugins/lang/python.lua for the conditional config.
+-- TODO: add a keybind to switch LSPs at runtime (stop current, start other)
+g.python_type_checker = "ty"
 
 -- Plugin globals
 if vim.fn.exists("$SSH_CLIENT") ~= 0 then

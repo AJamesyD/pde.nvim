@@ -1,14 +1,17 @@
--- basedpyright + bemol pythonPath bridge
+-- Python type checker config: ty or basedpyright, controlled by vim.g.python_type_checker
 --
--- Problem: bemol generates pyrightconfig.json with venvPath/venv fields, which
--- basedpyright marks as "discouraged" and doesn't resolve the same way pyright does.
--- See: https://docs.basedpyright.com/latest/configuration/config-files/ (discouraged settings)
+-- ty (Astral, beta): ~7-112x faster incremental checks, lower typing conformance.
+--   bemol generates ty.toml natively (language-servers = ['ty'] in .bemol config).
+--   Known: :edit clears diagnostics until next change (ty#3010), needs explicit cmd (ty#2616).
 --
--- Fix: on_init reads bemol's pyrightconfig.json and passes the venv interpreter
--- as python.pythonPath, which basedpyright fully supports.
--- Prior art: Cladam-settings, Nzimmerl dotfiles (code.amazon.com)
+-- basedpyright: high conformance, full LSP feature set (call hierarchy, type hierarchy).
+--   bemol generates pyrightconfig.json with venvPath/venv (marked "discouraged" by basedpyright).
+--   Workaround: on_init reads bemol's config and passes the interpreter as python.pythonPath.
+
+local use_ty = vim.g.python_type_checker == "ty"
 
 --- Read bemol's pyrightconfig.json and return the venv python path, or nil.
+--- Only used when basedpyright is active.
 local function bemol_python_path(root_dir)
   local config_path = root_dir and (root_dir .. "/pyrightconfig.json")
   if not config_path or vim.fn.filereadable(config_path) ~= 1 then
@@ -31,13 +34,16 @@ local function bemol_python_path(root_dir)
 end
 
 return {
-  -- Reconfigure LazyVim defaults
   {
     "neovim/nvim-lspconfig",
     ---@class PluginLspOpts
     opts = {
       servers = {
-        basedpyright = {
+        -- Always disable pyright; lazyvim_python_lsp is pinned to basedpyright
+        -- to prevent LazyVim from enabling pyright as a fallback.
+        pyright = { enabled = false },
+
+        basedpyright = use_ty and { enabled = false } or {
           on_init = function(client)
             local python_path = bemol_python_path(client.config.root_dir)
             if python_path then
@@ -58,11 +64,21 @@ return {
             },
           },
         },
+
+        ty = use_ty and {
+          cmd = { "ty", "server" }, -- explicit cmd avoids ty#2616
+          settings = {
+            ty = {
+              showSyntaxErrors = false, -- ruff handles syntax errors
+              diagnosticMode = "openFilesOnly",
+              completions = { autoImport = true },
+            },
+          },
+        } or { enabled = false },
       },
     },
   },
 
-  -- Other
   {
     "jmbuhr/otter.nvim",
     optional = true,
@@ -70,7 +86,8 @@ return {
       buffers = {
         preambles = {
           python = {
-            "# pyright: reportMissingImports=false, reportMissingModuleSource=false",
+            -- `# type: ignore` is PEP 484, respected by both ty and basedpyright.
+            "# type: ignore",
             "from __future__ import annotations",
             "from typing import *",
             "import os, sys, json, re, math",

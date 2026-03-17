@@ -59,10 +59,7 @@ autocmd({ "BufWinEnter" }, {
       return
     end
 
-    bufglobals.is_relevant_file = false
-
     if util.is_relevant_file(bufname, bufnr) then
-      bufglobals.is_relevant_file = true
       return
     end
 

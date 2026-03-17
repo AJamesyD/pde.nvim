@@ -38,10 +38,10 @@ if vim.fn.exists("$SSH_CLIENT") ~= 0 then
 end
 
 -- Custom globals
-g.clippy_level = 0
+g.clippy_level = 0 -- cycle index for rust clippy lint level (after/ftplugin/rust.lua)
 g.concerning_file_size = 100 * 1024 -- 100 KB
 g.minipairs_disable = true
-g.pyright_level = 2
+g.pyright_level = 2 -- cycle index: 0=off 1=basic 2=standard 3=strict 4=all (after/ftplugin/python.lua)
 
 g.codeium_enabled = false
 

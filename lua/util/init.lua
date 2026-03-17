@@ -80,6 +80,8 @@ end
 ---@return boolean
 function M.is_relevant_file(full_file_name, bufnr)
   if not full_file_name or full_file_name == "" then
+    -- Unnamed buffers (scratch, new files) default to relevant so they
+    -- aren't unlisted by the BufWinEnter autocmd before the user saves.
     vim.b[bufnr].is_relevant_file = true
     return true
   end

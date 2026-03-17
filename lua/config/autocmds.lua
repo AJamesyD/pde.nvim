@@ -87,30 +87,22 @@ autocmd({ "BufWinEnter" }, {
   end,
 })
 
-autocmd({ "BufReadPost" }, {
+autocmd("FileType", {
   desc = "Disable spell if treesitter inactive",
   callback = function(event)
     local bufnr = event.buf
-
-    local is_relevant_file = vim.b[bufnr].is_relevant_file
-    local is_relevant_file_set_callback = function()
-      is_relevant_file = vim.b[bufnr].is_relevant_file
-      return type(is_relevant_file) == "boolean"
+    if not vim.bo[bufnr].buflisted then
+      return
     end
-
-    local ts_active_callback = function()
-      return vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()]
-    end
-
-    if vim.wait(500, is_relevant_file_set_callback, 50) then
-      if not is_relevant_file then
+    -- Treesitter highlight attaches after FileType; defer to let it initialize
+    vim.schedule(function()
+      if not vim.api.nvim_buf_is_valid(bufnr) then
         return
       end
-    end
-
-    if not vim.wait(2000, ts_active_callback, 200) then
-      vim.opt_local.spell = false
-    end
+      if not vim.treesitter.highlighter.active[bufnr] then
+        vim.bo[bufnr].spell = false
+      end
+    end)
   end,
 })
 

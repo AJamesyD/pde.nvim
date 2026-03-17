@@ -157,6 +157,11 @@ return {
       { "<leader>snl", false },
     },
     opts = {
+      lsp = {
+        hover = {
+          silent = true,
+        },
+      },
       presets = {
         bottom_search = false,
         lsp_doc_border = true,

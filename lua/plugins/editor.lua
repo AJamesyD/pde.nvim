@@ -159,6 +159,10 @@ return {
   {
     "lewis6991/gitsigns.nvim",
     opts = {
+      diff_opts = {
+        algorithm = "histogram",
+        linematch = 60,
+      },
       current_line_blame_opts = {
         virt_text_pos = "right_align",
         delay = 500,

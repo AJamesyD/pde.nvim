@@ -79,7 +79,6 @@ end
 ---@param bufnr number
 ---@return boolean
 function M.is_relevant_file(full_file_name, bufnr)
-  -- XXX: This method does not yet work well
   if not full_file_name or full_file_name == "" then
     vim.b[bufnr].is_relevant_file = true
     return true
@@ -91,43 +90,18 @@ function M.is_relevant_file(full_file_name, bufnr)
   local cwd_in_root = root:find(cwd, 1, true) == 1
   local root_in_cwd = cwd:find(root, 1, true) == 1
   if not cwd_in_root and not root_in_cwd then
-    -- root and cwd are not related
     vim.b[bufnr].is_relevant_file = false
     return false
   end
 
-  local find_command = (function()
-    if 1 == vim.fn.executable("fd") then
-      -- Allow symlinks so we can still find nix managed files
-      -- Exclude .git/ since we want hidden files but .git/ isn't typically in .gitignore
-      return { "fd", "--type", "file", "--type", "symlink", "--hidden", "--exclude", ".git/", "--color", "never" }
-    end
-  end)()
-
-  if not find_command then
-    vim.notify("You need to install fd", vim.log.levels.ERROR)
-    vim.b[bufnr].is_relevant_file = true
-    return true
-  end
-
-  -- Include --full-path so that we don't accidentally match if the same filename is found elsewhere under root,
-  -- E.g. Cargo.toml in a multi-package workspace
-  vim.list_extend(find_command, { "--full-path", "--base-directory", root, full_file_name })
-
-  local result = vim.system(find_command, { text = true }):wait()
-  if result.code ~= 0 then
-    vim.notify("fd command failed: " .. (result.stderr or ""), vim.log.levels.ERROR)
-    vim.b[bufnr].is_relevant_file = true
-    return true
-  end
-
-  local found = vim.trim(result.stdout or "")
-  if found == "" then
-    vim.b[bufnr].is_relevant_file = false
-    return false
-  end
-  vim.b[bufnr].is_relevant_file = true
-  return true
+  -- Check if the file lives under the project root.
+  -- Simpler and non-blocking compared to the previous fd-based approach.
+  -- Trade-off: gitignored files (target/, node_modules/) under root are
+  -- now considered relevant, but this rarely matters in practice.
+  local normalized = vim.fs.normalize(full_file_name)
+  local is_relevant = vim.startswith(normalized, root)
+  vim.b[bufnr].is_relevant_file = is_relevant
+  return is_relevant
 end
 
 ---@param mode string|string[]

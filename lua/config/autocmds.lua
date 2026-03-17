@@ -68,6 +68,7 @@ autocmd({ "BufWinEnter" }, {
 
     autocmd({ "BufWinLeave" }, {
       desc = "Unlist irrelevant buffer",
+      once = true,
       buffer = bufnr,
       callback = function()
         if vim.bo.modified then

@@ -110,19 +110,11 @@ end
 ---@param opts? vim.keymap.set.Opts
 M.map = function(mode, lhs, rhs, opts)
   opts = opts or {}
-
-  -- Default is no recursive remap
-  if type(opts.remap) == "boolean" then
-    opts.remap = opts.remap
-  elseif type(opts.noremap) == "boolean" then
-    opts.noremap = opts.noremap
-  end
-
-  -- Unsure of what default is, but I want it to be silent
-  if type(opts.silent) == "nil" then
+  -- vim.keymap.set defaults to silent = false; prefer silent for custom maps
+  -- to avoid "hit-enter" prompts on command-based mappings (e.g., shpool detach).
+  if opts.silent == nil then
     opts.silent = true
   end
-
   vim.keymap.set(mode, lhs, rhs, opts)
 end
 

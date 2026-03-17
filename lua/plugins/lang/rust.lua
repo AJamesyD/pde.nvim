@@ -52,7 +52,7 @@ return {
   {
     "mrcjkb/rustaceanvim",
     optional = true,
-    version = "^6",
+    version = "^8",
     ---@param opts rustaceanvim.Opts
     opts = function(_, opts)
       ---@type rustaceanvim.Opts

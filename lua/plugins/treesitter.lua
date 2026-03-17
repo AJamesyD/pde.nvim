@@ -65,13 +65,13 @@ return {
               ["]F"] = { query = "@function.outer", desc = "Next Function end" },
               ["]C"] = { query = "@class.outer", desc = "Next Class end" },
               ["]A"] = { query = "@parameter.inner", desc = "Next Parameter end" },
-              ["]z"] = { query = "@fold", desc = "Next Fold end" },
+              ["]Z"] = { query = "@fold", desc = "Next Fold end" },
             },
             goto_previous_start = {
               ["[f"] = { query = "@function.outer", desc = "Prev Function" },
               ["[c"] = { query = "@class.outer", desc = "Prev Class" },
               ["[a"] = { query = "@parameter.inner", desc = "Prev Parameter" },
-              ["[z"] = { query = "@fold", desc = "Next Fold" },
+              ["[z"] = { query = "@fold", desc = "Prev Fold" },
             },
             goto_previous_end = {
               ["[F"] = { query = "@function.outer", desc = "Prev Function end" },

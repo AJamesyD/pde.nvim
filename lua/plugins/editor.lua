@@ -158,9 +158,13 @@ return {
   },
   {
     "lewis6991/gitsigns.nvim",
+    keys = {
+      { "<leader>ghw", "<cmd>Gitsigns toggle_word_diff<cr>", desc = "Toggle Word Diff" },
+    },
     opts = {
       diff_opts = {
         algorithm = "histogram",
+        ignore_whitespace_change = true,
         linematch = 60,
       },
       current_line_blame_opts = {

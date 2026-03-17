@@ -22,6 +22,10 @@ return {
           enabled = true,
         },
 
+        completion = {
+          keyword = { range = "full" },
+        },
+
         sources = {
           -- adding any nvim-cmp sources here will enable them
           -- with blink.compat
@@ -39,6 +43,10 @@ return {
               return { "lsp", "path", "snippets" }
             end
           end,
+          providers = {
+            buffer = { min_keyword_length = 3 },
+            path = { min_keyword_length = 0 },
+          },
         },
 
         keymap = {
@@ -60,7 +68,7 @@ return {
           and opts.sources.providers.lsp
           and opts.sources.providers.lsp.transform_items
 
-        overrides.sources.providers = {
+        overrides.sources.providers = vim.tbl_deep_extend("force", overrides.sources.providers, {
           lsp = {
             transform_items = function(ctx, items)
               if existing_transform then
@@ -69,7 +77,7 @@ return {
               return rust_cmp.transform_items(ctx, items)
             end,
           },
-        }
+        })
 
         local default_sorts = opts.fuzzy and opts.fuzzy.sorts
         overrides.fuzzy = {

@@ -179,6 +179,7 @@ return {
   },
   {
     "Wansmer/treesj",
+    dev = true,
     lazy = true,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     opts = function(_, opts)

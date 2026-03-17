@@ -141,7 +141,7 @@ if util.amazon.is_amazon_machine() then
 
       if is_brazil_proj then
         -- Often want to disable autoformatting in Brazil projects
-        vim.g.autoformat = false
+        vim.b[bufnr].autoformat = false
       end
 
       if util.amazon.is_bemol_proj(bufnr) then

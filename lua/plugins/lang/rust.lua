@@ -4,16 +4,8 @@ return {
     "stevearc/conform.nvim",
     opts = {
       formatters = {
-        rust = {
-          args = function(self, ctx)
-            local util = require("conform.util")
-
-            local args = { "+nightly", "--emit=stdout" }
-            local edition = util.parse_rust_edition(ctx.dirname) or self.options.default_edition
-            table.insert(args, "--edition=" .. edition)
-
-            return args
-          end,
+        rustfmt = {
+          options = { nightly = true },
         },
       },
       formatters_by_ft = {

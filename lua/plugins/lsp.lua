@@ -1,7 +1,3 @@
-vim.diagnostic.config({
-  float = { border = "rounded" },
-})
-
 require("snacks")
   .toggle({
     name = "Lensline",
@@ -37,9 +33,6 @@ return {
     opts = {
       PATH = "append",
       max_concurrent_installers = 10,
-      ui = {
-        border = "rounded",
-      },
     },
   },
 

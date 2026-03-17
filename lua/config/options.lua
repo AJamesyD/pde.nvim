@@ -67,6 +67,11 @@ if g.neovide then
   g.neovide_confirm_quit = true
 end
 
+-- Neovim 0.11+ global border for all floating windows.
+-- Plugins (blink.cmp, mason, crates.nvim, diagnostics) fall back to this
+-- when their own border option is nil. See each plugin's config for details.
+opt.winborder = "rounded"
+
 opt.spell = true
 opt.spelloptions = "camel"
 opt.spelllang = "en_us"

@@ -44,7 +44,6 @@ return {
         },
       },
       popup = {
-        border = "rounded",
         show_version_date = true,
       },
     },

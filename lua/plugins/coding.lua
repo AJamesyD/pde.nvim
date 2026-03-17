@@ -17,20 +17,9 @@ return {
       ---@type blink.cmp.Config
       ---@diagnostic disable-next-line: missing-fields
       local overrides = {
-        completion = {
-          menu = {
-            border = "rounded",
-          },
-          documentation = {
-            window = { border = "rounded" },
-          },
-        },
         -- experimental signature help support
         signature = {
           enabled = true,
-          window = {
-            border = "rounded",
-          },
         },
 
         sources = {

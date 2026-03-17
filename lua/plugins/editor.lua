@@ -174,6 +174,7 @@ return {
     },
   },
 
+  -- Reconfigure LazyVim extras
   {
     "folke/snacks.nvim",
     -- stylua: ignore

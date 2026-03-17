@@ -66,7 +66,7 @@ return {
             open_split = "vertical",
             width = 0.8,
           },
-          test_executor = "background",
+          test_executor = "neotest",
           crate_test_executor = "background",
         },
         ---@type rustaceanvim.lsp.ClientConfig

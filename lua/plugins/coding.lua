@@ -135,7 +135,6 @@ return {
         { path = "nvim-treesitter", words = { "TS", "treesitter" } },
         { path = "rustaceanvim", words = { "rust" } },
         { path = "snacks.nvim", words = { "snacks" } },
-        { path = "telescope.nvim", words = { "telescope" } },
         { path = "tokyonight.nvim", words = { "tokyonight" } },
         { path = "which-key.nvim", words = { "wk", "which-key" } },
       }
@@ -163,15 +162,5 @@ return {
         suffix_next = "n", -- Suffix to search with "next" method
       },
     },
-  },
-
-  -- Other
-  {
-    "willothy/flatten.nvim",
-    -- TODO: find a way to only load when launching LazyGit
-    enabled = false,
-    lazy = false,
-    config = true,
-    priority = 1001,
   },
 }

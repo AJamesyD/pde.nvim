@@ -63,6 +63,3 @@ require("lazy").setup({
     },
   },
 })
-
-_G.LazyVim = require("lazyvim.util")
-_G.Snacks = require("snacks")

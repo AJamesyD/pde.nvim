@@ -27,7 +27,7 @@ return {
   -- Other
   {
     "olimorris/codecompanion.nvim",
-    version = "^18.0.0",
+    version = "^19.0.0",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
@@ -151,7 +151,7 @@ return {
               add_mcp_prefix_to_tool_names = false,
               show_result_in_chat = true,
               format_tool = nil,
-              make_vars = true,
+              make_vars = false, -- TODO: re-enable after mcphub fixes CC v19 editor_context rename (ravitemer/mcphub.nvim#277)
               make_slash_commands = true,
             },
           },

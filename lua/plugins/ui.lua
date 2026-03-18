@@ -195,7 +195,7 @@ return {
               "if_statement",
               "for_statement",
 
-              -- Rust
+              -- Rust (tree-sitter-rust grammar, circa 2025-01)
               "array_expression",
               "attribute_item",
               "call_expression",

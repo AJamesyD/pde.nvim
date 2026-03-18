@@ -45,7 +45,7 @@ return {
       "CodeCompanionActions",
     },
     opts = function(_, opts)
-      vim.api.nvim_create_autocmd({ "LspAttach", "BufWritePost", "DirChanged", "BufEnter" }, {
+      vim.api.nvim_create_autocmd({ "DirChanged" }, {
         callback = vim.schedule_wrap(function()
           local config = require("codecompanion.config")
           if not config.interactions then
@@ -90,7 +90,7 @@ return {
                     "run",
                   },
                 },
-                defaults = { timeout = 30000 },
+                defaults = { timeout = 60000 },
                 parameters = {
                   protocolVersion = 1,
                   clientCapabilities = {
@@ -109,11 +109,23 @@ return {
                 },
               })
             end,
-            kiro = "kiro",
+            kiro = function()
+              return require("codecompanion.adapters.acp").extend("kiro", {
+                commands = { default = { "kiro-cli", "acp", "--agent", "nvim" } },
+                -- 1 min; handshake-only, not conversation streaming
+                defaults = { timeout = 60000 },
+              })
+            end,
             opencode = "opencode",
           },
         },
         interactions = {
+          shared = {
+            rules = {
+              -- backends load their own steering; Claude Code rules are redundant
+              ["Default"] = { enabled = false },
+            },
+          },
           chat = {
             adapter = "kiro",
             tools = {
@@ -151,7 +163,8 @@ return {
               add_mcp_prefix_to_tool_names = false,
               show_result_in_chat = true,
               format_tool = nil,
-              make_vars = false, -- TODO: re-enable after mcphub fixes CC v19 editor_context rename (ravitemer/mcphub.nvim#277)
+              -- TODO: re-enable after mcphub fixes CodeCompanion v19 editor_context rename (ravitemer/mcphub.nvim#277)
+              make_vars = false,
               make_slash_commands = true,
             },
           },

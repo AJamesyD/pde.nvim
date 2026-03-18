@@ -37,7 +37,7 @@ return {
       },
       "ravitemer/mcphub.nvim",
     },
-    build = "npm install -g @zed-industries/claude-code-acp",
+    build = false, -- nix-managed
     cmd = {
       "CodeCompanion",
       "CodeCompanionChat",
@@ -52,7 +52,9 @@ return {
             return
           end
           local root = LazyVim.root()
-          local adapter = vim.fn.filereadable(root .. "/Cargo.toml") == 1 and "symposium" or "kiro"
+          local has_symposium = vim.fn.executable("symposium-acp-agent") == 1
+          local adapter = (has_symposium and vim.fn.filereadable(root .. "/Cargo.toml") == 1)
+            and "symposium" or "kiro"
           for _, interaction in pairs(config.interactions) do
             if type(interaction) == "table" and interaction.adapter then
               interaction.adapter = adapter
@@ -84,7 +86,7 @@ return {
                 roles = { llm = "assistant", user = "user" },
                 commands = {
                   default = {
-                    vim.fn.expand("~/.cargo/bin/symposium-acp-agent"),
+                    "symposium-acp-agent",
                     "run",
                   },
                 },
@@ -164,7 +166,7 @@ return {
     "ravitemer/mcphub.nvim",
     optional = true,
     lazy = true,
-    build = "npm install -g mcp-hub@latest", -- Installs `mcp-hub` node binary globally
+    build = false, -- nix-managed
     cmd = "MCPHub",
     dependencies = {
       "nvim-lua/plenary.nvim",

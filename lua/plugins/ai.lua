@@ -76,7 +76,11 @@ return {
           },
         },
         adapters = {
+          http = {
+            opts = { show_presets = false },
+          },
           acp = {
+            opts = { show_presets = false },
             symposium = function()
               local helpers = require("codecompanion.adapters.acp.helpers")
               return require("codecompanion.adapters.acp").new({
@@ -90,7 +94,9 @@ return {
                     "run",
                   },
                 },
-                defaults = { timeout = 60000 },
+                -- mcpServers required by v19 session/new (sent as-is in the ACP request)
+                -- 2 min: mod startup + Sparkle embodiment can be slow
+                defaults = { mcpServers = {}, timeout = 120000 },
                 parameters = {
                   protocolVersion = 1,
                   clientCapabilities = {

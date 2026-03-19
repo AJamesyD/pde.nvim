@@ -97,7 +97,9 @@ autocmd("FileType", {
         return
       end
       if not vim.treesitter.highlighter.active[bufnr] then
-        vim.bo[bufnr].spell = false
+        for _, win in ipairs(vim.fn.win_findbuf(bufnr)) do
+          vim.wo[win].spell = false
+        end
       end
     end)
   end,

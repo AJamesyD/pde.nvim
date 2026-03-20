@@ -89,6 +89,7 @@ opt.diffopt = {
 -- Override default LazyVim options
 opt.autowrite = false
 opt.clipboard = ""
+opt.showtabline = 0 -- Never show tabline; prevents 1-row jump when plugins open new tabs
 opt.mouse = "nv" -- Normal and visual
 opt.mousemoveevent = true
 

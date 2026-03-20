@@ -11,6 +11,9 @@ M.WIDTH_PROGRESS = 80 -- hide progress/location
 -- (lualine winbar, smartcolumn, colorful-winsep) to skip decoration.
 M.SPECIAL_FILETYPES = {
   "DiffviewFiles",
+  "codediff-explorer",
+  "codediff-history",
+  "codediff-help",
   "TelescopePrompt",
   "TelescopeResults",
   "trouble",

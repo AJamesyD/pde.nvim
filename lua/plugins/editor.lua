@@ -334,20 +334,100 @@ return {
     cmd = { "VenvSelect" },
     branch = "main",
   },
+  -- codediff.nvim: diff engine with C FFI, move detection, two-tier highlights
   {
-    "sindrets/diffview.nvim",
+    "AJamesyD/codediff.nvim",
+    dev = true,
+    cmd = "CodeDiff",
     keys = {
       {
         "<leader>gd",
-        "<CMD>DiffviewOpen<CR>",
-        desc = "Open Diffview",
+        function()
+          local ok, lifecycle = pcall(require, "codediff.ui.lifecycle")
+          if not ok then
+            vim.cmd("CodeDiff")
+            return
+          end
+          for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
+            if lifecycle.get_session(tab) then
+              vim.cmd(vim.api.nvim_tabpage_get_number(tab) .. "tabclose")
+              return
+            end
+          end
+          vim.cmd("CodeDiff")
+        end,
+        desc = "Toggle CodeDiff",
       },
       {
-        "<leader>gD",
-        "<CMD>DiffviewClose<CR>",
-        desc = "Close Diffview",
+        "<leader>gf",
+        "<CMD>CodeDiff history %<CR>",
+        desc = "File History (CodeDiff)",
       },
     },
+    opts = {
+      diff = {
+        compute_moves = true,
+        original_position = "left",
+        jump_to_first_change = true,
+      },
+      explorer = {
+        position = "right",
+        focus_on_select = true,
+      },
+      keymaps = {
+        view = {
+          -- Remap hunk/file nav to avoid ]c/[c and ]f/[f treesitter collisions
+          ["]c"] = false,
+          ["[c"] = false,
+          ["]f"] = false,
+          ["[f"] = false,
+          ["]h"] = "next_hunk",
+          ["[h"] = "prev_hunk",
+          ["]F"] = "next_file",
+          ["[F"] = "prev_file",
+        },
+      },
+    },
+    config = function(_, opts)
+      require("codediff").setup(opts)
+
+      local function is_codediff_tab(tabpage)
+        local ok, lifecycle = pcall(require, "codediff.ui.lifecycle")
+        return ok and lifecycle.get_session(tabpage or vim.api.nvim_get_current_tabpage()) ~= nil
+      end
+
+      -- Skip lualine winbar on CodeDiff tabs (diff buffers have filetype=""
+      -- which passes lualine's disabled_filetypes check).
+      local lualine_ok, lualine = pcall(require, "lualine")
+      if lualine_ok and lualine.winbar then
+        local orig_winbar = lualine.winbar
+        lualine.winbar = function(...)
+          if is_codediff_tab() then
+            return nil
+          end
+          return orig_winbar(...)
+        end
+      end
+
+      -- Prevent edgy.nvim from running layout on CodeDiff tabs.
+      -- edgy hooks BufWinEnter/WinResized globally and resizes windows
+      -- at edge positions, which breaks CodeDiff's own layout engine.
+      local edgy_ok, edgy_layout = pcall(require, "edgy.layout")
+      if edgy_ok and edgy_layout.update then
+        local original_update = edgy_layout.update
+        edgy_layout.update = function(...)
+          if is_codediff_tab() then
+            return
+          end
+          return original_update(...)
+        end
+      end
+    end,
+  },
+
+  {
+    "sindrets/diffview.nvim",
+    enabled = false,
     cmd = {
       "DiffviewOpen",
       "DiffviewToggleFiles",

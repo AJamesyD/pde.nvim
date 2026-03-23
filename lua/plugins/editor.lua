@@ -210,6 +210,7 @@ return {
       { "<leader>sS", false },
       { "z=", function() Snacks.picker.spelling() end, desc = "Spelling Suggestions" },
       { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
+      { "<leader>.", function() Snacks.picker.resume() end, desc = "Resume Last Picker" },
     },
     ---@type snacks.Config
     opts = {

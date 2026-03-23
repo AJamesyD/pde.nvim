@@ -43,6 +43,12 @@ del("n", "<leader><tab>[")
 -- quit/session: disabled entirely, shpool handles session persistence
 del("n", "<leader>qq")
 
+-- windows: disabled, user manages windows via tmux/Aerospace (100% freq 0)
+del("n", "<leader>w-")
+del("n", "<leader>w|")
+del("n", "<leader>wd")
+del("n", "<leader>wm")
+
 -- Add any additional keymaps here
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 map("n", "n", "'Nn'[v:searchforward].'zzzv'", { desc = "Next Search Result", expr = true })

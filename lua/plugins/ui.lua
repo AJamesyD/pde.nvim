@@ -408,30 +408,30 @@ return {
         end,
         desc = "Move cursor right",
       },
-      -- Swapping buffers between windows
+      -- Swapping buffers between windows (moved from <leader>w* which was deleted)
       {
-        "<leader>wh",
+        "<C-w>H",
         function()
           require("smart-splits").swap_buf_left()
         end,
         desc = "Swap left",
       },
       {
-        "<leader>wj",
+        "<C-w>J",
         function()
           require("smart-splits").swap_buf_down()
         end,
         desc = "Swap down",
       },
       {
-        "<leader>wk",
+        "<C-w>K",
         function()
           require("smart-splits").swap_buf_up()
         end,
         desc = "Swap up",
       },
       {
-        "<leader>wl",
+        "<C-w>L",
         function()
           require("smart-splits").swap_buf_right()
         end,
@@ -471,6 +471,7 @@ return {
   },
   {
     "kevinhwang91/nvim-ufo",
+    enabled = false,
     event = "LazyFile",
     dependencies = {
       "kevinhwang91/promise-async",

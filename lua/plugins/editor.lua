@@ -186,7 +186,7 @@ return {
     "folke/snacks.nvim",
     -- stylua: ignore
     keys = {
-      { "<leader>/", false },
+      { "<leader>/", LazyVim.pick("grep"), desc = "Grep (Root Dir)" },
       { "<leader>:", false },
       { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find" },
       -- find

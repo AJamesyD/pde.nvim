@@ -40,7 +40,7 @@ del("n", "<leader><tab>]")
 del("n", "<leader><tab>d")
 del("n", "<leader><tab>[")
 
--- quit/session: disabled entirely, shpool handles session persistence
+-- quit/session: disabled, user doesn't use nvim session persistence
 del("n", "<leader>qq")
 
 -- windows: disabled, user manages windows via tmux/Aerospace (100% freq 0)

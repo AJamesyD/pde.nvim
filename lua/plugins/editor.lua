@@ -129,7 +129,7 @@ return {
       },
     },
   },
-  -- Disable persistence.nvim session keybindings (shpool handles persistence)
+  -- Disable persistence.nvim session keybindings (unused)
   {
     "folke/persistence.nvim",
     keys = function()

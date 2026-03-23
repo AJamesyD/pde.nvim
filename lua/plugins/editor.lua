@@ -153,7 +153,7 @@ return {
 
       local spec_overrides = {
         { "<leader>F", hidden = true },
-        { "<leader>gw", group = "worktrees" },
+        { "<leader>w", group = "worktrees" },
         { "<leader>a", group = "AI" },
         { "s", group = "surround" },
       }
@@ -272,9 +272,9 @@ return {
       "folke/snacks.nvim",
     },
     keys = {
-      { "<leader>gwc", function() require("worktrees").new_worktree() end, desc = "New Worktree" },
-      { "<leader>gws", function() Snacks.picker.worktrees() end, desc = "List Worktrees" },
-      { "<leader>gwd", function() require("worktrees").remove_worktree() end, desc = "Remove Worktree" },
+      { "<leader>wc", function() require("worktrees").new_worktree() end, desc = "New Worktree" },
+      { "<leader>ws", function() Snacks.picker.worktrees() end, desc = "List Worktrees" },
+      { "<leader>wd", function() require("worktrees").remove_worktree() end, desc = "Remove Worktree" },
     },
     opts = {
       worktree_path = "..",

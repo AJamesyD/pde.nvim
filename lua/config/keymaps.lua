@@ -49,6 +49,13 @@ del("n", "<leader>w|")
 del("n", "<leader>wd")
 del("n", "<leader>wm")
 
+-- PRUNED 2026-03-22: palette-safe (use : or Cmd+Shift+P), remove after 4 weeks
+del("n", "<leader>ft") -- terminal (root)
+del("n", "<leader>fT") -- terminal (cwd)
+del("n", "<leader>xl") -- location list
+del("n", "<leader>xL") -- location list (Trouble)
+del("n", "<leader>n")  -- dismiss notifications
+
 -- Add any additional keymaps here
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 map("n", "n", "'Nn'[v:searchforward].'zzzv'", { desc = "Next Search Result", expr = true })

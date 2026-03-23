@@ -448,12 +448,11 @@ return {
     cmd = { "PinBuffer", "PinBuftype", "PinFiletype" },
     opts = {},
   },
+  -- PRUNED 2026-03-22: palette-safe (use :CellularAutomaton), remove after 4 weeks
   {
     "eandrju/cellular-automaton.nvim",
     cmd = "CellularAutomaton",
-    keys = {
-      { "<leader>FML", "<CMD>CellularAutomaton make_it_rain<CR>", desc = "FML" },
-    },
+    keys = {},
   },
   {
     "tzachar/highlight-undo.nvim",

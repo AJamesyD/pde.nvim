@@ -136,6 +136,13 @@ return {
       return {}
     end,
   },
+  -- PRUNED 2026-03-22: palette-safe, remove after 4 weeks
+  {
+    "folke/trouble.nvim",
+    keys = {
+      { "<leader>xL", false },
+    },
+  },
   {
     "folke/which-key.nvim",
     ---@param opts wk.Opts
@@ -208,13 +215,12 @@ return {
       { "<leader>si", false },
       { "<leader>sB", false },
       { "<leader>sl", false },
-      { "<leader>gl", false },
-      { "<leader>gL", false },
       { "<leader>gS", false },
       { "<leader>gI", false },
       { "<leader>gp", false },
       { "<leader>gP", false },
       { "<leader>S", false },
+      { "<leader>n", false },
       { "<leader>sH", false },
       { "<leader>sm", false },
       { "<leader>sM", false },

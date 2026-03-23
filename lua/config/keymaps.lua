@@ -43,18 +43,21 @@ del("n", "<leader><tab>[")
 -- quit/session: disabled, user doesn't use nvim session persistence
 del("n", "<leader>qq")
 
--- windows: disabled, user manages windows via tmux/Aerospace (100% freq 0)
-del("n", "<leader>w-")
-del("n", "<leader>w|")
+-- windows: <leader>wd and <leader>wm are real keymaps in LazyVim keymaps.lua.
+-- <leader>w-/w| are which-key proxy entries, not real keymaps (can't del).
+-- Swap bindings moved to <C-w>HJKL in ui.lua.
 del("n", "<leader>wd")
 del("n", "<leader>wm")
 
--- PRUNED 2026-03-22: palette-safe (use : or Cmd+Shift+P), remove after 4 weeks
+-- PRUNED 2026-03-22: palette-safe, remove after 4 weeks
+-- Only del() bindings from LazyVim's config/keymaps.lua (loaded before us)
 del("n", "<leader>ft") -- terminal (root)
 del("n", "<leader>fT") -- terminal (cwd)
 del("n", "<leader>xl") -- location list
-del("n", "<leader>xL") -- location list (Trouble)
-del("n", "<leader>n")  -- dismiss notifications
+del("n", "<leader>gl") -- lazygit log (use lazygit directly)
+del("n", "<leader>gL") -- lazygit log (cwd)
+-- <leader>xL, <leader>n: defined in plugin specs,
+-- disabled via { key, false } in their respective plugin specs in editor.lua
 
 -- Add any additional keymaps here
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n

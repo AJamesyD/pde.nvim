@@ -195,7 +195,7 @@ return {
     keys = {
       { "<leader>/", LazyVim.pick("grep"), desc = "Grep (Root Dir)" },
       { "<leader>:", false },
-      { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find" },
+      { "<leader><space>", false },
       -- find
       { "<leader>fc", false },
       { "<leader>fr", LazyVim.pick("oldfiles"), desc = "Recent (Root Dir)" },
@@ -617,10 +617,10 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     cmd = "Grapple",
     keys = {
-      { "<leader>H", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle tag" },
-      { "<leader>h", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple open tags window" },
-      { "]h", "<cmd>Grapple cycle_tags next<cr>", desc = "Next Grapple Tag" },
-      { "[h", "<cmd>Grapple cycle_tags prev<cr>", desc = "Prev Grapple Tag" },
+      { "<leader>h", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle tag" },
+      { "<leader><space>", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple open tags" },
+      { "]g", "<cmd>Grapple cycle_tags next<cr>", desc = "Next Grapple tag" },
+      { "[g", "<cmd>Grapple cycle_tags prev<cr>", desc = "Prev Grapple tag" },
     },
     config = function(_, opts)
       require("grapple").setup(opts)
@@ -630,7 +630,7 @@ return {
       -- GrappleScopeChanged fires on scope switches (e.g. branch change).
       local function sync_keymaps()
         local count = #(require("grapple").tags() or {})
-        for i = 1, 9 do
+        for i = 1, 4 do
           if i <= count then
             vim.keymap.set("n", "<leader>" .. i, "<cmd>Grapple select index=" .. i .. "<cr>", {
               desc = "Grapple → " .. i,
@@ -638,6 +638,10 @@ return {
           else
             pcall(vim.keymap.del, "n", "<leader>" .. i)
           end
+        end
+        -- Clean up any stale slots from previous config
+        for i = 5, 9 do
+          pcall(vim.keymap.del, "n", "<leader>" .. i)
         end
       end
 

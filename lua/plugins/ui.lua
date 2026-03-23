@@ -525,6 +525,12 @@ return {
           require("ufo").openFoldsExceptKinds()
         end,
       },
+      {
+        "zm",
+        function()
+          require("ufo").closeFoldsWith()
+        end,
+      },
     },
     opts = function(_, opts)
       local handler = function(virtText, lnum, endLnum, width, truncate)

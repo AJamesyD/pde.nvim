@@ -29,6 +29,16 @@ return {
   },
   {
     "mason-org/mason.nvim",
+    dependencies = {
+      {
+        "folke/lazydev.nvim",
+        optional = true,
+        opts = function(_, opts)
+          opts.library = opts.library or {}
+          table.insert(opts.library, { path = "mason.nvim", words = { "mason" } })
+        end,
+      },
+    },
     ---@type MasonSettings
     opts = {
       PATH = "append",

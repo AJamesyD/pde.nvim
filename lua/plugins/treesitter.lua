@@ -11,6 +11,16 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     cmd = { "TSInstallFromGrammar" },
+    dependencies = {
+      {
+        "folke/lazydev.nvim",
+        optional = true,
+        opts = function(_, opts)
+          opts.library = opts.library or {}
+          table.insert(opts.library, { path = "nvim-treesitter", words = { "TS", "treesitter" } })
+        end,
+      },
+    },
     ---@param opts TSConfig
     ---@diagnostic disable-next-line: missing-fields
     opts = function(_, opts)

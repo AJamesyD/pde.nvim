@@ -7,6 +7,16 @@ return {
     "folke/tokyonight.nvim",
     lazy = false,
     priority = 1000,
+    dependencies = {
+      {
+        "folke/lazydev.nvim",
+        optional = true,
+        opts = function(_, opts)
+          opts.library = opts.library or {}
+          table.insert(opts.library, { path = "tokyonight.nvim", words = { "tokyonight" } })
+        end,
+      },
+    },
 
     ---@param opts tokyonight.Config
     opts = function(_, opts)

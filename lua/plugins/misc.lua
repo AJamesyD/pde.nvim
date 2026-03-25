@@ -2,9 +2,16 @@ return {
   {
     "kawre/leetcode.nvim",
     dependencies = {
-      -- include a picker of your choice, see picker section for more details
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
+      {
+        "folke/lazydev.nvim",
+        optional = true,
+        opts = function(_, opts)
+          opts.library = opts.library or {}
+          table.insert(opts.library, { path = "leetcode.nvim", words = { "leetcode" } })
+        end,
+      },
     },
     opts = {
       lang = "python",

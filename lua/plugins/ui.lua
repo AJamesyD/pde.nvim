@@ -242,6 +242,16 @@ return {
   {
     "folke/edgy.nvim",
     optional = true,
+    dependencies = {
+      {
+        "folke/lazydev.nvim",
+        optional = true,
+        opts = function(_, opts)
+          opts.library = opts.library or {}
+          table.insert(opts.library, { path = "edgy.nvim", words = { "edgy" } })
+        end,
+      },
+    },
     opts = function(_, opts)
       ---@type Edgy.Config
       local overrides = {

@@ -5,6 +5,14 @@ return {
     optional = true,
     dependencies = {
       {
+        "folke/lazydev.nvim",
+        optional = true,
+        opts = function(_, opts)
+          opts.library = opts.library or {}
+          table.insert(opts.library, { path = "blink.cmp", words = { "blink" } })
+        end,
+      },
+      {
         "saghen/blink.compat",
         optional = false,
       },
@@ -115,31 +123,6 @@ return {
       end
 
       opts = vim.tbl_deep_extend("force", opts, overrides)
-      return opts
-    end,
-  },
-  {
-    "folke/lazydev.nvim",
-    opts = function(_, opts)
-      local library_overrides = {
-        { path = "lazy.nvim" },
-        { path = "LazyVim" },
-
-        { path = "avante.nvim", words = { "avante" } },
-        { path = "blink.cmp", words = { "blink" } },
-        { path = "conform.nvim", words = { "conform" } },
-        { path = "edgy.nvim", words = { "edgy" } },
-        { path = "grapple.nvim", words = { "grapple" } },
-        { path = "leetcode.nvim", words = { "leetcode" } },
-        { path = "mason.nvim", words = { "mason" } },
-        { path = "nvim-treesitter", words = { "TS", "treesitter" } },
-        { path = "rustaceanvim", words = { "rust" } },
-        { path = "snacks.nvim", words = { "snacks" } },
-        { path = "tokyonight.nvim", words = { "tokyonight" } },
-        { path = "which-key.nvim", words = { "wk", "which-key" } },
-      }
-
-      opts.library = vim.list_extend(opts.library or {}, library_overrides)
       return opts
     end,
   },

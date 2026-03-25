@@ -145,6 +145,16 @@ return {
   },
   {
     "folke/which-key.nvim",
+    dependencies = {
+      {
+        "folke/lazydev.nvim",
+        optional = true,
+        opts = function(_, opts)
+          opts.library = opts.library or {}
+          table.insert(opts.library, { path = "which-key.nvim", words = { "wk", "which-key" } })
+        end,
+      },
+    },
     ---@param opts wk.Opts
     opts = function(_, opts)
       local overrides = {
@@ -272,9 +282,27 @@ return {
       "folke/snacks.nvim",
     },
     keys = {
-      { "<leader>wc", function() require("worktrees").new_worktree() end, desc = "New Worktree" },
-      { "<leader>ws", function() Snacks.picker.worktrees() end, desc = "List Worktrees" },
-      { "<leader>wd", function() require("worktrees").remove_worktree() end, desc = "Remove Worktree" },
+      {
+        "<leader>wc",
+        function()
+          require("worktrees").new_worktree()
+        end,
+        desc = "New Worktree",
+      },
+      {
+        "<leader>ws",
+        function()
+          Snacks.picker.worktrees()
+        end,
+        desc = "List Worktrees",
+      },
+      {
+        "<leader>wd",
+        function()
+          require("worktrees").remove_worktree()
+        end,
+        desc = "Remove Worktree",
+      },
     },
     opts = {
       worktree_path = "..",
@@ -616,6 +644,16 @@ return {
     "cbochs/grapple.nvim",
     event = { "BufReadPost", "BufNewFile" },
     cmd = "Grapple",
+    dependencies = {
+      {
+        "folke/lazydev.nvim",
+        optional = true,
+        opts = function(_, opts)
+          opts.library = opts.library or {}
+          table.insert(opts.library, { path = "grapple.nvim", words = { "grapple" } })
+        end,
+      },
+    },
     keys = {
       { "<leader>h", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle tag" },
       { "<leader><space>", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple open tags" },

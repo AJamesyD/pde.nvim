@@ -52,6 +52,16 @@ return {
     "mrcjkb/rustaceanvim",
     optional = true,
     version = "^8",
+    dependencies = {
+      {
+        "folke/lazydev.nvim",
+        optional = true,
+        opts = function(_, opts)
+          opts.library = opts.library or {}
+          table.insert(opts.library, { path = "rustaceanvim", words = { "rust" } })
+        end,
+      },
+    },
     ---@param opts rustaceanvim.Opts
     opts = function(_, opts)
       ---@type rustaceanvim.Opts

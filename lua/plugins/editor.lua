@@ -208,7 +208,7 @@ return {
       { "<leader><space>", false },
       -- find
       { "<leader>fc", false },
-      { "<leader>fr", LazyVim.pick("oldfiles"), desc = "Recent (Root Dir)" },
+      { "<leader>fr", function() Snacks.picker.recent({ filter = { cwd = LazyVim.root() }}) end, desc = "Recent (Root Dir)" },
       { "<leader>fR", function() Snacks.picker.recent({ filter = { cwd = true }}) end, desc = "Recent (cwd)" },
       -- git
       { "<leader>gc", false },

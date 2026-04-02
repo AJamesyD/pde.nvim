@@ -573,6 +573,10 @@ return {
 
       local overrides = {
         provider_selector = function(_, filetype, buftype)
+          if filetype == "crux_thread" then
+            return ""
+          end
+
           local function handleFallbackException(bufnr, err, providerName)
             if type(err) == "string" and err:match("UfoFallbackException") then
               return require("ufo").getFolds(bufnr, providerName)

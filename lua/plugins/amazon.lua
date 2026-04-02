@@ -121,6 +121,16 @@ return {
           { "%.git$", "" },
         },
       },
+      ---@type snacks.indent.Config
+      ---@diagnostic disable-next-line: missing-fields
+      indent = {
+        filter = function(buf, win)
+          return vim.bo[buf].filetype ~= "crux_thread"
+            and vim.g.snacks_indent ~= false
+            and vim.b[buf].snacks_indent ~= false
+            and vim.bo[buf].buftype == ""
+        end,
+      },
     },
   },
 
@@ -157,5 +167,76 @@ return {
     branch = "mainline",
     cond = require("util").amazon.is_amazon_machine(),
     lazy = false,
+  },
+  {
+    "AJamesyD/crux.nvim",
+    dev = true,
+    cond = require("util").amazon.is_amazon_machine(),
+    name = "crux",
+    cmd = "Cr",
+    dependencies = {
+      {
+        "folke/lazydev.nvim",
+        optional = true,
+        opts = function(_, opts)
+          opts.library = opts.library or {}
+          table.insert(opts.library, { path = "crux", words = { "crux" } })
+        end,
+      },
+      {
+        "folke/which-key.nvim",
+        optional = true,
+        opts = {
+          spec = { { "<leader>r", group = "review", icon = "💬" } },
+        },
+      },
+      {
+        "MeanderingProgrammer/render-markdown.nvim",
+        optional = true,
+        opts = { file_types = { "markdown", "crux_thread" } },
+        ft = { "markdown", "crux_thread" },
+      },
+      {
+        "folke/trouble.nvim",
+        optional = true,
+      },
+      {
+        "nvim-lualine/lualine.nvim",
+        optional = true,
+        opts = function(_, opts)
+          opts.sections = opts.sections or {}
+          opts.sections.lualine_x = opts.sections.lualine_x or {}
+          table.insert(opts.sections.lualine_x, 1, {
+            function()
+              return require("crux").statusline() or ""
+            end,
+            cond = function()
+              return package.loaded["crux"] and require("crux").is_active()
+            end,
+          })
+        end,
+      },
+    },
+    keys = {
+      { "<leader>ro", "<cmd>Cr open<cr>", desc = "Open review" },
+      { "<leader>rf", "<cmd>Cr files<cr>", desc = "Review files" },
+    },
+    ---@type CruxConfig
+    opts = {
+      picker = "auto",
+      diff = {
+        rename_colors = true,
+      },
+      thread = {
+        open_mode = "float",
+      },
+      icons = {
+        comment = "",
+        blocking = "",
+        draft = "󰑢",
+        resolved = "",
+        reply = "",
+      },
+    },
   },
 }

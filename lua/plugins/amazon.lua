@@ -238,5 +238,21 @@ return {
         reply = "",
       },
     },
+    config = function(_, opts)
+      require("crux").setup(opts)
+
+      -- Suppress lualine winbar on crux diff tabs so crux's own winbar
+      -- (file path + revision) is visible. Same pattern as CodeDiff in editor.lua.
+      local lualine_ok, lualine = pcall(require, "lualine")
+      if lualine_ok and lualine.winbar then
+        local orig_winbar = lualine.winbar
+        lualine.winbar = function(...)
+          if vim.b.crux_diff then
+            return nil
+          end
+          return orig_winbar(...)
+        end
+      end
+    end,
   },
 }

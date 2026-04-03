@@ -164,6 +164,11 @@ M.format_branch = function(name, max_len)
   max_len = max_len or math.floor(vim.o.columns * 0.15)
   local result = name
 
+  local cr_id, cr_rev = name:match("^[Cc][Rr][Uu]?[Xx]?/CR%-(%d+)/r(%d+)")
+  if cr_id then
+    return "CR-" .. cr_id .. " r" .. cr_rev
+  end
+
   -- Strip username prefix (2+ slashes)
   local slash_count = 0
   for _ in result:gmatch("/") do

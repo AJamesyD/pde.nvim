@@ -7,6 +7,7 @@ local g = vim.g
 local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
 
 -- Override default LazyVim globals
+g.maplocalleader = ","
 g.lazyvim_picker = "snacks"
 g.lazyvim_prettier_needs_config = true
 -- Pin to "basedpyright" so the LazyVim python extra doesn't fall back to pyright.

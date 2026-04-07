@@ -225,10 +225,7 @@ return {
       { "<leader>si", false },
       { "<leader>sB", false },
       { "<leader>sl", false },
-      { "<leader>gS", false },
-      { "<leader>gI", false },
-      { "<leader>gp", false },
-      { "<leader>gP", false },
+
       { "<leader>S", false },
       { "<leader>n", false },
       { "<leader>sH", false },
@@ -243,6 +240,7 @@ return {
     },
     ---@type snacks.Config
     opts = {
+      gh = {},
       gitbrowse = {
         what = "permalink",
       },

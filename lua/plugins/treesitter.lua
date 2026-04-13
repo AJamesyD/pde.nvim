@@ -73,6 +73,120 @@ return {
       },
     },
   },
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    opts = { select = { lookahead = true } },
+    keys = {
+      {
+        "aa",
+        mode = { "x", "o" },
+        function()
+          require("nvim-treesitter-textobjects.select").select_textobject("@parameter.outer", "textobjects")
+        end,
+        desc = "argument",
+      },
+      {
+        "ia",
+        mode = { "x", "o" },
+        function()
+          require("nvim-treesitter-textobjects.select").select_textobject("@parameter.inner", "textobjects")
+        end,
+        desc = "argument",
+      },
+      {
+        "a=",
+        mode = { "x", "o" },
+        function()
+          require("nvim-treesitter-textobjects.select").select_textobject("@assignment.outer", "textobjects")
+        end,
+        desc = "assignment",
+      },
+      {
+        "i=",
+        mode = { "x", "o" },
+        function()
+          require("nvim-treesitter-textobjects.select").select_textobject("@assignment.inner", "textobjects")
+        end,
+        desc = "assignment",
+      },
+      {
+        "l=",
+        mode = { "x", "o" },
+        function()
+          require("nvim-treesitter-textobjects.select").select_textobject("@assignment.lhs", "textobjects")
+        end,
+        desc = "assignment lhs",
+      },
+      {
+        "r=",
+        mode = { "x", "o" },
+        function()
+          require("nvim-treesitter-textobjects.select").select_textobject("@assignment.rhs", "textobjects")
+        end,
+        desc = "assignment rhs",
+      },
+      {
+        ">a",
+        function()
+          require("nvim-treesitter-textobjects.swap").swap_next("@parameter.inner")
+        end,
+        desc = "Swap next argument",
+      },
+      {
+        "<a",
+        function()
+          require("nvim-treesitter-textobjects.swap").swap_previous("@parameter.inner")
+        end,
+        desc = "Swap prev argument",
+      },
+      {
+        ">f",
+        function()
+          require("nvim-treesitter-textobjects.swap").swap_next("@function.outer")
+        end,
+        desc = "Swap next function",
+      },
+      {
+        "<f",
+        function()
+          require("nvim-treesitter-textobjects.swap").swap_previous("@function.outer")
+        end,
+        desc = "Swap prev function",
+      },
+      {
+        "]z",
+        mode = { "n", "x", "o" },
+        function()
+          require("nvim-treesitter-textobjects.move").goto_next_start("@fold", "folds")
+        end,
+        desc = "Next fold",
+      },
+      {
+        "[z",
+        mode = { "n", "x", "o" },
+        function()
+          require("nvim-treesitter-textobjects.move").goto_previous_start("@fold", "folds")
+        end,
+        desc = "Prev fold",
+      },
+      {
+        "]Z",
+        mode = { "n", "x", "o" },
+        function()
+          require("nvim-treesitter-textobjects.move").goto_next_end("@fold", "folds")
+        end,
+        desc = "Next fold end",
+      },
+      {
+        "[Z",
+        mode = { "n", "x", "o" },
+        function()
+          require("nvim-treesitter-textobjects.move").goto_previous_end("@fold", "folds")
+        end,
+        desc = "Prev fold end",
+      },
+    },
+  },
 
   -- Other
   {

@@ -10,7 +10,6 @@ return {
   -- Reconfigure LazyVim defaults
   {
     "nvim-treesitter/nvim-treesitter",
-    cmd = { "TSInstallFromGrammar" },
     dependencies = {
       {
         "folke/lazydev.nvim",
@@ -21,8 +20,7 @@ return {
         end,
       },
     },
-    ---@param opts TSConfig
-    ---@diagnostic disable-next-line: missing-fields
+    ---@param opts lazyvim.TSConfig
     opts = function(_, opts)
       vim.filetype.add({
         extension = { rasi = "rasi", rofi = "rasi", wofi = "rasi" },
@@ -37,10 +35,8 @@ return {
         "brazil-config",
       }
 
-      ---@type TSConfig
-      ---@diagnostic disable-next-line: missing-fields
+      ---@type lazyvim.TSConfig
       local overrides = {
-        auto_install = true,
         highlight = {
           enable = true,
           disable = disabled_fts,
@@ -49,58 +45,9 @@ return {
           enable = true,
           disable = disabled_fts,
         },
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-              ["aa"] = { query = "@parameter.outer", desc = "argument" },
-              ["ia"] = { query = "@parameter.inner", desc = "argument" },
-              ["a="] = { query = "@assignment.outer", desc = "assignment" },
-              ["i="] = { query = "@assignment.inner", desc = "assignment" },
-              ["l="] = { query = "@assignment.lhs", desc = "assignment" },
-              ["r="] = { query = "@assignment.rhs", desc = "assignment" },
-            },
-          },
-          move = {
-            enable = true,
-            set_jumps = true,
-            goto_next_start = {
-              ["]f"] = { query = "@function.outer", desc = "Next Function" },
-              ["]c"] = { query = "@class.outer", desc = "Next Class" },
-              ["]a"] = { query = "@parameter.inner", desc = "Next Parameter" },
-              ["]z"] = { query = "@fold", desc = "Next Fold" },
-            },
-            goto_next_end = {
-              ["]F"] = { query = "@function.outer", desc = "Next Function end" },
-              ["]C"] = { query = "@class.outer", desc = "Next Class end" },
-              ["]A"] = { query = "@parameter.inner", desc = "Next Parameter end" },
-              ["]Z"] = { query = "@fold", desc = "Next Fold end" },
-            },
-            goto_previous_start = {
-              ["[f"] = { query = "@function.outer", desc = "Prev Function" },
-              ["[c"] = { query = "@class.outer", desc = "Prev Class" },
-              ["[a"] = { query = "@parameter.inner", desc = "Prev Parameter" },
-              ["[z"] = { query = "@fold", desc = "Prev Fold" },
-            },
-            goto_previous_end = {
-              ["[F"] = { query = "@function.outer", desc = "Prev Function end" },
-              ["[C"] = { query = "@class.outer", desc = "Prev Class end" },
-              ["[A"] = { query = "@parameter.inner", desc = "Prev Parameter end" },
-              ["[Z"] = { query = "@fold", desc = "Prev Fold end" },
-            },
-          },
-          swap = {
-            enable = true,
-            swap_next = {
-              [">f"] = { query = "@function.outer", desc = "Swap next function" },
-              [">a"] = { query = "@parameter.inner", desc = "Swap next argument" },
-            },
-            swap_previous = {
-              ["<f"] = { query = "@function.outer", desc = "Swap prev function" },
-              ["<a"] = { query = "@parameter.inner", desc = "Swap prev argument" },
-            },
-          },
+        folds = {
+          enable = true,
+          disable = disabled_fts,
         },
       }
 

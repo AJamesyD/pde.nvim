@@ -1,18 +1,8 @@
-return {
-  -- Reconfigure LazyVim defaults
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts)
-      opts.highlight = opts.highlight or {}
-      local vim_regex_highlighting = opts.highlight.additional_vim_regex_highlighting
-      if type(vim_regex_highlighting) == "table" then
-        vim_regex_highlighting = vim.list_extend(vim_regex_highlighting, { "ion" })
-      else
-        vim_regex_highlighting = { "ion" }
-      end
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "ion",
+  callback = function(ev)
+    vim.bo[ev.buf].syntax = "ON"
+  end,
+})
 
-      opts.highlight.additional_vim_regex_highlighting = vim_regex_highlighting
-      return opts
-    end,
-  },
-}
+return {}

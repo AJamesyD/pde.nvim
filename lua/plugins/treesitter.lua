@@ -245,8 +245,7 @@ return {
   },
   {
     "m-demare/hlargs.nvim",
-    event = "LazyFile",
-    config = true,
+    enabled = false,
   },
   {
     "Wansmer/treesj",

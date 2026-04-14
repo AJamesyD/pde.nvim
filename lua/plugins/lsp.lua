@@ -1,16 +1,3 @@
-require("snacks")
-  .toggle({
-    name = "Lensline",
-    get = function()
-      return require("lensline").is_visible()
-    end,
-    set = function(_)
-      require("lensline").toggle_view()
-    end,
-    notify = false,
-  })
-  :map("<leader>ul")
-
 return {
   -- Reconfigure LazyVim defaults
   {
@@ -46,24 +33,4 @@ return {
     },
   },
 
-  -- Other
-  {
-    "oribarilan/lensline.nvim",
-    cmd = {
-      "LenslineEnable",
-      "LenslineDisable",
-      "LenslineToggleEngine",
-      "LenslineToggle",
-      "LenslineShow",
-      "LenslineHide",
-      "LenslineToggleView",
-    },
-    branch = "release/2.x",
-    event = { "LspAttach", "BufWritePost" },
-    opts = {},
-    config = function(_, opts)
-      require("lensline").setup(opts)
-      require("lensline").hide()
-    end,
-  },
 }

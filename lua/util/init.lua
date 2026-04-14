@@ -8,7 +8,7 @@ M.WIDTH_BRANCH = 100 -- hide branch
 M.WIDTH_PROGRESS = 80 -- hide progress/location
 
 -- Filetypes for UI chrome / non-editor buffers. Used by multiple plugins
--- (lualine winbar, smartcolumn, colorful-winsep) to skip decoration.
+-- (lualine winbar, colorful-winsep) to skip decoration.
 M.SPECIAL_FILETYPES = {
   "DiffviewFiles",
   "codediff-explorer",

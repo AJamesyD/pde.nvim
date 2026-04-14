@@ -244,10 +244,6 @@ return {
     opts = {},
   },
   {
-    "m-demare/hlargs.nvim",
-    enabled = false,
-  },
-  {
     "Wansmer/treesj",
     dev = true,
     lazy = true,

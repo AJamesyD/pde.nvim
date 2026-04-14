@@ -14,9 +14,7 @@ return {
           globalstatus = true,
           component_separators = { left = "", right = "" },
           section_separators = { left = "", right = "" },
-          disabled_filetypes = {
-            winbar = vim.list_extend(vim.deepcopy(util.SPECIAL_FILETYPES), { "help", "qf" }),
-          },
+          disabled_filetypes = {},
         },
       }
 
@@ -50,71 +48,20 @@ return {
         },
       }
 
-      local function find_and_remove(section, predicate)
-        for i, component in ipairs(section) do
-          if predicate(component) then
-            return table.remove(section, i)
-          end
+      -- Strip aerial from lualine_c; breadcrumbs are handled by dropbar.
+      for i = #opts.sections.lualine_c, 1, -1 do
+        local c = opts.sections.lualine_c[i]
+        if type(c) == "table" and c[1] == "aerial" then
+          table.remove(opts.sections.lualine_c, i)
         end
       end
 
-      -- Remove LazyVim's default lualine_c components; path and aerial move to winbar.
-      find_and_remove(opts.sections.lualine_c, function(c)
-        return type(c) == "table" and c[1] and type(c[1]) == "function" and not c.cond
-      end)
-      find_and_remove(opts.sections.lualine_c, function(c)
-        return type(c) == "table" and c.icon_only == true
-      end)
-      find_and_remove(opts.sections.lualine_c, function(c)
-        return type(c) == "table" and c[1] == "aerial"
-      end)
-      local diagnostics_element = find_and_remove(opts.sections.lualine_c, function(c)
-        return type(c) == "table" and c[1] == "diagnostics"
-      end)
-
-      opts.sections.lualine_c = { diagnostics_element }
-
-      -- Winbar: dropbar-style path › aerial breadcrumbs.
-      -- separator="" and padding=0 prevent lualine from inserting gaps between
-      -- the path and breadcrumbs, keeping them visually continuous.
-      local winbar_path = {
-        function()
-          return require("util").format_winbar_path()
-        end,
-        separator = "",
-        padding = { left = 2 },
-      }
-      opts.winbar = {
-        lualine_c = {
-          winbar_path,
-          {
-            function()
-              local ok, aerial = pcall(require, "aerial")
-              if not ok then
-                return ""
-              end
-              local result = require("util").format_aerial(aerial.get_location(true))
-              if result == "" then
-                return ""
-              end
-              -- %#NonText# sets the highlight group; %* resets to default
-              return " %#NonText#›%* " .. result
-            end,
-            cond = function()
-              return vim.o.columns >= require("util").WIDTH_AERIAL
-            end,
-            separator = "",
-            padding = 0,
-          },
-        },
-      }
-      opts.inactive_winbar = {
-        lualine_c = { winbar_path },
-      }
-
-      find_and_remove(opts.sections.lualine_x, function(c)
-        return type(c) == "table" and c[1] == "diff"
-      end)
+      for i = #opts.sections.lualine_x, 1, -1 do
+        local c = opts.sections.lualine_x[i]
+        if type(c) == "table" and c[1] == "diff" then
+          table.remove(opts.sections.lualine_x, i)
+        end
+      end
 
       opts.sections.lualine_y = {
         {
@@ -343,6 +290,67 @@ return {
   -- Other
   -- TODO: auto-detect colorcolumn from active formatter settings (e.g. rustfmt max_width,
   -- prettier printWidth). Would need to read formatter config per buffer.
+  {
+    "Bekaboo/dropbar.nvim",
+    event = "VeryLazy",
+    ---@type dropbar_configs_t
+    opts = {
+      bar = {
+        enable = function(buf, win, _)
+          local bt = vim.bo[buf].buftype
+          local ft = vim.bo[buf].filetype
+          if bt ~= "" and bt ~= "terminal" then
+            return false
+          end
+          if vim.tbl_contains(require("util").SPECIAL_FILETYPES, ft) then
+            return false
+          end
+          if vim.api.nvim_win_get_config(win).relative ~= "" then
+            return false
+          end
+          return true
+        end,
+        sources = function(buf, _)
+          local sources = require("dropbar.sources")
+          local ft = vim.bo[buf].filetype
+          if ft == "markdown" then
+            return { sources.path, sources.markdown }
+          end
+          if ft == "lua" then
+            return { sources.path, sources.treesitter }
+          end
+          return { sources.path, sources.lsp }
+        end,
+        truncate = true,
+      },
+      icons = {
+        ui = {
+          bar = {
+            separator = " › ",
+          },
+        },
+      },
+      sources = {
+        path = {
+          modified = function(sym)
+            return sym:merge({
+              name = sym.name .. " [+]",
+              name_hl = "DiffAdded",
+            })
+          end,
+        },
+      },
+    },
+    keys = {
+      {
+        "<leader>cb",
+        function()
+          require("dropbar.api").pick()
+        end,
+        desc = "Breadcrumb pick",
+      },
+    },
+  },
   {
     "mrjones2014/smart-splits.nvim",
     -- Cannot be loaded just by <C-h/j/k/l> keys

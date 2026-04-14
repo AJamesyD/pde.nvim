@@ -156,6 +156,10 @@ return {
         end,
       },
       integrations = {
+        dropbar = {
+          enabled = true,
+          color_mode = true,
+        },
         ufo = true,
       },
       color_overrides = {

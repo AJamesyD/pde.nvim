@@ -7,9 +7,19 @@ end
 -- Detect Brazil workspace from cwd (used to conditionally load Amazon plugins)
 local in_brazil = util.amazon.amazon_root(vim.fn.getcwd()) ~= nil
 
--- VimIon provides ftdetect for *.ion, but only loads on ft = "ion".
--- Register the extension here so the filetype is set before the plugin loads.
-vim.filetype.add({ extension = { ion = "ion" } })
+-- WARN: Config/packageInfo detection must live here, not in VimBrazilConfig.
+-- VimBrazilConfig's cond can exclude it entirely; vim.filetype.add runs
+-- unconditionally and is checked before legacy ftdetect autocmds.
+vim.filetype.add({
+  extension = { ion = "ion" },
+  filename = {
+    ["Config"] = function()
+      vim.b.brazil_package_Config = 1
+      return "brazil-config"
+    end,
+    ["packageInfo"] = "brazil-config",
+  },
+})
 
 -- Barium LSP for brazil-config files (native Neovim 0.11+ config, no lspconfig needed).
 -- VimBrazilConfig handles ftdetect and sets the brazil-config filetype.
@@ -118,12 +128,10 @@ return {
   },
 
   -- Other
-  -- Provides ftdetect, syntax, indent, and ftplugin for brazil-config files.
-  -- Loads eagerly in Brazil workspaces so its ftdetect registers before any Config file opens.
   {
     url = "angaidan@git.amazon.com:pkg/VimBrazilConfig",
     branch = "mainline",
-    cond = in_brazil,
+    cond = util.amazon.is_amazon_machine(),
     lazy = false,
   },
   -- Provides syntax, indent, and ftplugin for Amazon Ion files.

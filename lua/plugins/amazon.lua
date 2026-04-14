@@ -4,41 +4,24 @@ if not util.amazon.is_amazon_machine() then
   return {}
 end
 
-vim.filetype.add({
-  filename = {
-    ["Config"] = function()
-      vim.b.brazil_package_Config = 1
-      return "brazil-config"
-    end,
-  },
-})
+-- Detect Brazil workspace from cwd (used to conditionally load Amazon plugins)
+local in_brazil = util.amazon.amazon_root(vim.fn.getcwd()) ~= nil
+
+-- VimIon provides ftdetect for *.ion, but only loads on ft = "ion".
+-- Register the extension here so the filetype is set before the plugin loads.
+vim.filetype.add({ extension = { ion = "ion" } })
+
+-- Barium LSP for brazil-config files (native Neovim 0.11+ config, no lspconfig needed).
+-- VimBrazilConfig handles ftdetect and sets the brazil-config filetype.
+vim.lsp.config.barium = {
+  cmd = { "barium" },
+  root_markers = { "Config" },
+  filetypes = { "brazil-config" },
+}
+vim.lsp.enable("barium")
 
 return {
   -- Reconfigure LazyVim defaults
-  {
-    "neovim/nvim-lspconfig",
-    opts = function(_, opts)
-      if require("util").amazon.is_amazon_machine() then
-        local lspconfig = require("lspconfig")
-        local configs = require("lspconfig.configs")
-        ---@type lspconfig.Config
-        configs.barium = {
-          default_config = {
-            cmd = { "barium" },
-            filetypes = { "brazil-config" },
-            root_dir = function(fname)
-              local primary = util.amazon.amazon_root(fname, "brazil")
-              local fallback = vim.fs.dirname(vim.fs.find(".git", { path = fname, upward = true })[1])
-              return primary or fallback
-            end,
-            settings = {},
-          },
-        }
-        lspconfig.barium.setup({})
-      end
-      return opts
-    end,
-  },
   {
     "stevearc/conform.nvim",
     opts = {
@@ -135,38 +118,21 @@ return {
   },
 
   -- Other
-  {
-    url = "angaidan@git.amazon.com:pkg/NinjaHooks",
-    branch = "mainline",
-    cond = require("util").amazon.is_amazon_machine(),
-    dependencies = {},
-    lazy = false,
-    config = function(plugin)
-      local nvim_conf_dir = "~/.config/nvim"
-      vim.opt.rtp:remove(nvim_conf_dir)
-      vim.opt.rtp:prepend(plugin.dir .. "/configuration/vim")
-      -- NOTE: Make sure ~/.config/nvim is always first in runtime path (for spell, etc)
-      vim.opt.rtp:prepend(nvim_conf_dir)
-    end,
-  },
+  -- Provides ftdetect, syntax, indent, and ftplugin for brazil-config files.
+  -- Loads eagerly in Brazil workspaces so its ftdetect registers before any Config file opens.
   {
     url = "angaidan@git.amazon.com:pkg/VimBrazilConfig",
     branch = "mainline",
-    cond = require("util").amazon.is_amazon_machine(),
+    cond = in_brazil,
     lazy = false,
-    config = function(plugin)
-      local nvim_conf_dir = "~/.config/nvim"
-      vim.opt.rtp:remove(nvim_conf_dir)
-      vim.opt.rtp:prepend(plugin.dir)
-      -- NOTE: Make sure ~/.config/nvim is always first in runtime path (for spell, etc)
-      vim.opt.rtp:prepend(nvim_conf_dir)
-    end,
   },
+  -- Provides syntax, indent, and ftplugin for Amazon Ion files.
+  -- Lazy-loaded on ft because vim.filetype.add above handles *.ion detection.
   {
     url = "angaidan@git.amazon.com:pkg/VimIon",
     branch = "mainline",
-    cond = require("util").amazon.is_amazon_machine(),
-    lazy = false,
+    cond = in_brazil,
+    ft = "ion",
   },
   {
     "AJamesyD/crux.nvim",

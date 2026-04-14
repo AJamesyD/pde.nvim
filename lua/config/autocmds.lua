@@ -128,7 +128,7 @@ if util.amazon.is_amazon_machine() then
       local bufnr = event.buf
       local filepath = vim.api.nvim_buf_get_name(bufnr)
 
-      local is_brazil_proj = util.amazon.amazon_root(filepath, "brazil")
+      local is_brazil_proj = util.amazon.amazon_root(filepath)
 
       if is_brazil_proj then
         -- Often want to disable autoformatting in Brazil projects

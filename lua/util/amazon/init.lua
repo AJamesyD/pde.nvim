@@ -1,34 +1,20 @@
 -- https://w.amazon.com/bin/view/Bemol#HPluginFeatures
-local BRAZIL_BEMOL_SUPPORTED_FTS = {
-  "cpp", -- beta
-  "c", -- beta
+local BEMOL_SUPPORTED_FTS = {
+  "cpp",
+  "c",
   "java",
-  "kotlin", --beta
+  "kotlin",
   "python",
   "ruby",
-}
-local PERU_BEMOL_SUPPORTED_FTS = {
   "javascript",
   "typescript",
-  "python",
 }
 
 local M = {}
 
 ---@param filename string
----@param build_system? "brazil"|"peru"
---- Build system. Defaults to both Brazil and Peru
-M.amazon_root = function(filename, build_system)
-  local root_file = vim.fs.find(function(name, _)
-    local is_brazil = name:match("^Config$")
-    local is_peru = name:match("^brazil%.ion$")
-    if build_system == "brazil" then
-      return is_brazil
-    elseif build_system == "peru" then
-      return is_peru
-    end
-    return is_brazil or is_peru
-  end, { path = filename, type = "file", upward = true })[1]
+M.amazon_root = function(filename)
+  local root_file = vim.fs.find("Config", { path = filename, type = "file", upward = true })[1]
   return vim.fs.dirname(root_file)
 end
 
@@ -39,15 +25,11 @@ end
 ---@param bufnr? integer
 M.is_bemol_proj = function(bufnr)
   if type(bufnr) == "nil" then
-    bufnr = 0 -- Current bufnr
+    bufnr = 0
   end
   local filepath = vim.api.nvim_buf_get_name(bufnr)
   local filetype = vim.bo[bufnr].filetype
-
-  local is_brazil_proj = M.amazon_root(filepath, "brazil") and vim.tbl_contains(BRAZIL_BEMOL_SUPPORTED_FTS, filetype)
-  local is_peru_proj = M.amazon_root(filepath, "peru") and vim.tbl_contains(PERU_BEMOL_SUPPORTED_FTS, filetype)
-
-  return is_brazil_proj or is_peru_proj
+  return M.amazon_root(filepath) ~= nil and vim.tbl_contains(BEMOL_SUPPORTED_FTS, filetype)
 end
 
 -- Workspace folder management for bemol projects.

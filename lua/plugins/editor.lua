@@ -275,31 +275,6 @@ return {
       })
     end,
   },
-  {
-    "stevearc/aerial.nvim",
-    optional = true,
-    opts = function(_, opts)
-      local util = require("util")
-
-      -- Filetype map: prefer treesitter for Lua because lua_ls emits
-      -- tables as Object/Array with unhelpful [1], [2] names.
-      -- Treesitter parses Lua grammar directly for better symbols.
-      opts.backends = {
-        _ = { "lsp", "treesitter" },
-        lua = { "treesitter", "lsp" },
-      }
-
-      local overrides = {
-        highlight_on_hover = true,
-        filter_kind = {
-          _ = util.OUTLINE_SYMBOLS,
-          rust = util.OUTLINE_SYMBOLS_RUST,
-        },
-      }
-      opts = vim.tbl_deep_extend("force", opts, overrides)
-      return opts
-    end,
-  },
 
   -- Other
   {

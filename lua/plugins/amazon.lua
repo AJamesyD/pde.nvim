@@ -167,7 +167,14 @@ return {
       {
         "MeanderingProgrammer/render-markdown.nvim",
         optional = true,
-        opts = { file_types = { "markdown", "crux_thread" } },
+        opts = {
+          file_types = { "markdown", "crux_thread" },
+          overrides = {
+            filetype = {
+              crux_thread = { code = { language = false } },
+            },
+          },
+        },
         ft = { "markdown", "crux_thread" },
       },
       {

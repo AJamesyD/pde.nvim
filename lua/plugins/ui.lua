@@ -48,13 +48,15 @@ return {
         },
       }
 
-      -- Strip aerial from lualine_c; breadcrumbs are handled by dropbar.
+      -- Extract diagnostics from lualine_c, move to lualine_b.
+      -- Drop everything else (path, filetype icon, root_dir): dropbar handles file identity.
       for i = #opts.sections.lualine_c, 1, -1 do
         local c = opts.sections.lualine_c[i]
-        if type(c) == "table" and c[1] == "aerial" then
-          table.remove(opts.sections.lualine_c, i)
+        if type(c) == "table" and c[1] == "diagnostics" then
+          table.insert(opts.sections.lualine_b, c)
         end
       end
+      opts.sections.lualine_c = {}
 
       for i = #opts.sections.lualine_x, 1, -1 do
         local c = opts.sections.lualine_x[i]
@@ -83,7 +85,28 @@ return {
       }
 
       opts.sections.lualine_z = {
-        { "grapple" },
+        {
+          function()
+            local grapple = require("grapple")
+            local current = grapple.find({ buffer = 0 })
+            if not current then
+              return ""
+            end
+            local tags = grapple.tags()
+            if not tags then
+              return ""
+            end
+            for i, tag in ipairs(tags) do
+              if tag.path == current.path then
+                return "󰛢 [" .. (tag.name or i) .. "]"
+              end
+            end
+            return ""
+          end,
+          cond = function()
+            return package.loaded["grapple"] ~= nil
+          end,
+        },
       }
 
       local extensions_overrides = {

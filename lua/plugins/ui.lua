@@ -14,7 +14,6 @@ return {
           globalstatus = true,
           component_separators = { left = "", right = "" },
           section_separators = { left = "", right = "" },
-          disabled_filetypes = {},
         },
       }
 
@@ -48,15 +47,13 @@ return {
         },
       }
 
-      -- Extract diagnostics from lualine_c, move to lualine_b.
-      -- Drop everything else (path, filetype icon, root_dir): dropbar handles file identity.
+      -- Drop path, filetype icon, root_dir from lualine_c: dropbar handles file identity.
       for i = #opts.sections.lualine_c, 1, -1 do
         local c = opts.sections.lualine_c[i]
-        if type(c) == "table" and c[1] == "diagnostics" then
-          table.insert(opts.sections.lualine_b, c)
+        if not (type(c) == "table" and c[1] == "diagnostics") then
+          table.remove(opts.sections.lualine_c, i)
         end
       end
-      opts.sections.lualine_c = {}
 
       for i = #opts.sections.lualine_x, 1, -1 do
         local c = opts.sections.lualine_x[i]

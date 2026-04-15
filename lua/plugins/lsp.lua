@@ -8,9 +8,11 @@ return {
       diagnostics = {
         virtual_text = { prefix = "icons" },
       },
+      -- TODO: re-enable with lensline.nvim for proper indentation.
+      -- Native codelens renders at column 0, ignoring code indentation.
       ---@type lsp.CodeLensOptions
       codelens = {
-        enabled = true,
+        enabled = false,
       },
     },
   },

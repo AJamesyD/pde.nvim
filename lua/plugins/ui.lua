@@ -333,17 +333,6 @@ return {
           end
           return true
         end,
-        sources = function(buf, _)
-          local sources = require("dropbar.sources")
-          local ft = vim.bo[buf].filetype
-          if ft == "markdown" then
-            return { sources.path, sources.markdown }
-          end
-          if ft == "lua" then
-            return { sources.path, sources.treesitter }
-          end
-          return { sources.path, sources.lsp }
-        end,
         truncate = true,
       },
       icons = {
@@ -354,6 +343,8 @@ return {
         },
       },
       sources = {
+        lsp = { max_depth = 3 },
+        treesitter = { max_depth = 3 },
         path = {
           modified = function(sym)
             return sym:merge({

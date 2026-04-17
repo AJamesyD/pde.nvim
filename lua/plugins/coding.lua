@@ -106,21 +106,18 @@ return {
             end,
           },
         })
-
-        local default_sorts = opts.fuzzy and opts.fuzzy.sorts
-        overrides.fuzzy = {
-          ---@diagnostic disable-next-line: assign-type-mismatch
-          sorts = function()
-            local base = type(default_sorts) == "function" and default_sorts()
-              or default_sorts
-              or { "score", "sort_text" }
-            if vim.bo.filetype == "rust" then
-              return vim.list_extend({ rust_cmp.compare }, base)
-            end
-            return base
-          end,
-        }
       end
+
+      local cmp_sort = require("util.completion")
+      overrides.fuzzy = {
+        ---@diagnostic disable-next-line: assign-type-mismatch
+        sorts = function()
+          if ok and vim.bo.filetype == "rust" then
+            return { rust_cmp.compare, "score", "sort_text", cmp_sort.compare, "label" }
+          end
+          return { "score", "sort_text", cmp_sort.compare, "label" }
+        end,
+      }
 
       opts = vim.tbl_deep_extend("force", opts, overrides)
       return opts

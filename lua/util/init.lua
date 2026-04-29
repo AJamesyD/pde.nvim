@@ -13,6 +13,8 @@ M.SPECIAL_FILETYPES = {
   "codediff-explorer",
   "codediff-history",
   "codediff-help",
+  "crux_panel",
+  "crux_thread",
   "TelescopePrompt",
   "TelescopeResults",
   "trouble",

@@ -182,6 +182,10 @@ return {
         optional = true,
       },
       {
+        "folke/edgy.nvim",
+        optional = true,
+      },
+      {
         "nvim-lualine/lualine.nvim",
         optional = true,
         opts = function(_, opts)
@@ -222,16 +226,35 @@ return {
     config = function(_, opts)
       require("crux").setup(opts)
 
+      local function is_crux_tab()
+        local ok, session = pcall(require, "crux.core.session")
+        return ok and session.current() ~= nil
+      end
+
       -- Suppress lualine winbar on crux diff tabs so crux's own winbar
       -- (file path + revision) is visible. Same pattern as CodeDiff in editor.lua.
       local lualine_ok, lualine = pcall(require, "lualine")
       if lualine_ok and lualine.winbar then
         local orig_winbar = lualine.winbar
         lualine.winbar = function(...)
-          if vim.b.crux_diff then
+          if is_crux_tab() then
             return nil
           end
           return orig_winbar(...)
+        end
+      end
+
+      -- Prevent edgy.nvim from running layout on crux diff tabs.
+      -- edgy hooks BufWinEnter/WinResized globally and resizes windows
+      -- at edge positions, which breaks crux's own diff layout.
+      local edgy_ok, edgy_layout = pcall(require, "edgy.layout")
+      if edgy_ok and edgy_layout.update then
+        local original_update = edgy_layout.update
+        edgy_layout.update = function(...)
+          if is_crux_tab() then
+            return
+          end
+          return original_update(...)
         end
       end
     end,

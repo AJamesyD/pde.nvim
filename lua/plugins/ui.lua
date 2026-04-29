@@ -277,6 +277,14 @@ return {
         end
       end
 
+      -- crux.nvim file panel
+      table.insert(opts.left, {
+        title = "CR Files",
+        ft = "crux_panel",
+        pinned = false,
+        size = { width = 35 },
+      })
+
       -- Move neo-tree and terminals from left → right
       for _, config in ipairs(opts.left) do
         if type(config) == "table" and config.ft == "neo-tree" then
@@ -364,8 +372,6 @@ return {
   },
   {
     "mrjones2014/smart-splits.nvim",
-    -- Cannot be loaded just by <C-h/j/k/l> keys
-    -- or else tmux will capture first
     event = "VeryLazy",
     keys = {
       -- resizing splits

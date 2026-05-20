@@ -1,36 +1,21 @@
 return {
-  -- Reconfigure LazyVim defaults
   {
-    "nvim-treesitter/nvim-treesitter",
-    dependencies = {
-      { "AJamesyD/tree-sitter-jsonl" },
-    },
-    opts = function(_, opts)
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "TSUpdate",
-        callback = function()
-          local ts_parser_configs = require("nvim-treesitter.parsers")
-
-          ---@diagnostic disable-next-line: inject-field
-          ts_parser_configs.jsonl = {
-            tier = 1, -- "stable"
-            install_info = {
-              url = "https://github.com/AJamesyD/tree-sitter-jsonl",
-              revision = "ca9788e608163af027f750698f4fe685b46774b8",
-              files = { "src/parser.c" },
-              branch = "mainline",
-            },
-          }
+    "AJamesyD/tree-sitter-jsonl",
+    build = function(plugin)
+      local parser_dir = vim.fn.stdpath("data") .. "/site/parser"
+      vim.fn.mkdir(parser_dir, "p")
+      vim.system({ "tree-sitter", "build", "-o", parser_dir .. "/jsonl.so" }, { cwd = plugin.dir }):wait()
+    end,
+    init = function()
+      vim.filetype.add({ extension = { jsonl = "jsonl" } })
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "jsonl",
+        callback = function(ev)
+          vim.treesitter.start(ev.buf, "jsonl")
         end,
       })
-
-      if type(opts.ensure_installed) == "table" then
-        vim.list_extend(opts.ensure_installed, { "jsonl" })
-      end
     end,
   },
-
-  -- Other
   {
     "Wansmer/treesj",
     opts = function(_, opts)

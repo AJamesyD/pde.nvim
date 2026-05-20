@@ -4,8 +4,12 @@ return {
     build = function(plugin)
       local parser_dir = vim.fn.stdpath("data") .. "/site/parser"
       vim.fn.mkdir(parser_dir, "p")
-      local result = vim.system({ "tree-sitter", "build", "-o", parser_dir .. "/jsonl.so" }, { cwd = plugin.dir }):wait()
-      if result.code ~= 0 then error(result.stderr) end
+      local result = vim
+        .system({ "tree-sitter", "build", "-o", parser_dir .. "/jsonl.so" }, { cwd = plugin.dir })
+        :wait()
+      if result.code ~= 0 then
+        error(result.stderr)
+      end
     end,
     init = function()
       vim.filetype.add({ extension = { jsonl = "jsonl" } })

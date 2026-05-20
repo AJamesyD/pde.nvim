@@ -1,3 +1,5 @@
+-- NOTE: queries are owned locally (queries/kanata/) due to upstream regex bug
+--   (postsolar/tree-sitter-kanata#1). Don't add a query copy step to build.
 return {
   {
     "postsolar/tree-sitter-kanata",

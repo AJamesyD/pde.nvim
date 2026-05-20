@@ -1,6 +1,7 @@
 return {
   {
     "cathaysia/tree-sitter-asciidoc",
+    -- NOTE: monorepo with two grammars in subdirectories, not at repo root
     build = function(plugin)
       local parser_dir = vim.fn.stdpath("data") .. "/site/parser"
       vim.fn.mkdir(parser_dir, "p")

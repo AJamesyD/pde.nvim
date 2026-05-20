@@ -55,6 +55,8 @@
 (quoted_item) @string
 
 ; aliases
+; HACK: upstream uses bare `@` which is invalid in Vim regex (E866);
+;   remove when postsolar/tree-sitter-kanata#1 is fixed
 ((unquoted_item) @string.special.symbol
   (#match? @string.special.symbol "[@].+"))
 

@@ -82,10 +82,6 @@ return {
     "folke/flash.nvim",
     enabled = false,
   },
-  {
-    "folke/persistence.nvim",
-    enabled = false,
-  },
   -- PRUNED 2026-03-22: palette-safe, remove after 4 weeks
   {
     "folke/trouble.nvim",

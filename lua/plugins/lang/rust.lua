@@ -10,7 +10,9 @@ return {
         },
       },
       formatters_by_ft = {
-        rust = { "rustfmt" },
+        -- When not rustfmt +nightly is unavailable, it's nice to have RA enforce
+        -- things like [`imports.granularity.*`](https://rust-analyzer.github.io/book/configuration.html#imports.granularity.enforce)
+        rust = { "rustfmt", lsp_format = "last" },
       },
     },
   },

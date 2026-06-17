@@ -6,6 +6,7 @@ return {
   -- Reconfigure LazyVim defaults
   {
     "stevearc/conform.nvim",
+    ---@type conform.setupOpts
     opts = {
       formatters = {
         ["markdownlint-cli2"] = {

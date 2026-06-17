@@ -43,6 +43,10 @@ return {
         },
       },
       formatters_by_ft = {
+        ["brazil-config"] = {
+          -- Always run barium lsp formatting
+          lsp_format = "last",
+        },
         ion = { "ion" },
       },
     },

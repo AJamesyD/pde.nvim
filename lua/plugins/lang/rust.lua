@@ -146,6 +146,12 @@ return {
               },
               cargo = {
                 features = "all",
+                -- NOTE: cargo.targetDir explicitly false (the default), set for clarity.
+                -- Sharing brazil-build's target dir lets RA reuse its compiled
+                -- proc-macros/build-scripts; an isolated dir only helps when RA and
+                -- cargo/brazil-build (or a watcher like bacon) run concurrently, which
+                -- this workflow doesn't. Revisit if adopting bacon.
+                targetDir = false,
               },
               -- TODO: conditionally disable for big projects
               -- use bacon or flycheck instead

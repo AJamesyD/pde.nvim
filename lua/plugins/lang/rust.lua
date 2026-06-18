@@ -189,6 +189,7 @@ return {
                 show = {
                   enumVariants = 10,
                   fields = 10,
+                  traitAssocItems = 10,
                 },
               },
               -- XXX: Should inherit .rustfmt config when available
@@ -209,6 +210,7 @@ return {
                   lifetime = { enable = true },
                   type = { enable = true },
                 },
+                lifetimeElisionHints = { enable = "skip_trivial" },
               },
               lens = {
                 run = { enable = false },

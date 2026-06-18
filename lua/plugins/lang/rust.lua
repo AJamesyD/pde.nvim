@@ -227,6 +227,7 @@ return {
               },
               references = {
                 excludeImports = true,
+                excludeTests = true,
               },
               rustfmt = {
                 extraArgs = { "+nightly" },
@@ -235,6 +236,7 @@ return {
                 symbol = {
                   search = {
                     limit = 512,
+                    excludeImports = true,
                   },
                 },
               },

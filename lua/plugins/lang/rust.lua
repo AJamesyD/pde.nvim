@@ -54,7 +54,7 @@ return {
   {
     "mrcjkb/rustaceanvim",
     optional = true,
-    version = "^8",
+    version = "^9",
     dependencies = {
       {
         "folke/lazydev.nvim",
